@@ -1,0 +1,7 @@
+{
+  "parent": "choppersdelight:block/cutting_board",
+  "textures": {
+    "particle": "choppersdelight:block/cherry_cutting_board",
+    "top": "choppersdelight:block/cherry_cutting_board"
+  }
+}

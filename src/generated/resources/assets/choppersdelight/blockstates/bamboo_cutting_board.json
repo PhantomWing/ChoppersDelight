@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "choppersdelight:block/bamboo_cutting_board",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "choppersdelight:block/bamboo_cutting_board"
+    },
+    "facing=south": {
+      "model": "choppersdelight:block/bamboo_cutting_board",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "choppersdelight:block/bamboo_cutting_board",
+      "y": 270
+    }
+  }
+}
