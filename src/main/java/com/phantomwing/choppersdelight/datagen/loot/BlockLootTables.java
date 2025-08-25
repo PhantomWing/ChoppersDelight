@@ -5,10 +5,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class BlockLootTables extends BlockLootSubProvider {
     public BlockLootTables(HolderLookup.Provider lookupProvider) {
@@ -24,13 +27,24 @@ public class BlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected @NotNull Iterable<Block> getKnownBlocks() {
-        return ModBlocks.BLOCKS.getEntries()
-                .stream()
-                .map(e -> (Block) e.value())
-                .toList();
+        Stream<Block> blocks = getKnownBlocksForRegistry(ModBlocks.BLOCKS);
+
+        // Compatibility blocks.
+        Stream<Block> biomesOPlentyBlocks = getKnownBlocksForRegistry(ModBlocks.BIOMES_O_PLENTY_BLOCKS);
+        Stream<Block> biomesWeveGoneBlocks = getKnownBlocksForRegistry(ModBlocks.BIOMES_WEVE_GONE_BLOCKS);
+
+        Stream<Block> concat = Stream.concat(biomesOPlentyBlocks, biomesWeveGoneBlocks);
+        return Stream.concat(blocks, concat).toList();
     }
 
-    protected void dropSelf(Supplier<Block> blockSupplier) {
+    private Stream<Block> getKnownBlocksForRegistry(DeferredRegister.Blocks registry) {
+        return registry.getEntries()
+            .stream()
+            .map(e -> (Block) e.value());
+    }
+
+
+    private void dropSelf(Supplier<Block> blockSupplier) {
         var block = blockSupplier.get();
         this.dropOther(block, block);
     }

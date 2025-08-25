@@ -1,0 +1,7 @@
+{
+  "parent": "farmersdelight:block/cutting_board",
+  "textures": {
+    "particle": "biomeswevegone:block/maple_cutting_board",
+    "top": "biomeswevegone:block/maple_cutting_board"
+  }
+}

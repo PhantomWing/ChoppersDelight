@@ -12,11 +12,11 @@ public class BlockUtils {
         return BuiltInRegistries.BLOCK.getKey(block).getPath();
     }
 
-    public static ResourceLocation getResourceLocation(Block block) {
-        return ResourceLocation.fromNamespaceAndPath(ChoppersDelight.MOD_ID, "block/" + getName(block));
+    public static ResourceLocation getResourceLocation(String modId, Block block) {
+        return ResourceLocation.fromNamespaceAndPath(modId, "block/" + getName(block));
     }
 
-    public static ModelFile getModel(BlockModelProvider provider, Block block) {
-        return new ModelFile.ExistingModelFile(getResourceLocation(block), provider.existingFileHelper);
+    public static ModelFile getModel(BlockModelProvider provider, String modId, Block block) {
+        return new ModelFile.ExistingModelFile(getResourceLocation(modId, block), provider.existingFileHelper);
     }
 }

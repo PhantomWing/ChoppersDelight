@@ -7,7 +7,7 @@ import com.phantomwing.choppersdelight.renderer.DecoratedCuttingBoardRenderer;
 import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.item.ModItems;
-import com.phantomwing.choppersdelight.ui.ModCreativeModTab;
+import com.phantomwing.choppersdelight.ui.ModCreativeModeTab;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.neoforged.api.distmarker.Dist;
@@ -38,6 +38,8 @@ public class ChoppersDelight {
     public static final String MOD_ID = "choppersdelight";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+
+
     public ChoppersDelight(IEventBus eventBus, ModContainer modContainer) {
         eventBus.addListener(this::commonSetup);
 
@@ -50,15 +52,18 @@ public class ChoppersDelight {
 
         NeoForge.EVENT_BUS.register(this);
 
+        Compatibility.checkInstalledMods();
         registerManagers(eventBus);
     }
+
+
 
     // Register all managers to the event bus.
     private void registerManagers(IEventBus eventBus) {
         ModItems.register(eventBus);
         ModBlocks.register(eventBus);
         ModBlockEntityTypes.register(eventBus);
-        ModCreativeModTab.register(eventBus);
+        ModCreativeModeTab.register(eventBus);
         ModDataComponents.register(eventBus);
         ModRecipes.register(eventBus);
     }

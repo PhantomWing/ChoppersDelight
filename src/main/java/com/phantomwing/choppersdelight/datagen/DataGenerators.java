@@ -23,6 +23,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new ModRecipeProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), ModLootTableProvider.create(output, lookupProvider));
 
+        generator.addProvider(event.includeClient(), new ModBlockModelProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new ModBlockStateProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new ModItemModelProvider(output, existingFileHelper));
 

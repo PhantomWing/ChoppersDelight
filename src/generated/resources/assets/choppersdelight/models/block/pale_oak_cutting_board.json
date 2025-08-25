@@ -1,0 +1,7 @@
+{
+  "parent": "farmersdelight:block/cutting_board",
+  "textures": {
+    "particle": "choppersdelight:block/pale_oak_cutting_board",
+    "top": "choppersdelight:block/pale_oak_cutting_board"
+  }
+}

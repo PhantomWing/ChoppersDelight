@@ -1,7 +1,0 @@
-{
-  "parent": "choppersdelight:block/cutting_board",
-  "textures": {
-    "particle": "choppersdelight:block/oak_cutting_board",
-    "top": "choppersdelight:block/oak_cutting_board"
-  }
-}

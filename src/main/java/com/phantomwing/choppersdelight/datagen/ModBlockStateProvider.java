@@ -1,6 +1,7 @@
 package com.phantomwing.choppersdelight.datagen;
 
 import com.phantomwing.choppersdelight.ChoppersDelight;
+import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.data.PackOutput;
@@ -26,15 +27,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        ModBlocks.CUTTING_BOARDS.forEach(this::cuttingBoardBlock);
+        ModBlocks.MINECRAFT_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, ChoppersDelight.MOD_ID));
+        ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
+        ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
 
-        cuttingBoardBlock(ModBlocks.DECORATED_CUTTING_BOARD);
+        cuttingBoardBlock(ModBlocks.DECORATED_CUTTING_BOARD, ChoppersDelight.MOD_ID);
     }
 
-    private void cuttingBoardBlock(Supplier<Block> supplier) {
+    private void cuttingBoardBlock(Supplier<Block> supplier, String modId) {
         Block block = supplier.get();
         customHorizontalBlock(block,
-                $ -> BlockUtils.getModel(models(), block), BasketBlock.WATERLOGGED);
+                $ -> BlockUtils.getModel(models(), modId, block), BasketBlock.WATERLOGGED);
     }
 
     // Helper functions.

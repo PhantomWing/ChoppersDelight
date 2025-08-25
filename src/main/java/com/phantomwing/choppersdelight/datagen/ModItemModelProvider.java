@@ -1,6 +1,7 @@
 package com.phantomwing.choppersdelight.datagen;
 
 import com.phantomwing.choppersdelight.ChoppersDelight;
+import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.data.PackOutput;
@@ -17,11 +18,13 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        ModBlocks.CUTTING_BOARDS.forEach(this::simpleBlock);
+        ModBlocks.MINECRAFT_CUTTING_BOARDS.forEach((supplier) -> simpleBlock(supplier, ChoppersDelight.MOD_ID));
+        ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((supplier) -> simpleBlock(supplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
+        ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((supplier) -> simpleBlock(supplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
     }
 
-    private void simpleBlock(Supplier<Block> item) {
-        Block block = item.get();
-        this.withExistingParent(ChoppersDelight.MOD_ID + ":" + BlockUtils.getName(block), BlockUtils.getResourceLocation(block));
+    private void simpleBlock(Supplier<Block> blockSupplier, String modId) {
+        Block block = blockSupplier.get();
+        this.withExistingParent(modId + ":" + BlockUtils.getName(block), BlockUtils.getResourceLocation(modId, block));
     }
 }
