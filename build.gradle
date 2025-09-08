@@ -98,6 +98,9 @@ neoForge {
         data {
             data()
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath(), "--existing-mod", "farmersdelight"
+
+            include_biomesoplenty = "true"
+            include_biomeswevegone = "true"
         }
 
         configureEach {
@@ -139,19 +142,20 @@ dependencies {
     }
 
     // Oh The Biomes We've Gone
+    compileOnly "net.potionstudios:Oh-The-Biomes-Weve-Gone-NeoForge:${biomeswevegone_version}"
     if (include_biomeswevegone.toBoolean()) {
         localRuntime "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
         localRuntime "dev.corgitaco:Corgilib-NeoForge:${minecraft_version}-${corgilib_version}"
-        localRuntime "dev.corgitaco:Oh-The-Trees-Youll-Grow-neoforge:"
+        localRuntime "dev.corgitaco:Oh-The-Trees-Youll-Grow-neoforge:${minecraft_version}-${ohthetreesyoullgrow_version}"
+        localRuntime "net.potionstudios:Oh-The-Biomes-Weve-Gone-NeoForge:${biomeswevegone_version}"
     }
-    implementation "net.potionstudios:Oh-The-Biomes-Weve-Gone-NeoForge:${biomeswevegone_version}"
 
     // Biomes O' Plenty
+    compileOnly "com.github.glitchfiend:BiomesOPlenty-neoforge:${minecraft_version}-${biomesoplenty_version}"
     if (include_biomesoplenty.toBoolean()) {
         localRuntime "com.github.glitchfiend:GlitchCore-neoforge:${minecraft_version}-${glitchcore_version}"
+        localRuntime "com.github.glitchfiend:BiomesOPlenty-neoforge:${minecraft_version}-${biomesoplenty_version}"
     }
-    implementation "com.github.glitchfiend:BiomesOPlenty-neoforge:${minecraft_version}-${biomesoplenty_version}"
-
 }
 
 tasks.withType(ProcessResources).configureEach {
