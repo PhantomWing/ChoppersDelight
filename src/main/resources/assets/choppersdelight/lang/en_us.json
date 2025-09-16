@@ -55,5 +55,8 @@
 
   "block.farmersdelight.cutting_board": "Spruce Cutting Board",
 
-  "itemGroup.choppersdelight": "Chopper's Delight"
+  "itemGroup.choppersdelight": "Chopper's Delight",
+
+  "tag.item.choppersdelight.cutting_boards": "Cutting Boards",
+  "tag.block.choppersdelight.cutting_boards": "Cutting Boards"
 }

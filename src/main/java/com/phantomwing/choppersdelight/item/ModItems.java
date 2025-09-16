@@ -92,7 +92,9 @@ public class ModItems {
 
     // Registry functions
     private static DeferredItem<Item> registerDecoratedCuttingBoardItem(DeferredBlock<Block> block) {
-        return registerBlockItem(block, () -> new DecoratedCuttingBoardItem(block.get(),baseItem(), 200));
+        String name = block.getRegisteredName().replaceFirst(ChoppersDelight.MOD_ID + ":", "");
+
+        return ITEMS.register(name, () -> new DecoratedCuttingBoardItem(block.get(),baseItem(), 200));
     }
 
     private static DeferredItem<Item> registerCuttingBoardItem(DeferredBlock<Block> block) {
