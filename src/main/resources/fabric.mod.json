@@ -3,42 +3,30 @@
 	"id": "choppersdelight",
 	"version": "${version}",
 	"name": "choppersdelight",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "An add-on for Farmer's Delight that adds Cutting Board variants for different wood types, and the ability to decorate them using banners.",
 	"authors": [
-		"Me!"
+		"PhantomWing"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/choppers-delight",
+		"sources": "https://github.com/PhantomWing/ChoppersDelight"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/choppersdelight/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.phantomwing.choppersdelight.Choppersdelight"
+			"com.phantomwing.choppersdelight.ChoppersDelight"
 		],
 		"client": [
-			"com.phantomwing.choppersdelight.ChoppersdelightClient"
-		],
-		"fabric-datagen": [
-			"com.phantomwing.choppersdelight.ChoppersdelightDataGenerator"
+			"com.phantomwing.choppersdelight.ChoppersDelightClient"
 		]
 	},
-	"mixins": [
-		"choppersdelight.mixins.json",
-		{
-			"config": "choppersdelight.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=0.17.2",
-		"minecraft": "~1.21.1",
+		"minecraft": ">=1.21 <=1.21.1",
 		"java": ">=21",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
+		"fabric-api": "*",
+		"farmersdelight": "*"
 	}
 }

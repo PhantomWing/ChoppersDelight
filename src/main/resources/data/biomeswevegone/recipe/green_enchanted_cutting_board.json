@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "biomeswevegone:green_enchanted_planks"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "/##",
+    "/##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "biomeswevegone:green_enchanted_cutting_board"
+  }
+}
