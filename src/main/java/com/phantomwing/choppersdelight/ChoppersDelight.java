@@ -1,5 +1,12 @@
 package com.phantomwing.choppersdelight;
 
+import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
+import com.phantomwing.choppersdelight.block.ModBlocks;
+import com.phantomwing.choppersdelight.component.ModDataComponents;
+import com.phantomwing.choppersdelight.item.ModItems;
+import com.phantomwing.choppersdelight.itemGroup.ModItemGroups;
+
+import com.phantomwing.choppersdelight.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -11,5 +18,18 @@ public class ChoppersDelight implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		Compatibility.checkInstalledMods();
+
+		// Items
+		ModBlockEntityTypes.registerModBlockEntityTypes();
+		ModDataComponents.registerModDataComponents();
+		ModItems.registerModItems();
+		ModBlocks.registerModBlocks();
+		ModRecipes.registerModRecipes();
+
+		// UI
+		ModItemGroups.registerModItemGroups();
 	}
+
+
 }

@@ -1,5 +1,6 @@
 package com.phantomwing.choppersdelight.recipe;
 
+import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.recipe.custom.AddCuttingBoardPatternRecipe;
 import com.phantomwing.choppersdelight.recipe.custom.RemoveCuttingBoardPatternRecipe;
 import com.phantomwing.choppersdelight.utils.RegisterUtils;
@@ -22,5 +23,9 @@ public class ModRecipes {
 
     private static <T extends Recipe<?>>Supplier<RecipeSerializer<T>> registerRecipe(String name, Supplier<RecipeSerializer<T>> supplier) {
         return RegisterUtils.register(name, supplier, BuiltInRegistries.RECIPE_SERIALIZER);
+    }
+
+    public static void registerModRecipes() {
+        ChoppersDelight.LOGGER.info("Registering recipes for " + ChoppersDelight.MOD_ID);
     }
 }

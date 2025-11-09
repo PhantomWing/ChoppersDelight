@@ -1,6 +1,8 @@
 package com.phantomwing.choppersdelight.block;
 
 import com.google.common.collect.Sets;
+import com.phantomwing.choppersdelight.ChoppersDelight;
+import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.custom.DecoratedCuttingBoardBlock;
 import com.phantomwing.choppersdelight.utils.RegisterUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -79,28 +81,28 @@ public class ModBlocks {
     public static final Supplier<Block> BWG_ZELKOVA_CUTTING_BOARD = registerBiomesWeveGoneCuttingBoard("zelkova_cutting_board");
 
     private static Supplier<Block> registerVanillaCuttingBoard(String name) {
-        Supplier<Block> block = registerCuttingBoard(name);
+        Supplier<Block> block = registerCuttingBoard(name, ChoppersDelight.MOD_ID);
         MINECRAFT_CUTTING_BOARDS.add(block);
 
         return block;
     }
 
     private static Supplier<Block> registerBiomesOPlentyCuttingBoard(String name) {
-        Supplier<Block> block = registerCuttingBoard(name);
+        Supplier<Block> block = registerCuttingBoard(name, Compatibility.BIOMES_O_PLENTY_MOD_ID);
         BIOMES_O_PLENTY_CUTTING_BOARDS.add(block);
 
         return block;
     }
 
     private static Supplier<Block> registerBiomesWeveGoneCuttingBoard(String name) {
-        Supplier<Block> block = registerCuttingBoard(name);
+        Supplier<Block> block = registerCuttingBoard(name, Compatibility.BIOMES_WEVE_GONE_MOD_ID);
         BIOMES_WEVE_GONE_CUTTING_BOARDS.add(block);
 
         return block;
     }
 
-    private static Supplier<Block> registerCuttingBoard(String name) {
-        Supplier<Block> block = registerBlock(name, ModBlocks::createCuttingBoard);
+    private static Supplier<Block> registerCuttingBoard(String name, String namespace) {
+        Supplier<Block> block = registerBlock(name, ModBlocks::createCuttingBoard, namespace);
         CUTTING_BOARDS.add(block);
 
         return block;
@@ -111,10 +113,18 @@ public class ModBlocks {
     }
 
     private static Supplier<Block> registerDecoratedCuttingBoard(String name) {
-        return registerBlock(name, () -> new DecoratedCuttingBoardBlock(Block.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(2.0f).sound(SoundType.WOOD)));
+        return registerBlock(
+                name,
+                () -> new DecoratedCuttingBoardBlock(Block.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(2.0f).sound(SoundType.WOOD)),
+                ChoppersDelight.MOD_ID
+        );
     }
 
-    private static Supplier<Block> registerBlock(String name, Supplier<Block> supplier) {
-        return RegisterUtils.register(name, supplier, BuiltInRegistries.BLOCK);
+    private static Supplier<Block> registerBlock(String name, Supplier<Block> supplier, String namespace) {
+        return RegisterUtils.register(name, supplier, BuiltInRegistries.BLOCK, namespace);
+    }
+
+    public static void registerModBlocks() {
+        ChoppersDelight.LOGGER.info("Registering blocks for " + ChoppersDelight.MOD_ID);
     }
 }

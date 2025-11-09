@@ -15,7 +15,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -52,7 +51,6 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
 {
     private final ItemStackHandler inventory;
     private final RecipeManager.CachedCheck<CuttingBoardRecipeInput, CuttingBoardRecipe> quickCheck;
-    private ResourceLocation lastRecipeID;
     private boolean isItemCarvingBoard;
 
     // Decoration
@@ -65,6 +63,7 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
         inventory = createHandler();
         isItemCarvingBoard = false;
         quickCheck = RecipeManager.createCheck(ModRecipeTypes.CUTTING.get());
+
     }
 
     public static void init() {

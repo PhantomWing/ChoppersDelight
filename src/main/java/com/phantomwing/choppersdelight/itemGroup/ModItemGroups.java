@@ -1,4 +1,4 @@
-package com.phantomwing.choppersdelight.ui;
+package com.phantomwing.choppersdelight.itemGroup;
 
 import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.Compatibility;
@@ -25,19 +25,19 @@ import net.minecraft.world.level.block.entity.BannerPatterns;
 
 import java.util.function.Supplier;
 
-public class ModCreativeModeTab {
+public class ModItemGroups {
     public static final Supplier<CreativeModeTab> MOD_TAB =
        RegisterUtils.register(ChoppersDelight.MOD_ID + "_tab", () -> FabricItemGroup.builder()
-            .icon(ModCreativeModeTab::getTabIcon)
+            .icon(ModItemGroups::getTabIcon)
             .title(Component.translatable(("itemGroup." + ChoppersDelight.MOD_ID)))
-            .displayItems(ModCreativeModeTab::displayItems)
+            .displayItems(ModItemGroups::displayItems)
             .build(), BuiltInRegistries.CREATIVE_MODE_TAB);
 
-    public static ItemStack getTabIcon() {
+    private static ItemStack getTabIcon() {
         return getDecoratedCuttingBoard(ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK);
     }
 
-    public static ItemStack getDecoratedCuttingBoard(Supplier<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
+    private static ItemStack getDecoratedCuttingBoard(Supplier<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
         Level level = Minecraft.getInstance().level;
 
         if (level != null) {
@@ -65,7 +65,7 @@ public class ModCreativeModeTab {
         return new ItemStack(ModBlocks.DECORATED_CUTTING_BOARD.get());
     }
 
-    public static void displayItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
+    private static void displayItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
         displayModItems(parameters, output);
         displayBiomesOPlentyItems(parameters, output);
         displayBiomesWeveGoneItems(parameters, output);
@@ -77,7 +77,7 @@ public class ModCreativeModeTab {
         output.accept(getDecoratedCuttingBoard(ModBlocks.WARPED_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.FLOW, DyeColor.CYAN));
     }
 
-    public static void displayModItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
+    private static void displayModItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
         // Add items to this tab.
         ModItems.CREATIVE_TAB_ITEMS.forEach((item) -> {
             output.accept(item.get());
@@ -90,7 +90,7 @@ public class ModCreativeModeTab {
         });
     }
 
-    public static void displayBiomesOPlentyItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
+    private static void displayBiomesOPlentyItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
         if (!Compatibility.IsBiomesOPlentyLoaded()) {
             return;
         }
@@ -101,7 +101,7 @@ public class ModCreativeModeTab {
         });
     }
 
-    public static void displayBiomesWeveGoneItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
+    private static void displayBiomesWeveGoneItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
         if (!Compatibility.IsBiomesWeveGoneLoaded()) {
             return;
         }
@@ -112,15 +112,7 @@ public class ModCreativeModeTab {
         });
     }
 
-    public static Holder<BannerPattern> getCreeperPattern() {
-        Level level = Minecraft.getInstance().level;
-        if (level == null) {
-            return null; // not in a world yet
-        }
-
-        Registry<BannerPattern> registry =
-                level.registryAccess().registryOrThrow(Registries.BANNER_PATTERN);
-
-        return registry.getHolderOrThrow(BannerPatterns.CREEPER);
+    public static void registerModItemGroups() {
+        ChoppersDelight.LOGGER.info("Registering item groups for " + ChoppersDelight.MOD_ID);
     }
 }

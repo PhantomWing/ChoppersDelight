@@ -144,7 +144,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+    public @NotNull BlockState updateShape(BlockState stateIn, Direction facing, @NotNull BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
