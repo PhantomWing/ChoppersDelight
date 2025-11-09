@@ -39,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.tag.ModTags;
 
-@SuppressWarnings("deprecation")
 public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
 {
     public static final MapCodec<DecoratedCuttingBoardBlock> CODEC = simpleCodec(DecoratedCuttingBoardBlock::new);
@@ -55,22 +54,22 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return null;
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState pState) {
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState pState) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         BlockEntity tileEntity = level.getBlockEntity(pos);
 
         if (tileEntity instanceof DecoratedCuttingBoardBlockEntity cuttingBoardEntity) {
@@ -117,7 +116,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() == newState.getBlock()) {
             return;
         }
@@ -132,7 +131,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    public boolean isPossibleToRespawnInThis(BlockState state) {
+    public boolean isPossibleToRespawnInThis(@NotNull BlockState state) {
         return true;
     }
 
@@ -144,7 +143,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState stateIn, Direction facing, @NotNull BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+    public @NotNull BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor level, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -154,13 +153,13 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, @NotNull LevelReader level, BlockPos pos) {
         BlockPos floorPos = pos.below();
         return canSupportRigidBlock(level, floorPos) || canSupportCenter(level, floorPos, Direction.UP);
     }
 
     @Override
-    protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(final StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(FACING, WATERLOGGED);
     }
@@ -171,12 +170,12 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState state) {
+    public boolean hasAnalogOutputSignal(@NotNull BlockState state) {
         return true;
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    public int getAnalogOutputSignal(@NotNull BlockState state, Level level, @NotNull BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof DecoratedCuttingBoardBlockEntity) {
             return !((DecoratedCuttingBoardBlockEntity) blockEntity).isEmpty() ? 15 : 0;
@@ -186,7 +185,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return ModBlockEntityTypes.DECORATED_CUTTING_BOARD.get().create(pos, state);
     }
 
@@ -201,15 +200,14 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos,
-                                                BlockState state) {
+    public @NotNull ItemStack getCloneItemStack(LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
         BlockEntity be = level.getBlockEntity(pos);
         return be instanceof DecoratedCuttingBoardBlockEntity ? ((DecoratedCuttingBoardBlockEntity) be).getItem() :
                 super.getCloneItemStack(level, pos, state);
     }
 
     @Override
-    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity placer, @NotNull ItemStack stack) {
         BlockEntity blockentity = worldIn.getBlockEntity(pos);
 
         if (blockentity instanceof DecoratedCuttingBoardBlockEntity) {
@@ -229,7 +227,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
+    protected void spawnDestroyParticles(Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state) {
         // We want to render the particles of the Cutting Board.
         if (level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity blockEntity) {
             ItemStack board = blockEntity.getCuttingBoard();

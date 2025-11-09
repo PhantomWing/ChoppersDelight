@@ -4,7 +4,6 @@ import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
-import com.phantomwing.choppersdelight.itemGroup.ModItemGroups;
 
 import com.phantomwing.choppersdelight.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
@@ -26,10 +25,5 @@ public class ChoppersDelight implements ModInitializer {
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
 		ModRecipes.registerModRecipes();
-
-		// UI
-		ModItemGroups.registerModItemGroups();
 	}
-
-
 }

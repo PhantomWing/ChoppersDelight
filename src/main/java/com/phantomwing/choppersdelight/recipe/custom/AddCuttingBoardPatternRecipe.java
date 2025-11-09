@@ -3,24 +3,22 @@ package com.phantomwing.choppersdelight.recipe.custom;
 import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
+import com.phantomwing.choppersdelight.recipe.ModRecipes;
 import com.phantomwing.choppersdelight.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class AddCuttingBoardPatternRecipe extends CustomRecipe {
-
-    public static final RecipeSerializer<AddCuttingBoardPatternRecipe> ADD_PATTERN =
-            new SimpleCraftingRecipeSerializer<>(AddCuttingBoardPatternRecipe::new);
-
     public AddCuttingBoardPatternRecipe(CraftingBookCategory category) {
         super(category);
     }
 
     @Override
-    public boolean matches(CraftingInput inv, Level level) {
+    public boolean matches(CraftingInput inv, @NotNull Level level) {
         ItemStack bannerStack = ItemStack.EMPTY;
         ItemStack cuttingBoardStack = ItemStack.EMPTY;
 
@@ -51,7 +49,7 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider provider) {
+    public @NotNull ItemStack assemble(CraftingInput inv, HolderLookup.@NotNull Provider provider) {
         ItemStack bannerStack = ItemStack.EMPTY;
         ItemStack cuttingBoardStack = ItemStack.EMPTY;
 
@@ -85,7 +83,7 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return ADD_PATTERN;
+    public @NotNull RecipeSerializer<?> getSerializer() {
+        return ModRecipes.ADD_PATTERN_RECIPE.get();
     }
 }

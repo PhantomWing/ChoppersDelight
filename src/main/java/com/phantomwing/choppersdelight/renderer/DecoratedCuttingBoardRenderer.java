@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
 
@@ -28,7 +29,7 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
         this.bannerModelPart = BannerUtils.initializeBannerModelPart();
     }
 
-    public void render(DecoratedCuttingBoardBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+    public void render(DecoratedCuttingBoardBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
         Direction direction = blockEntity.getBlockState().getValue(DecoratedCuttingBoardBlock.FACING).getOpposite();
 
         // Render the board itself.
