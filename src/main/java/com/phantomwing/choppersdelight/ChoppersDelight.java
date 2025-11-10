@@ -17,8 +17,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -27,7 +25,6 @@ import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -38,17 +35,8 @@ public class ChoppersDelight {
     public static final String MOD_ID = "choppersdelight";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-
-
     public ChoppersDelight(IEventBus eventBus, ModContainer modContainer) {
         eventBus.addListener(this::commonSetup);
-
-        modContainer.registerConfig(ModConfig.Type.COMMON, Configuration.COMMON_CONFIG);
-
-        // This will use NeoForge's ConfigurationScreen to display this mod's configs (Client only)
-        if (FMLEnvironment.dist.isClient()) {
-            modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-        }
 
         NeoForge.EVENT_BUS.register(this);
 
@@ -56,16 +44,17 @@ public class ChoppersDelight {
         registerManagers(eventBus);
     }
 
-
-
     // Register all managers to the event bus.
     private void registerManagers(IEventBus eventBus) {
         ModItems.register(eventBus);
         ModBlocks.register(eventBus);
         ModBlockEntityTypes.register(eventBus);
-        ModCreativeModeTab.register(eventBus);
         ModDataComponents.register(eventBus);
         ModRecipes.register(eventBus);
+
+        if (FMLEnvironment.dist.isClient()) {
+            ModCreativeModeTab.register(eventBus);
+        }
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -80,6 +69,7 @@ public class ChoppersDelight {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+
         }
 
         @SubscribeEvent

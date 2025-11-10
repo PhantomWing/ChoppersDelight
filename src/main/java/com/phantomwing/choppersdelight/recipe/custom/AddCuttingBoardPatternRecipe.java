@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
+import com.phantomwing.choppersdelight.recipe.ModRecipes;
 import com.phantomwing.choppersdelight.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.BannerItem;
@@ -13,14 +14,9 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class AddCuttingBoardPatternRecipe extends CustomRecipe {
-
-    public static final RecipeSerializer<AddCuttingBoardPatternRecipe> ADD_PATTERN =
-            new SimpleCraftingRecipeSerializer<>(AddCuttingBoardPatternRecipe::new);
-
     public AddCuttingBoardPatternRecipe(CraftingBookCategory category) {
         super(category);
     }
@@ -94,6 +90,6 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
     @Nonnull
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ADD_PATTERN;
+        return ModRecipes.ADD_PATTERN_RECIPE.get();
     }
 }

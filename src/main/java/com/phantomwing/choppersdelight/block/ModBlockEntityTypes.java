@@ -11,9 +11,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.lang.reflect.Array;
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 

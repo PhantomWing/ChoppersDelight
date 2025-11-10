@@ -3,6 +3,7 @@ package com.phantomwing.choppersdelight.recipe.custom;
 import javax.annotation.Nonnull;
 
 import com.phantomwing.choppersdelight.item.custom.DecoratedCuttingBoardItem;
+import com.phantomwing.choppersdelight.recipe.ModRecipes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
@@ -10,14 +11,9 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class RemoveCuttingBoardPatternRecipe extends CustomRecipe {
-
-    public static final RecipeSerializer<RemoveCuttingBoardPatternRecipe> REMOVE_PATTERN =
-            new SimpleCraftingRecipeSerializer<>(RemoveCuttingBoardPatternRecipe::new);
-
     public RemoveCuttingBoardPatternRecipe(CraftingBookCategory category) {
         super(category);
     }
@@ -89,6 +85,6 @@ public class RemoveCuttingBoardPatternRecipe extends CustomRecipe {
     @Nonnull
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return REMOVE_PATTERN;
+        return ModRecipes.REMOVE_PATTERN_RECIPE.get();
     }
 }
