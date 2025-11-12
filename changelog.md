@@ -1,6 +1,9 @@
 # 1.0.1
 ### Fixes
 - Fix crash on startup when running the mod on a server
+- Fix crafting recipes for cutting boards of compatible mods always loading, even if the mod is not present
+- Fix JEIPlugin trying to load cutting boards of compatible mods, even if the mod is not present
+- Fix `cutting_boards` tag failing to load, when any of the compatible mods is not present
 
 # 1.0.0
 ### Additions

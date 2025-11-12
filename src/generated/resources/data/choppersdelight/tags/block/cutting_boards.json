@@ -13,43 +13,157 @@
     "choppersdelight:crimson_cutting_board",
     "choppersdelight:warped_cutting_board",
     "choppersdelight:pale_oak_cutting_board",
-    "biomesoplenty:dead_cutting_board",
-    "biomesoplenty:empyreal_cutting_board",
-    "biomesoplenty:fir_cutting_board",
-    "biomesoplenty:hellbark_cutting_board",
-    "biomesoplenty:jacaranda_cutting_board",
-    "biomesoplenty:magic_cutting_board",
-    "biomesoplenty:mahogany_cutting_board",
-    "biomesoplenty:maple_cutting_board",
-    "biomesoplenty:palm_cutting_board",
-    "biomesoplenty:pine_cutting_board",
-    "biomesoplenty:redwood_cutting_board",
-    "biomesoplenty:umbran_cutting_board",
-    "biomesoplenty:willow_cutting_board",
-    "biomeswevegone:aspen_cutting_board",
-    "biomeswevegone:baobab_cutting_board",
-    "biomeswevegone:blue_enchanted_cutting_board",
-    "biomeswevegone:cika_cutting_board",
-    "biomeswevegone:cypress_cutting_board",
-    "biomeswevegone:ebony_cutting_board",
-    "biomeswevegone:fir_cutting_board",
-    "biomeswevegone:florus_cutting_board",
-    "biomeswevegone:green_enchanted_cutting_board",
-    "biomeswevegone:holly_cutting_board",
-    "biomeswevegone:ironwood_cutting_board",
-    "biomeswevegone:jacaranda_cutting_board",
-    "biomeswevegone:mahogany_cutting_board",
-    "biomeswevegone:maple_cutting_board",
-    "biomeswevegone:palm_cutting_board",
-    "biomeswevegone:pine_cutting_board",
-    "biomeswevegone:rainbow_eucalyptus_cutting_board",
-    "biomeswevegone:redwood_cutting_board",
-    "biomeswevegone:sakura_cutting_board",
-    "biomeswevegone:skyris_cutting_board",
-    "biomeswevegone:spirit_cutting_board",
-    "biomeswevegone:white_mangrove_cutting_board",
-    "biomeswevegone:willow_cutting_board",
-    "biomeswevegone:witch_hazel_cutting_board",
-    "biomeswevegone:zelkova_cutting_board"
+    {
+      "id": "biomesoplenty:dead_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:empyreal_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:fir_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:hellbark_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:jacaranda_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:magic_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:mahogany_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:maple_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:palm_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:pine_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:redwood_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:umbran_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:willow_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:aspen_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:baobab_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:blue_enchanted_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:cika_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:cypress_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:ebony_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:fir_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:florus_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:green_enchanted_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:holly_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:ironwood_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:jacaranda_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:mahogany_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:maple_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:palm_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:pine_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:rainbow_eucalyptus_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:redwood_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:sakura_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:skyris_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:spirit_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:white_mangrove_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:willow_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:witch_hazel_cutting_board",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:zelkova_cutting_board",
+      "required": false
+    }
   ]
 }

@@ -3,6 +3,7 @@ package com.phantomwing.choppersdelight.block;
 import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
+import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -29,16 +30,7 @@ public class ModBlockEntityTypes
 
     @SubscribeEvent
     public static void onRegisterFarmersDelightBlockEntityTypes(final BlockEntityTypeAddBlocksEvent event) {
-        Stream<Block> blocks = ModBlocks.MINECRAFT_CUTTING_BOARDS.stream().map(Supplier::get);
-
-        if (Compatibility.IsBiomesOPlentyLoaded()) {
-            blocks = Stream.concat(blocks, ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.stream().map(Supplier::get));
-        }
-
-        if (Compatibility.IsBiomesWeveGoneLoaded()) {
-            blocks = Stream.concat(blocks, ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.stream().map(Supplier::get));
-        }
-
-        event.modify(vectorwing.farmersdelight.common.registry.ModBlockEntityTypes.CUTTING_BOARD.get(), blocks.toArray(Block[]::new));
+        Stream<Block> cuttingBoards = BlockUtils.getCuttingBoards();
+        event.modify(vectorwing.farmersdelight.common.registry.ModBlockEntityTypes.CUTTING_BOARD.get(), cuttingBoards.toArray(Block[]::new));
     }
 }

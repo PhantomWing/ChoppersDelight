@@ -4,11 +4,16 @@ import com.phantomwing.choppersdelight.block.ModBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -40,12 +45,18 @@ public class BlockLootTables extends BlockLootSubProvider {
     private Stream<Block> getKnownBlocksForRegistry(DeferredRegister.Blocks registry) {
         return registry.getEntries()
             .stream()
-            .map(e -> (Block) e.value());
+            .map(DeferredHolder::value);
     }
-
 
     private void dropSelf(Supplier<Block> blockSupplier) {
         var block = blockSupplier.get();
-        this.dropOther(block, block);
+        this.map.put(block.getLootTable(), createCuttingBoardLootTable(block));
+    }
+
+    public LootTable.Builder createCuttingBoardLootTable(ItemLike item) {
+        return LootTable.lootTable()
+            .withPool(
+                this.applyExplosionCondition(item, LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(item)))
+            );
     }
 }
