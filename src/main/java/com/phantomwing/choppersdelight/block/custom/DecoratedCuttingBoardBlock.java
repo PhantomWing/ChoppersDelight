@@ -56,7 +56,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
 
-    public DecoratedCuttingBoardBlock(BlockBehaviour.Properties properties) {
+    public DecoratedCuttingBoardBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
@@ -131,8 +131,12 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
 
         BlockEntity tileEntity = level.getBlockEntity(pos);
         if (tileEntity instanceof DecoratedCuttingBoardBlockEntity cuttingBoard) {
+            // Drop item placed on top of the cutting board.
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.getStoredItem());
             level.updateNeighbourForOutputSignal(pos, this);
+
+            // Drop the cutting board itself.
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.getItem());
         }
 
         super.onRemove(state, level, pos, newState, isMoving);
@@ -238,15 +242,23 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
 
     @Override
     protected void spawnDestroyParticles(Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state) {
+        BlockState blockState = null;
+
         // We want to render the particles of the Cutting Board.
         if (level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity blockEntity) {
             ItemStack board = blockEntity.getCuttingBoard();
 
             if (board.getItem() instanceof BlockItem blockItem) {
-                BlockState blockState = blockItem.getBlock().defaultBlockState();
-                level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(blockState));
+                blockState = blockItem.getBlock().defaultBlockState();
             }
         }
+
+        // Fallback to oak planks if something goes wrong.
+        if (blockState == null) {
+            blockState = Blocks.OAK_PLANKS.defaultBlockState();
+        }
+
+        level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(blockState));
     }
 
     @EventBusSubscriber(modid = ChoppersDelight.MOD_ID)

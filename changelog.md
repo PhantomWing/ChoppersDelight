@@ -1,9 +1,13 @@
 # 1.0.1
 ### Fixes
 - Fix crash on startup when running the mod on a server
+- Fix decorated cutting boards not being craftable
 - Fix crafting recipes for cutting boards of compatible mods always loading, even if the mod is not present
+- Fix block loot tables for cutting boards of compatible mods always loading, even if the mod is not present
 - Fix JEIPlugin trying to load cutting boards of compatible mods, even if the mod is not present
 - Fix `cutting_boards` tag failing to load, when any of the compatible mods is not present
+- Fix decorated cutting boards not dropping the correct item, always dropping with a default banner and wood type
+- Fix decorated cutting boards having a missing particle texture when breaking
 
 # 1.0.0
 ### Additions
