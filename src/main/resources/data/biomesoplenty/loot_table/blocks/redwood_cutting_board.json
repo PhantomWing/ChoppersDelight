@@ -17,5 +17,13 @@
       "rolls": 1.0
     }
   ],
-  "random_sequence": "biomesoplenty:blocks/redwood_cutting_board"
+  "random_sequence": "biomesoplenty:blocks/redwood_cutting_board",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "biomesoplenty"
+      ]
+    }
+  ]
 }

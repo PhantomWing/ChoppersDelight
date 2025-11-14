@@ -16,5 +16,13 @@
   "result": {
     "count": 1,
     "id": "biomeswevegone:sakura_cutting_board"
-  }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "biomeswevegone"
+      ]
+    }
+  ]
 }

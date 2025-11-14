@@ -16,5 +16,13 @@
   "result": {
     "count": 1,
     "id": "biomeswevegone:green_enchanted_cutting_board"
-  }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "biomeswevegone"
+      ]
+    }
+  ]
 }

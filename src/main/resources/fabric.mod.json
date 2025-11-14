@@ -34,6 +34,5 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"farmersdelight": "*"
-	},
-	"loadAfter": ["farmersdelight"]
+	}
 }

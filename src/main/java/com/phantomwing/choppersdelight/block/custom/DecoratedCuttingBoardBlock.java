@@ -123,8 +123,12 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
 
         BlockEntity tileEntity = level.getBlockEntity(pos);
         if (tileEntity instanceof DecoratedCuttingBoardBlockEntity cuttingBoard) {
+            // Drop item placed on top of the cutting board.
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.getStoredItem());
             level.updateNeighbourForOutputSignal(pos, this);
+
+            // Drop the cutting board itself.
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.getItem());
         }
 
         super.onRemove(state, level, pos, newState, isMoving);

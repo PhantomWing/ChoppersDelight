@@ -1,3 +1,11 @@
+# 1.0.1
+### Fixes
+- Fixed Farmer's Delight's Cutting Board recipe not being overridden (it still allowed any wood type), causing some other cutting boards to be unobtainable
+- Fixed Farmer's Delight's Cutting Board not being renamed to Spruce Cutting Board
+- Fixed recipes, advancements & loot tables of cutting boards not being loaded conditionally (now they only load in if their wood type is present)
+- Fixed decorated cutting boards dropping the wrong item when broken
+- Fixed decorated cutting boards missing a particle texture when breaking
+
 # 1.0.0
 First Fabric version.
 
