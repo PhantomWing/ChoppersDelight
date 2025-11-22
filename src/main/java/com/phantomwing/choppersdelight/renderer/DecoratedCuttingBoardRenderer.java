@@ -2,9 +2,6 @@ package com.phantomwing.choppersdelight.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-
-import javax.annotation.Nonnull;
-
 import com.phantomwing.choppersdelight.block.custom.DecoratedCuttingBoardBlock;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import com.phantomwing.choppersdelight.utils.BannerUtils;
@@ -16,11 +13,15 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
+
+import javax.annotation.Nonnull;
 
 public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<DecoratedCuttingBoardBlockEntity> {
     private final ModelPart bannerModelPart;

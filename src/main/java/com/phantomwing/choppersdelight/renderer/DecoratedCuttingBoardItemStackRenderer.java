@@ -1,5 +1,7 @@
 package com.phantomwing.choppersdelight.renderer;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Pair;
 import com.phantomwing.choppersdelight.item.custom.DecoratedCuttingBoardItem;
 import com.phantomwing.choppersdelight.utils.BannerUtils;
 import net.minecraft.client.Minecraft;
@@ -11,15 +13,13 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.*;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.world.level.block.entity.BannerPatternLayers;
-import net.neoforged.neoforge.client.ClientHooks;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 public class DecoratedCuttingBoardItemStackRenderer extends BlockEntityWithoutLevelRenderer {
     private final ModelPart bannerModelPart;
@@ -59,15 +59,15 @@ public class DecoratedCuttingBoardItemStackRenderer extends BlockEntityWithoutLe
         if (bannerItemStack.getItem() instanceof BannerItem bannerItem) {
             // Prepare PoseStack based on display context.
             BakedModel model = itemRenderer.getModel(cuttingBoardItem, null, null, 0);
-            ClientHooks.handleCameraTransforms(poseStack, model, displayContext, false);
+            BannerUtils.handleCameraTransforms(poseStack, model, displayContext, false);
             poseStack.translate(-0.5F, -0.5F, -0.5F);
 
+            List<Pair<Holder<BannerPattern>, DyeColor>> patternLayers = BannerUtils.getPatternLayers(bannerItemStack);
+
             // Render the banner.
-            BannerUtils.renderBanner(poseStack, buffer, bannerModelPart, light, overlay, Direction.SOUTH, bannerItem.getColor(), bannerItemStack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY));
+            if (patternLayers != null) {
+                BannerUtils.renderBanner(poseStack, buffer, bannerModelPart, light, overlay, Direction.SOUTH, patternLayers);
+            }
         }
     }
-
-
-
-
 }

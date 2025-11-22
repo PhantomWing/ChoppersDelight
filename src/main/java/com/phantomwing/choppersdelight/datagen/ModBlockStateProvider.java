@@ -3,16 +3,17 @@ package com.phantomwing.choppersdelight.datagen;
 import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.ModBlocks;
+
 import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import vectorwing.farmersdelight.common.block.BasketBlock;
 
 import java.util.function.Function;
@@ -28,8 +29,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         ModBlocks.MINECRAFT_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, ChoppersDelight.MOD_ID));
-        ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
-        ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
+
+        if (Compatibility.IsBiomesOPlentyLoaded()) {
+            ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
+        }
+
+        if (Compatibility.IsBiomesWeveGoneLoaded()) {
+            ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
+        }
 
         cuttingBoardBlock(ModBlocks.DECORATED_CUTTING_BOARD, ChoppersDelight.MOD_ID);
     }

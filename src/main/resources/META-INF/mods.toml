@@ -1,0 +1,39 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+issueTrackerURL = "https://github.com/PhantomWing/ChoppersDelight/issues"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+displayURL="https://github.com/PhantomWing/ChoppersDelight"
+logoFile="logo.png"
+logoBlur=false
+authors="${mod_authors}"
+description='''${mod_description}'''
+## Catalogue mod compatibility
+itemIcon = "farmersdelight:cutting_board"
+configBackground = "minecraft:textures/block/bricks.png"
+
+
+[[dependencies.${mod_id}]] #optional
+    modId="forge" #mandatory
+    mandatory=true
+    versionRange="${forge_version_range}" #mandatory
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="farmersdelight"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="AFTER"
+    side="BOTH"

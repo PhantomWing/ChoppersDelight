@@ -1,28 +1,30 @@
 package com.phantomwing.choppersdelight.recipe.custom;
 
-import javax.annotation.Nonnull;
-
 import com.phantomwing.choppersdelight.item.custom.DecoratedCuttingBoardItem;
 import com.phantomwing.choppersdelight.recipe.ModRecipes;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 public class RemoveCuttingBoardPatternRecipe extends CustomRecipe {
-    public RemoveCuttingBoardPatternRecipe(CraftingBookCategory category) {
-        super(category);
+    public RemoveCuttingBoardPatternRecipe(ResourceLocation id, CraftingBookCategory category) {
+        super(id, category);
     }
 
     @Override
-    public boolean matches(@Nonnull CraftingInput inv, @Nonnull Level level) {
+    public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
         ItemStack itemstack = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.size(); i++) {
+        for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack stack = inv.getItem(i);
 
             if (!stack.isEmpty()) {
@@ -39,10 +41,10 @@ public class RemoveCuttingBoardPatternRecipe extends CustomRecipe {
 
     @Nonnull
     @Override
-    public ItemStack assemble(@Nonnull CraftingInput inv, @Nonnull HolderLookup.Provider provider) {
+    public ItemStack assemble(@Nonnull CraftingContainer inv, @NotNull RegistryAccess registryAccess) {
         ItemStack itemstack = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.size(); ++i) {
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
 
             if (!stack.isEmpty()) {
@@ -63,9 +65,9 @@ public class RemoveCuttingBoardPatternRecipe extends CustomRecipe {
 
     @Nonnull
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
         NonNullList<ItemStack> nonnulllist = NonNullList
-                .withSize(inv.size(), ItemStack.EMPTY);
+                .withSize(inv.getContainerSize(), ItemStack.EMPTY);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack item = inv.getItem(i);

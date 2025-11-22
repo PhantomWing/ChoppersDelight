@@ -7,9 +7,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -17,13 +17,13 @@ public class ModRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
             DeferredRegister.create(Registries.RECIPE_SERIALIZER, ChoppersDelight.MOD_ID);
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AddCuttingBoardPatternRecipe>> ADD_PATTERN_RECIPE =
+    public static final RegistryObject<RecipeSerializer<AddCuttingBoardPatternRecipe>> ADD_PATTERN_RECIPE =
             registerRecipe("add_cutting_board_pattern", () -> new SimpleCraftingRecipeSerializer<>(AddCuttingBoardPatternRecipe::new));
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<RemoveCuttingBoardPatternRecipe>> REMOVE_PATTERN_RECIPE =
+    public static final RegistryObject<RecipeSerializer<RemoveCuttingBoardPatternRecipe>> REMOVE_PATTERN_RECIPE =
             registerRecipe("remove_cutting_board_pattern", () -> new SimpleCraftingRecipeSerializer<>(RemoveCuttingBoardPatternRecipe::new));
 
-    private static <T extends Recipe<?>> DeferredHolder<RecipeSerializer<?>, RecipeSerializer<T>> registerRecipe(String name, Supplier<? extends RecipeSerializer<T>> supplier) {
+    private static <T extends Recipe<?>> RegistryObject<RecipeSerializer<T>> registerRecipe(String name, Supplier<? extends RecipeSerializer<T>> supplier) {
         return RECIPE_SERIALIZERS.register(name, supplier);
     }
 

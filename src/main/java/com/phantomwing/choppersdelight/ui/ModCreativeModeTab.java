@@ -3,62 +3,62 @@ package com.phantomwing.choppersdelight.ui;
 import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.ModBlocks;
-import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BannerPatterns;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ModCreativeModeTab {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ChoppersDelight.MOD_ID);
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MOD_TAB =
-        CREATIVE_MODE_TABS.register(ChoppersDelight.MOD_ID + "_tab", () -> CreativeModeTab.builder()
-            .icon(ModCreativeModeTab::getTabIcon)
-            .title(Component.translatable(("itemGroup." + ChoppersDelight.MOD_ID)))
-            .displayItems(ModCreativeModeTab::displayItems)
-            .build());
+    public static final RegistryObject<CreativeModeTab> MOD_TAB =
+            CREATIVE_MODE_TABS.register(ChoppersDelight.MOD_ID + "_tab", () -> CreativeModeTab.builder()
+                    .icon(ModCreativeModeTab::getTabIcon)
+                    .title(Component.translatable(("itemGroup." + ChoppersDelight.MOD_ID)))
+                    .displayItems(ModCreativeModeTab::displayItems)
+                    .build());
 
     public static ItemStack getTabIcon() {
         return getDecoratedCuttingBoard(ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK);
     }
 
-    public static ItemStack getDecoratedCuttingBoard(DeferredBlock<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
+    public static ItemStack getDecoratedCuttingBoard(RegistryObject<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
         Level level = Minecraft.getInstance().level;
 
         if (level != null) {
-            // Generate a base cutting board
+            // Generate base items
             ItemStack cuttingBoard = new ItemStack(board.get());
-            Registry<BannerPattern> bannerPatternRegistry = level.registryAccess().registryOrThrow(Registries.BANNER_PATTERN);
-            Holder<BannerPattern> patternHolder = bannerPatternRegistry.getHolderOrThrow(pattern);
-
-            // Generate a banner
             ItemStack bannerStack = new ItemStack(banner);
-            BannerPatternLayers layers = new BannerPatternLayers.Builder()
-                    .add(patternHolder, patternColor)
-                    .build();
-            bannerStack.set(DataComponents.BANNER_PATTERNS, layers);
+
+            // Prepare BlockEntityTag and Patterns list
+            CompoundTag blockEntityTag = bannerStack.getOrCreateTagElement("BlockEntityTag");
+            ListTag patternsList = new ListTag();
+
+            CompoundTag patternTag = new CompoundTag();
+            String patternId = pattern.location().getPath();
+            patternTag.putString("Pattern", patternId);
+            patternTag.putInt("Color", patternColor.getId()); // color id 0-15
+            patternsList.add(patternTag);
+            blockEntityTag.put("Patterns", patternsList);
 
             // Generate the final item
-            ItemStack itemStack = new ItemStack(ModBlocks.DECORATED_CUTTING_BOARD.get());
-            DecoratedCuttingBoardData cuttingBoardData = new DecoratedCuttingBoardData(cuttingBoard, bannerStack);
-            itemStack.set(ModDataComponents.DECORATED_CUTTING_BOARD_DATA.get(), cuttingBoardData);
+            ItemStack itemStack = new ItemStack(ModItems.DECORATED_CUTTING_BOARD.get());
+            CompoundTag decoratedData = itemStack.getOrCreateTagElement(ModDataComponents.DECORATED_CUTTING_BOARD_DATA);
+            decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_CUTTING_BOARD_DATA, cuttingBoard.save(new CompoundTag()));
+            decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_BANNER_DATA, bannerStack.save(new CompoundTag()));
 
             return itemStack;
         }
@@ -76,7 +76,7 @@ public class ModCreativeModeTab {
         output.accept(getDecoratedCuttingBoard(ModBlocks.CHERRY_CUTTING_BOARD, Items.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK));
         output.accept(getDecoratedCuttingBoard(ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK));
         output.accept(getDecoratedCuttingBoard(ModBlocks.CRIMSON_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.SKULL, DyeColor.WHITE));
-        output.accept(getDecoratedCuttingBoard(ModBlocks.WARPED_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.FLOW, DyeColor.CYAN));
+        output.accept(getDecoratedCuttingBoard(ModBlocks.WARPED_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.PIGLIN, DyeColor.CYAN));
     }
 
     public static void displayModItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
@@ -112,18 +112,6 @@ public class ModCreativeModeTab {
         ModItems.BIOMES_WEVE_GONE_CREATIVE_TAB_ITEMS.forEach((item) -> {
             output.accept(item.get());
         });
-    }
-
-    public static Holder<BannerPattern> getCreeperPattern() {
-        Level level = Minecraft.getInstance().level;
-        if (level == null) {
-            return null; // not in a world yet
-        }
-
-        Registry<BannerPattern> registry =
-                level.registryAccess().registryOrThrow(Registries.BANNER_PATTERN);
-
-        return registry.getHolderOrThrow(BannerPatterns.CREEPER);
     }
 
     public static void register(IEventBus eventBus) {

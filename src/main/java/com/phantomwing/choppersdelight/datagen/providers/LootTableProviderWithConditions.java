@@ -1,141 +1,123 @@
 package com.phantomwing.choppersdelight.datagen.providers;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.Lifecycle;
+import com.phantomwing.choppersdelight.utils.WithConditions;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.Util;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.RandomSequence;
+import net.minecraft.world.level.levelgen.RandomSupport;
+import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+
+import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
-import net.minecraft.Util;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.RegistrationInfo;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.WritableRegistry;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
-import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.RandomSequence;
-import net.minecraft.world.level.levelgen.RandomSupport;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.ValidationContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.neoforge.common.conditions.ICondition;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
+import java.util.function.Supplier;
 
 public class LootTableProviderWithConditions implements DataProvider {
     private static final Logger LOGGER = LogUtils.getLogger();
     private final PackOutput.PathProvider pathProvider;
-    private final Set<ResourceKey<LootTable>> requiredTables;
-    private final List<SubProviderEntry> subProviders;
-    private final CompletableFuture<HolderLookup.Provider> registries;
+    private final Set<ResourceLocation> requiredTables;
+    private final List<LootTableProviderWithConditions.SubProviderEntry> subProviders;
 
-    public LootTableProviderWithConditions(PackOutput output, Set<ResourceKey<LootTable>> requiredTables, List<SubProviderEntry> subProviders, CompletableFuture<HolderLookup.Provider> registries) {
-        this.pathProvider = output.createRegistryElementsPathProvider(Registries.LOOT_TABLE);
+    public LootTableProviderWithConditions(PackOutput output, Set<ResourceLocation> requiredTables, List<SubProviderEntry> subProviders) {
+        this.pathProvider = output.createPathProvider(PackOutput.Target.DATA_PACK, "loot_tables");
         this.subProviders = subProviders;
         this.requiredTables = requiredTables;
-        this.registries = registries;
     }
 
-    public @NotNull CompletableFuture<?> run(@NotNull CachedOutput output) {
-        return this.registries.thenCompose((p_323117_) -> this.run(output, p_323117_));
-    }
+    public @NotNull CompletableFuture<?> run(@NotNull CachedOutput pOutput) {
+        final Map<ResourceLocation, LootTable> map = Maps.newHashMap();
+        Map<RandomSupport.Seed128bit, ResourceLocation> map1 = new Object2ObjectOpenHashMap<>();
+        Map<ResourceLocation, List<ICondition>> conditionsMap = new Object2ObjectOpenHashMap<>();
 
-    private CompletableFuture<?> run(CachedOutput output, HolderLookup.Provider provider) {
-        WritableRegistry<LootTable> writableregistry = new MappedRegistry<>(Registries.LOOT_TABLE, Lifecycle.experimental());
-        Map<RandomSupport.Seed128bit, ResourceLocation> map = new Object2ObjectOpenHashMap<>();
-        Map<ResourceKey<LootTable>, List<ICondition>> conditionsMap = new Object2ObjectOpenHashMap<>();
+        this.getTables().forEach((subProviderEntry) -> {
+            subProviderEntry.provider().get().generate((key, builderWithConditions) -> {
+                ResourceLocation resourcelocation1 = map1.put(RandomSequence.seedForKey(key), key);
+                if (resourcelocation1 != null) {
+                    Util.logAndPauseIfInIde("Loot table random sequence seed collision on " + resourcelocation1 + " and " + key);
+                }
 
-        this.getTables().forEach((subProviderEntry) -> subProviderEntry.provider().apply(provider).generate((resourceKey, builderWithConditions) -> {
-            ResourceLocation sequencedId = sequenceIdForLootTable(resourceKey);
+                builderWithConditions.carrier().setRandomSequence(key);
+                if (map.put(key, builderWithConditions.carrier().setParamSet(subProviderEntry.paramSet).build()) != null) {
+                    throw new IllegalStateException("Duplicate loot table " + key);
+                }
 
-            ResourceLocation resourceLocation = map.put(RandomSequence.seedForKey(sequencedId), sequencedId);
-            if (resourceLocation != null) {
-                String var10000 = String.valueOf(resourceLocation);
-                Util.logAndPauseIfInIde("Loot table random sequence seed collision on " + var10000 + " and " + String.valueOf(resourceKey.location()));
+                var conditions = builderWithConditions.conditions();
+                conditionsMap.put(resourcelocation1, conditions);
+            });
+        });
+
+        ValidationContext validationcontext = new ValidationContext(LootContextParamSets.ALL_PARAMS, new LootDataResolver() {
+            @Nullable
+            public <T> T getElement(@NotNull LootDataId<T> p_279283_) {
+                return (T) (p_279283_.type() == LootDataType.TABLE ? map.get(p_279283_.location()) : null);
             }
+        });
 
-            var conditions = builderWithConditions.conditions();
-            conditionsMap.put(resourceKey, conditions);
+        validate(map, validationcontext);
 
-            var builder = builderWithConditions.carrier();
-            builder.setRandomSequence(sequencedId);
-            LootTable loottable = builder.setParamSet(subProviderEntry.paramSet).build();
-
-            writableregistry.register(resourceKey, loottable, RegistrationInfo.BUILT_IN);
-        }));
-
-        writableregistry.freeze();
-
-        ProblemReporter.Collector problemreporter$collector = new ProblemReporter.Collector();
-        HolderGetter.Provider holdergetter$provider = (new RegistryAccess.ImmutableRegistryAccess(List.of(writableregistry))).freeze().asGetterLookup();
-        ValidationContext validationcontext = new ValidationContext(problemreporter$collector, LootContextParamSets.ALL_PARAMS, holdergetter$provider);
-
-        this.validate(writableregistry, validationcontext, problemreporter$collector);
-
-        Multimap<String, String> multimap = problemreporter$collector.get();
+        Multimap<String, String> multimap = validationcontext.getProblems();
         if (!multimap.isEmpty()) {
-            multimap.forEach((problemLoc, message) -> LOGGER.warn("Found validation problem in {}: {}", problemLoc, message));
+            multimap.forEach((p_124446_, p_124447_) -> {
+                LOGGER.warn("Found validation problem in {}: {}", p_124446_, p_124447_);
+            });
             throw new IllegalStateException("Failed to validate loot tables, see logs");
         } else {
-            return CompletableFuture.allOf(writableregistry.entrySet().stream().map((lootTableEntry) -> {
-                ResourceKey<LootTable> resourceKey = lootTableEntry.getKey();
+            return CompletableFuture.allOf(map.entrySet().stream().map((lootTableEntry) -> {
+                ResourceLocation resourcelocation1 = lootTableEntry.getKey();
                 LootTable loottable = lootTableEntry.getValue();
-                Path path = this.pathProvider.json(resourceKey.location());
+                Path path = this.pathProvider.json(resourcelocation1);
 
                 // Convert LootTable to JSON.
-                RegistryOps<JsonElement> registryops = provider.createSerializationContext(JsonOps.INSTANCE);
-                JsonElement jsonelement = LootTable.DIRECT_CODEC.encodeStart(registryops, loottable).getOrThrow();
+                JsonElement jsonelement = LootDataType.TABLE.parser().toJsonTree(loottable);
 
                 JsonObject root = jsonelement.getAsJsonObject();
 
                 // Add provided conditions to the JSON object (if there are any).
-                List<ICondition> conditions = conditionsMap.get(resourceKey);
-                ICondition.writeConditions(provider, root, conditions);
+                List<ICondition> conditions = conditionsMap.get(resourcelocation1);
+                WithConditions.writeConditions(root, conditions);
 
-                // Save JSON object to file.
-                return DataProvider.saveStable(output, root, path);
 
+                return DataProvider.saveStable(pOutput, root, path);
             }).toArray(CompletableFuture[]::new));
         }
     }
 
-    public List<SubProviderEntry> getTables() {
+    public List<LootTableProviderWithConditions.SubProviderEntry> getTables() {
         return this.subProviders;
     }
 
-    protected void validate(WritableRegistry<LootTable> writableregistry, ValidationContext validationcontext, ProblemReporter.Collector problemreporter$collector) {
-        for (ResourceKey<LootTable> resourcekey : Sets.difference(this.requiredTables, writableregistry.registryKeySet())) {
-            problemreporter$collector.report("Missing built-in table: " + resourcekey.location());
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationcontext) {
+        for(ResourceLocation resourcelocation : Sets.difference(this.requiredTables, map.keySet())) {
+            validationcontext.reportProblem("Missing built-in table: " + resourcelocation);
         }
 
-        writableregistry.holders().forEach((p_335195_) -> p_335195_.value().validate(validationcontext.setParams(p_335195_.value().getParamSet()).enterElement("{" + String.valueOf(p_335195_.key().location()) + "}", p_335195_.key())));
-    }
-
-    private static ResourceLocation sequenceIdForLootTable(ResourceKey<LootTable> lootTable) {
-        return lootTable.location();
+        map.forEach((p_278897_, p_278898_) -> {
+            p_278898_.validate(validationcontext.setParams(p_278898_.getParamSet()).enterElement("{" + p_278897_ + "}", new LootDataId<>(LootDataType.TABLE, p_278897_)));
+        });
     }
 
     public final @NotNull String getName() {
         return "Loot Tables With Conditions";
     }
 
-    public record SubProviderEntry(Function<HolderLookup.Provider, LootTableSubProviderWithConditions> provider, LootContextParamSet paramSet) {
+    public record SubProviderEntry(Supplier<LootTableSubProviderWithConditions> provider, LootContextParamSet paramSet) {
     }
 }

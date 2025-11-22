@@ -1,21 +1,14 @@
 package com.phantomwing.choppersdelight.block;
 
 import com.phantomwing.choppersdelight.ChoppersDelight;
-import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
-import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
 
-@EventBusSubscriber(modid = ChoppersDelight.MOD_ID)
+import java.util.function.Supplier;
+
 public class ModBlockEntityTypes
 {
     public static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, ChoppersDelight.MOD_ID);
@@ -26,11 +19,5 @@ public class ModBlockEntityTypes
 
     public static void register(IEventBus eventBus) {
         TILES.register(eventBus);
-    }
-
-    @SubscribeEvent
-    public static void onRegisterFarmersDelightBlockEntityTypes(final BlockEntityTypeAddBlocksEvent event) {
-        Stream<Block> cuttingBoards = BlockUtils.getCuttingBoards();
-        event.modify(vectorwing.farmersdelight.common.registry.ModBlockEntityTypes.CUTTING_BOARD.get(), cuttingBoards.toArray(Block[]::new));
     }
 }

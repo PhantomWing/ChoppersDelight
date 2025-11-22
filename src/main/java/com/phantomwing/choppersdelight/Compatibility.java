@@ -1,6 +1,6 @@
 package com.phantomwing.choppersdelight;
 
-import net.neoforged.fml.ModList;
+import net.minecraftforge.fml.ModList;
 
 public class Compatibility {
     public static String BIOMES_O_PLENTY_MOD_ID = "biomesoplenty";
@@ -17,7 +17,8 @@ public class Compatibility {
     }
 
     public static void checkInstalledMods() {
-        _isBiomesOPlentyLoaded = ModList.get().isLoaded(Compatibility.BIOMES_O_PLENTY_MOD_ID);
-        _isBiomesWeveGoneLoaded = ModList.get().isLoaded(Compatibility.BIOMES_WEVE_GONE_MOD_ID);
+        ModList modList = ModList.get();
+        _isBiomesOPlentyLoaded = modList.isLoaded(Compatibility.BIOMES_O_PLENTY_MOD_ID);
+        _isBiomesWeveGoneLoaded = modList.isLoaded(Compatibility.BIOMES_WEVE_GONE_MOD_ID);
     }
 }

@@ -1,32 +1,34 @@
 package com.phantomwing.choppersdelight.recipe.custom;
 
-import javax.annotation.Nonnull;
-
-import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
 import com.phantomwing.choppersdelight.recipe.ModRecipes;
 import com.phantomwing.choppersdelight.tags.ModTags;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 public class AddCuttingBoardPatternRecipe extends CustomRecipe {
-    public AddCuttingBoardPatternRecipe(CraftingBookCategory category) {
-        super(category);
+    public AddCuttingBoardPatternRecipe(ResourceLocation id, CraftingBookCategory category) {
+        super(id, category);
     }
 
     @Override
-    public boolean matches(@Nonnull CraftingInput inv, @Nonnull Level level) {
+    public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
         ItemStack bannerStack = ItemStack.EMPTY;
         ItemStack cuttingBoardStack = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.size(); ++i) {
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
 
             if (!stack.isEmpty()) {
@@ -54,11 +56,11 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
 
     @Nonnull
     @Override
-    public ItemStack assemble(@Nonnull CraftingInput inv, @Nonnull HolderLookup.Provider provider) {
+    public ItemStack assemble(@Nonnull CraftingContainer inv, @NotNull RegistryAccess registryAccess) {
         ItemStack bannerStack = ItemStack.EMPTY;
         ItemStack cuttingBoardStack = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.size(); ++i) {
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack stack = inv.getItem(i);
 
             if (!stack.isEmpty()) {
@@ -74,11 +76,12 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
         if (cuttingBoardStack.isEmpty()) {
             return ItemStack.EMPTY;
         } else {
-            ItemStack stack = new ItemStack(ModItems.DECORATED_CUTTING_BOARD.get());
-            stack.set(ModDataComponents.DECORATED_CUTTING_BOARD_DATA.get(),
-                new DecoratedCuttingBoardData(cuttingBoardStack.copy(), bannerStack.copy()));
+            ItemStack itemstack = new ItemStack(ModItems.DECORATED_CUTTING_BOARD.get());
+            CompoundTag decoratedData = itemstack.getOrCreateTagElement(ModDataComponents.DECORATED_CUTTING_BOARD_DATA);
+            decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_CUTTING_BOARD_DATA, cuttingBoardStack.save(new CompoundTag()));
+            decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_BANNER_DATA, bannerStack.save(new CompoundTag()));
 
-            return stack;
+            return itemstack;
         }
     }
 

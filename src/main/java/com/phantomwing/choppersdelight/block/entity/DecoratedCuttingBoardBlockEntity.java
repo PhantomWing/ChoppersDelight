@@ -1,60 +1,57 @@
 package com.phantomwing.choppersdelight.block.entity;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
-import com.phantomwing.choppersdelight.block.custom.DecoratedCuttingBoardBlock;
-import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
+import com.phantomwing.choppersdelight.item.custom.DecoratedCuttingBoardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 import vectorwing.farmersdelight.common.block.entity.SyncedBlockEntity;
 import vectorwing.farmersdelight.common.crafting.CuttingBoardRecipe;
-import vectorwing.farmersdelight.common.crafting.CuttingBoardRecipeInput;
+import vectorwing.farmersdelight.common.mixin.accessor.RecipeManagerAccessor;
 import vectorwing.farmersdelight.common.registry.ModAdvancements;
 import vectorwing.farmersdelight.common.registry.ModRecipeTypes;
 import vectorwing.farmersdelight.common.registry.ModSounds;
-import vectorwing.farmersdelight.common.tag.CommonTags;
+import vectorwing.farmersdelight.common.tag.ForgeTags;
 import vectorwing.farmersdelight.common.utility.ItemUtils;
 import vectorwing.farmersdelight.common.utility.TextUtils;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-@EventBusSubscriber(modid = ChoppersDelight.MOD_ID)
 public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
 {
     private final ItemStackHandler inventory;
-    private final RecipeManager.CachedCheck<CuttingBoardRecipeInput, CuttingBoardRecipe> quickCheck;
+    private final LazyOptional<IItemHandler> inputHandler;
     private ResourceLocation lastRecipeID;
     private boolean isItemCarvingBoard;
 
@@ -66,45 +63,36 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
         super(ModBlockEntityTypes.DECORATED_CUTTING_BOARD.get(), pos, state);
 
         inventory = createHandler();
+        inputHandler = LazyOptional.of(() -> inventory);
         isItemCarvingBoard = false;
-        quickCheck = RecipeManager.createCheck(ModRecipeTypes.CUTTING.get());
-    }
-
-    @SubscribeEvent
-    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
-                ModBlockEntityTypes.DECORATED_CUTTING_BOARD.get(),
-                (be, context) -> be.getInventory()
-        );
     }
 
     @Override
-    public void loadAdditional(@NotNull CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
-        super.loadAdditional(compoundTag, provider);
+    public void load(@NotNull CompoundTag compoundTag) {
+        super.load(compoundTag);
 
         isItemCarvingBoard = compoundTag.getBoolean("IsItemCarved");
-        inventory.deserializeNBT(provider, compoundTag.getCompound("Inventory"));
+        inventory.deserializeNBT(compoundTag.getCompound("Inventory"));
 
         this.cuttingBoard = compoundTag.contains("CuttingBoardStack") ?
-                ItemStack.parseOptional(provider, compoundTag.getCompound("CuttingBoardStack")) : new ItemStack(vectorwing.farmersdelight.common.registry.ModItems.CUTTING_BOARD.get());
+                ItemStack.of(compoundTag.getCompound("CuttingBoardStack")) : new ItemStack(vectorwing.farmersdelight.common.registry.ModItems.CUTTING_BOARD.get());
         this.banner = compoundTag.contains("BannerStack") ?
-                ItemStack.parseOptional(provider, compoundTag.getCompound("BannerStack")) : new ItemStack(Items.WHITE_BANNER);
+                ItemStack.of(compoundTag.getCompound("BannerStack")) : new ItemStack(Items.WHITE_BANNER);
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
-        super.saveAdditional(compoundTag, provider);
+    public void saveAdditional(@NotNull CompoundTag compoundTag) {
+        super.saveAdditional(compoundTag);
 
-        compoundTag.put("Inventory", inventory.serializeNBT(provider));
+        compoundTag.put("Inventory", inventory.serializeNBT());
         compoundTag.putBoolean("IsItemCarved", isItemCarvingBoard);
 
         if (!this.cuttingBoard.isEmpty()) {
-            compoundTag.put("CuttingBoardStack", this.cuttingBoard.save(provider, new CompoundTag()));
+            compoundTag.put("CuttingBoardStack", this.cuttingBoard.save(new CompoundTag()));
         }
 
         if (!this.banner.isEmpty()) {
-            compoundTag.put("BannerStack", this.banner.save(provider, new CompoundTag()));
+            compoundTag.put("BannerStack", this.banner.save(new CompoundTag()));
         }
     }
 
@@ -113,58 +101,77 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
 
         if (isItemCarvingBoard) return false;
 
-        Optional<RecipeHolder<CuttingBoardRecipe>> matchingRecipe = getMatchingRecipe(toolStack, player);
+        Optional<CuttingBoardRecipe> matchingRecipe = getMatchingRecipe(new RecipeWrapper(inventory), toolStack, player);
 
         matchingRecipe.ifPresent(recipe -> {
-            List<ItemStack> results = recipe.value().rollResults(level.random, EnchantmentHelper.getTagEnchantmentLevel(level.holder(Enchantments.FORTUNE).get(), toolStack));
+            List<ItemStack> results = recipe.rollResults(level.random, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, toolStack));
+
             for (ItemStack resultStack : results) {
-                Direction direction = getBlockState().getValue(DecoratedCuttingBoardBlock.FACING).getCounterClockWise();
+                Direction direction = getBlockState().getValue(CuttingBoardBlock.FACING).getCounterClockWise();
                 ItemUtils.spawnItemEntity(level, resultStack.copy(),
                         worldPosition.getX() + 0.5 + (direction.getStepX() * 0.2), worldPosition.getY() + 0.2, worldPosition.getZ() + 0.5 + (direction.getStepZ() * 0.2),
                         direction.getStepX() * 0.2F, 0.0F, direction.getStepZ() * 0.2F);
             }
 
-            if (!level.isClientSide) {
-                toolStack.hurtAndBreak(1, (ServerLevel) level, player, (item) -> {
-                });
+            if (player != null) {
+                toolStack.hurtAndBreak(1, player, (user) -> user.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+            } else {
+                if (toolStack.hurt(1, level.random, null)) {
+                    toolStack.setCount(0);
+                }
             }
 
-            playProcessingSound(recipe.value().getSoundEvent().orElse(null), toolStack, getStoredItem());
+            playProcessingSound(recipe.getSoundEventID(), toolStack, getStoredItem());
 
             removeItem();
 
             if (player instanceof ServerPlayer) {
-                ModAdvancements.USE_CUTTING_BOARD.get().trigger((ServerPlayer) player);
+                ModAdvancements.CUTTING_BOARD.trigger((ServerPlayer) player);
             }
         });
 
         return matchingRecipe.isPresent();
     }
 
-    private Optional<RecipeHolder<CuttingBoardRecipe>> getMatchingRecipe(ItemStack toolStack, @Nullable Player player) {
+    private Optional<CuttingBoardRecipe> getMatchingRecipe(RecipeWrapper recipeWrapper, ItemStack toolStack, @Nullable Player player) {
         if (level == null) return Optional.empty();
 
-        Optional<RecipeHolder<CuttingBoardRecipe>> recipe = quickCheck.getRecipeFor(new CuttingBoardRecipeInput(getStoredItem(), toolStack), level);
-
-        if (recipe.isPresent()) {
-            if (recipe.get().value().getTool().test(toolStack)) {
-                return recipe;
-            } else if (player != null) {
-                player.displayClientMessage(TextUtils.getTranslation("block.cutting_board.invalid_tool"), true);
+        if (lastRecipeID != null) {
+            Recipe<RecipeWrapper> recipe = ((RecipeManagerAccessor) level.getRecipeManager())
+                    .getRecipeMap(ModRecipeTypes.CUTTING.get())
+                    .get(lastRecipeID);
+            if (recipe instanceof CuttingBoardRecipe && recipe.matches(recipeWrapper, level) && ((CuttingBoardRecipe) recipe).getTool().test(toolStack)) {
+                return Optional.of((CuttingBoardRecipe) recipe);
             }
-        } else if (player != null) {
-            player.displayClientMessage(TextUtils.getTranslation("block.cutting_board.invalid_item"), true);
         }
 
-        return Optional.empty();
+        List<CuttingBoardRecipe> recipeList = level.getRecipeManager().getRecipesFor(ModRecipeTypes.CUTTING.get(), recipeWrapper, level);
+        if (recipeList.isEmpty()) {
+            if (player != null)
+                player.displayClientMessage(TextUtils.getTranslation("block.cutting_board.invalid_item"), true);
+            return Optional.empty();
+        }
+
+        Optional<CuttingBoardRecipe> recipe = recipeList.stream().filter(cuttingRecipe -> cuttingRecipe.getTool().test(toolStack)).findFirst();
+        if (!recipe.isPresent()) {
+            if (player != null)
+                player.displayClientMessage(TextUtils.getTranslation("block.cutting_board.invalid_tool"), true);
+            return Optional.empty();
+        }
+
+        lastRecipeID = recipe.get().getId();
+
+        return recipe;
     }
 
-    public void playProcessingSound(@Nullable SoundEvent sound, ItemStack tool, ItemStack boardItem) {
+    public void playProcessingSound(String soundEventID, ItemStack tool, ItemStack boardItem) {
+        SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.withDefaultNamespace(soundEventID));
+
         if (sound != null) {
             playSound(sound, 1.0F, 1.0F);
-        } else if (tool.is(Tags.Items.TOOLS_SHEAR)) {
+        } else if (tool.is(Tags.Items.SHEARS)) {
             playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
-        } else if (tool.is(CommonTags.TOOLS_KNIFE)) {
+        } else if (tool.is(ForgeTags.TOOLS_KNIVES)) {
             playSound(ModSounds.BLOCK_CUTTING_BOARD_KNIFE.get(), 0.8F, 1.0F);
         } else if (boardItem.getItem() instanceof BlockItem blockItem) {
             Block block = blockItem.getBlock();
@@ -225,8 +232,18 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
     }
 
     @Override
+    @Nonnull
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+        if (cap.equals(ForgeCapabilities.ITEM_HANDLER)) {
+            return inputHandler.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Override
     public void setRemoved() {
         super.setRemoved();
+        inputHandler.invalidate();
     }
 
     private ItemStackHandler createHandler() {
@@ -245,36 +262,17 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
     }
 
     public void loadFromItemStack(ItemStack stack) {
-        DecoratedCuttingBoardData data = stack.get(ModDataComponents.DECORATED_CUTTING_BOARD_DATA.get());
-
-        if (data != null) {
-            this.cuttingBoard = data.cuttingBoard().copy();
-            this.banner = data.banner().copy();
-        } else {
-            // Set default state (this is how it appears in Creative Mode inventory)
-            this.cuttingBoard = new ItemStack(vectorwing.farmersdelight.common.registry.ModItems.CUTTING_BOARD.get());
-            this.banner = new ItemStack(Items.WHITE_BANNER);
-        }
-    }
-
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Nonnull
-    @Override
-    public CompoundTag getUpdateTag(@Nonnull HolderLookup.Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        this.saveAdditional(tag, provider);
-        return tag;
+        this.cuttingBoard = DecoratedCuttingBoardItem.getCuttingBoardStack(stack);
+        this.banner = DecoratedCuttingBoardItem.getBannerStack(stack);
     }
 
     public ItemStack getItem() {
-        ItemStack itemstack = new ItemStack(ModItems.DECORATED_CUTTING_BOARD.get());
-        itemstack.set(ModDataComponents.DECORATED_CUTTING_BOARD_DATA.get(),
-                new DecoratedCuttingBoardData(this.cuttingBoard.copy(), this.banner.copy()));
-        return itemstack;
+        ItemStack itemStack = new ItemStack(ModItems.DECORATED_CUTTING_BOARD.get());
+        CompoundTag decoratedData = itemStack.getOrCreateTagElement(ModDataComponents.DECORATED_CUTTING_BOARD_DATA);
+        decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_CUTTING_BOARD_DATA, this.cuttingBoard.save(new CompoundTag()));
+        decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_BANNER_DATA, this.banner.save(new CompoundTag()));
+
+        return itemStack;
     }
 
     public ItemStack getCuttingBoard() {

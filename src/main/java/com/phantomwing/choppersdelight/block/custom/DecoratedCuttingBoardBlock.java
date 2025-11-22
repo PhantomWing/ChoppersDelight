@@ -1,7 +1,5 @@
 package com.phantomwing.choppersdelight.block.custom;
 
-import com.mojang.serialization.MapCodec;
-import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -14,8 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -25,7 +21,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -37,20 +32,18 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
+import vectorwing.farmersdelight.FarmersDelight;
 import vectorwing.farmersdelight.common.tag.ModTags;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @SuppressWarnings("deprecation")
 public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
 {
-    public static final MapCodec<DecoratedCuttingBoardBlock> CODEC = simpleCodec(DecoratedCuttingBoardBlock::new);
-
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -59,11 +52,6 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     public DecoratedCuttingBoardBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return null;
     }
 
     @Override
@@ -77,9 +65,8 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     }
 
     @Override
-    public @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         BlockEntity tileEntity = level.getBlockEntity(pos);
-
         if (tileEntity instanceof DecoratedCuttingBoardBlockEntity cuttingBoardEntity) {
             ItemStack heldStack = player.getItemInHand(hand);
             ItemStack offhandStack = player.getOffhandItem();
@@ -87,26 +74,26 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
             if (cuttingBoardEntity.isEmpty()) {
                 if (!offhandStack.isEmpty()) {
                     if (hand.equals(InteractionHand.MAIN_HAND) && !offhandStack.is(ModTags.OFFHAND_EQUIPMENT) && !(heldStack.getItem() instanceof BlockItem)) {
-                        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION; // Pass to off-hand if that item is placeable
+                        return InteractionResult.PASS; // Pass to off-hand if that item is placeable
                     }
                     if (hand.equals(InteractionHand.OFF_HAND) && offhandStack.is(ModTags.OFFHAND_EQUIPMENT)) {
-                        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION; // Items in this tag should not be placed from the off-hand
+                        return InteractionResult.PASS; // Items in this tag should not be placed from the off-hand
                     }
                 }
                 if (heldStack.isEmpty()) {
-                    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                    return InteractionResult.PASS;
                 } else if (cuttingBoardEntity.addItem(player.getAbilities().instabuild ? heldStack.copy() : heldStack)) {
                     level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
-                    return ItemInteractionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
 
             } else if (!heldStack.isEmpty()) {
                 ItemStack boardStack = cuttingBoardEntity.getStoredItem().copy();
                 if (cuttingBoardEntity.processStoredItemUsingTool(heldStack, player)) {
                     spawnCuttingParticles(level, pos, boardStack, 5);
-                    return ItemInteractionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
-                return ItemInteractionResult.CONSUME;
+                return InteractionResult.CONSUME;
 
             } else if (hand.equals(InteractionHand.MAIN_HAND)) {
                 if (!player.isCreative()) {
@@ -117,10 +104,10 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
                     cuttingBoardEntity.removeItem();
                 }
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.WOOD_HIT, SoundSource.BLOCKS, 0.25F, 0.5F);
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -131,12 +118,8 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
 
         BlockEntity tileEntity = level.getBlockEntity(pos);
         if (tileEntity instanceof DecoratedCuttingBoardBlockEntity cuttingBoard) {
-            // Drop item placed on top of the cutting board.
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.getStoredItem());
             level.updateNeighbourForOutputSignal(pos, this);
-
-            // Drop the cutting board itself.
-            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.getItem());
         }
 
         super.onRemove(state, level, pos, newState, isMoving);
@@ -211,24 +194,6 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
         return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
     }
 
-    @Nonnull
-    @Override
-    public ItemStack getCloneItemStack(@Nonnull LevelReader level, @Nonnull BlockPos pos,
-                                       @Nonnull BlockState state) {
-        BlockEntity be = level.getBlockEntity(pos);
-        return be instanceof DecoratedCuttingBoardBlockEntity ? ((DecoratedCuttingBoardBlockEntity) be).getItem() :
-                super.getCloneItemStack(level, pos, state);
-    }
-
-    @Override
-    public void setPlacedBy(Level worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
-        BlockEntity blockentity = worldIn.getBlockEntity(pos);
-
-        if (blockentity instanceof DecoratedCuttingBoardBlockEntity) {
-            ((DecoratedCuttingBoardBlockEntity) blockentity).loadFromItemStack(stack);
-        }
-    }
-
     public static void spawnCuttingParticles(Level level, BlockPos pos, ItemStack stack, int count) {
         for (int i = 0; i < count; ++i) {
             Vec3 vec3d = new Vec3(((double) level.random.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, ((double) level.random.nextFloat() - 0.5D) * 0.1D);
@@ -240,28 +205,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
         }
     }
 
-    @Override
-    protected void spawnDestroyParticles(Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state) {
-        BlockState blockState = null;
-
-        // We want to render the particles of the Cutting Board.
-        if (level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity blockEntity) {
-            ItemStack board = blockEntity.getCuttingBoard();
-
-            if (board.getItem() instanceof BlockItem blockItem) {
-                blockState = blockItem.getBlock().defaultBlockState();
-            }
-        }
-
-        // Fallback to oak planks if something goes wrong.
-        if (blockState == null) {
-            blockState = Blocks.OAK_PLANKS.defaultBlockState();
-        }
-
-        level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(blockState));
-    }
-
-    @EventBusSubscriber(modid = ChoppersDelight.MOD_ID)
+    @Mod.EventBusSubscriber(modid = FarmersDelight.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ToolCarvingEvent
     {
         @SubscribeEvent
@@ -278,7 +222,6 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
                         heldStack.getItem() instanceof TridentItem ||
                         heldStack.getItem() instanceof ShearsItem) {
                     boolean success = ((DecoratedCuttingBoardBlockEntity) tileEntity).carveToolOnBoard(player.getAbilities().instabuild ? heldStack.copy() : heldStack);
-
                     if (success) {
                         level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
                         event.setCanceled(true);

@@ -1,47 +1,46 @@
 package com.phantomwing.choppersdelight;
 
-import com.phantomwing.choppersdelight.component.ModDataComponents;
-import com.phantomwing.choppersdelight.recipe.ModRecipes;
-import com.phantomwing.choppersdelight.renderer.DecoratedCuttingBoardItemStackRenderer;
-import com.phantomwing.choppersdelight.renderer.DecoratedCuttingBoardRenderer;
+import com.mojang.logging.LogUtils;
 import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.item.ModItems;
+import com.phantomwing.choppersdelight.recipe.ModRecipes;
 import com.phantomwing.choppersdelight.ui.ModCreativeModeTab;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import org.jetbrains.annotations.NotNull;
+import com.phantomwing.choppersdelight.utils.BlockUtils;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
-import com.mojang.logging.LogUtils;
-
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Set;
 
 @Mod(ChoppersDelight.MOD_ID)
-public class ChoppersDelight {
+public class ChoppersDelight
+{
     public static final String MOD_ID = "choppersdelight";
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
-    public ChoppersDelight(IEventBus eventBus, ModContainer modContainer) {
-        eventBus.addListener(this::commonSetup);
-
-        NeoForge.EVENT_BUS.register(this);
-
+    public ChoppersDelight()
+    {
         Compatibility.checkInstalledMods();
-        registerManagers(eventBus);
+
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        modEventBus.addListener(this::commonSetup);
+
+        MinecraftForge.EVENT_BUS.register(this);
+
+        registerManagers(modEventBus);
     }
 
     // Register all managers to the event bus.
@@ -49,7 +48,6 @@ public class ChoppersDelight {
         ModItems.register(eventBus);
         ModBlocks.register(eventBus);
         ModBlockEntityTypes.register(eventBus);
-        ModDataComponents.register(eventBus);
         ModRecipes.register(eventBus);
 
         if (FMLEnvironment.dist.isClient()) {
@@ -57,43 +55,59 @@ public class ChoppersDelight {
         }
     }
 
-    private void commonSetup(FMLCommonSetupEvent event) {
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            // add all cutting boards from your mod to the Farmers Delight cutting board block entity type
+            Block[] additional = BlockUtils.getCuttingBoards().toArray(Block[]::new);
+            addValidBlocksTo(vectorwing.farmersdelight.common.registry.ModBlockEntityTypes.CUTTING_BOARD.get(), additional);
+        });
     }
 
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-
-    }
-
-    @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-
+        public static void onClientSetup(FMLClientSetupEvent event)
+        {
         }
+    }
 
-        @SubscribeEvent
-        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerBlockEntityRenderer(ModBlockEntityTypes.DECORATED_CUTTING_BOARD.get(), DecoratedCuttingBoardRenderer::new);
-        }
 
-        @SubscribeEvent
-        public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
-            event.registerItem(
-                    new IClientItemExtensions() {
-                        private final BlockEntityWithoutLevelRenderer renderer =
-                                new DecoratedCuttingBoardItemStackRenderer(
-                                        Minecraft.getInstance().getBlockEntityRenderDispatcher(),
-                                        Minecraft.getInstance().getEntityModels()
-                                );
+    // Reflection helper: append blocks to the private validBlocks/set field of a BlockEntityType
+    public static void addValidBlocksTo(BlockEntityType<?> targetType, Block... blocks) {
+        try {
+            Field targetField = null;
+            // try common field names first
+            for (String name : new String[] { "validBlocks", "valid_blocks", "blocks" }) {
+                try {
+                    targetField = BlockEntityType.class.getDeclaredField(name);
+                    break;
+                } catch (NoSuchFieldException ignored) {}
+            }
+            // fallback: find first field of type java.util.Set
+            if (targetField == null) {
+                for (Field f : BlockEntityType.class.getDeclaredFields()) {
+                    if (Set.class.isAssignableFrom(f.getType())) {
+                        targetField = f;
+                        break;
+                    }
+                }
+            }
+            if (targetField == null) {
+                ChoppersDelight.LOGGER.error("Could not find a Set field on BlockEntityType to modify valid blocks.");
+                return;
+            }
 
-                        @Override
-                        public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                            return renderer;
-                        }
-                    },
-                    ModItems.DECORATED_CUTTING_BOARD.get()
-            );
+            targetField.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            Set<Block> set = (Set<Block>) targetField.get(targetType);
+            if (set == null) {
+                ChoppersDelight.LOGGER.error("The target BlockEntityType's block set is null.");
+                return;
+            }
+            set.addAll(Arrays.asList(blocks));
+            ChoppersDelight.LOGGER.info("Added {} blocks to BlockEntityType {}", blocks.length, targetType);
+        } catch (Throwable t) {
+            ChoppersDelight.LOGGER.error("Failed to add valid blocks to BlockEntityType", t);
         }
     }
 }
