@@ -1,0 +1,7 @@
+{
+  "parent": "farmersdelight:block/cutting_board",
+  "textures": {
+    "particle": "biomeswevegone:block/ironwood_cutting_board",
+    "top": "biomeswevegone:block/ironwood_cutting_board"
+  }
+}

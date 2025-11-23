@@ -27,9 +27,11 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'official', version: minecraft_version
+    mappings channel: mappings_channel, version: mappings_version
 
     copyIdeResources = true
+
+    accessTransformer = project.files('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -145,26 +147,26 @@ dependencies {
 
     // World-gen mods
     if (include_biomeswevegone.toBoolean() || include_biomesoplenty.toBoolean()) {
-        runtimeOnly "com.github.glitchfiend:TerraBlender-forge:${minecraft_version}-${terrablender_version}"
+        runtimeOnly fg.deobf("com.github.glitchfiend:TerraBlender-forge:${minecraft_version}-${terrablender_version}")
     }
 
     // Oh The Biomes We've Gone
-    compileOnly "net.potionstudios:Oh-The-Biomes-Weve-Gone-Forge:${biomeswevegone_version}"
+    compileOnly fg.deobf("net.potionstudios:Oh-The-Biomes-Weve-Gone-Forge:${biomeswevegone_version}")
     if (include_biomeswevegone.toBoolean()) {
         //implementation "com.eliotlash.mclib:mclib:20"
         //runtimeOnly "com.eliotlash.mclib:mclib:20"
 
-        runtimeOnly "software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}"
-        runtimeOnly "dev.corgitaco:Corgilib-Forge:${minecraft_version}-${corgilib_version}"
-        runtimeOnly "dev.corgitaco:Oh-The-Trees-Youll-Grow-forge:${minecraft_version}-${ohthetreesyoullgrow_version}"
-        runtimeOnly "net.potionstudios:Oh-The-Biomes-Weve-Gone-Forge:${biomeswevegone_version}"
+        runtimeOnly fg.deobf("software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}")
+        runtimeOnly fg.deobf("dev.corgitaco:Corgilib-Forge:${minecraft_version}-${corgilib_version}")
+        runtimeOnly fg.deobf("dev.corgitaco:Oh-The-Trees-Youll-Grow-forge:${minecraft_version}-${ohthetreesyoullgrow_version}")
+        runtimeOnly fg.deobf("net.potionstudios:Oh-The-Biomes-Weve-Gone-Forge:${biomeswevegone_version}")
     }
 
     // Biomes O' Plenty
     compileOnly "com.github.glitchfiend:BiomesOPlenty-forge:${minecraft_version}-${biomesoplenty_version}"
     if (include_biomesoplenty.toBoolean()) {
-        runtimeOnly "com.github.glitchfiend:GlitchCore-forge:${minecraft_version}-${glitchcore_version}"
-        runtimeOnly "com.github.glitchfiend:BiomesOPlenty-forge:${minecraft_version}-${biomesoplenty_version}"
+        runtimeOnly fg.deobf("com.github.glitchfiend:GlitchCore-forge:${minecraft_version}-${glitchcore_version}")
+        runtimeOnly fg.deobf("com.github.glitchfiend:BiomesOPlenty-forge:${minecraft_version}-${biomesoplenty_version}")
     }
 }
 

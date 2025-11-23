@@ -43,15 +43,13 @@ public class ModCreativeModeTab {
             ItemStack cuttingBoard = new ItemStack(board.get());
             ItemStack bannerStack = new ItemStack(banner);
 
+            // Contruct a patterns tag.
+            BannerPattern.Builder builder = new BannerPattern.Builder();
+            builder.addPattern(pattern, patternColor);
+            ListTag patternsList = builder.toListTag();
+
             // Prepare BlockEntityTag and Patterns list
             CompoundTag blockEntityTag = bannerStack.getOrCreateTagElement("BlockEntityTag");
-            ListTag patternsList = new ListTag();
-
-            CompoundTag patternTag = new CompoundTag();
-            String patternId = pattern.location().getPath();
-            patternTag.putString("Pattern", patternId);
-            patternTag.putInt("Color", patternColor.getId()); // color id 0-15
-            patternsList.add(patternTag);
             blockEntityTag.put("Patterns", patternsList);
 
             // Generate the final item
@@ -76,7 +74,7 @@ public class ModCreativeModeTab {
         output.accept(getDecoratedCuttingBoard(ModBlocks.CHERRY_CUTTING_BOARD, Items.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK));
         output.accept(getDecoratedCuttingBoard(ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK));
         output.accept(getDecoratedCuttingBoard(ModBlocks.CRIMSON_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.SKULL, DyeColor.WHITE));
-        output.accept(getDecoratedCuttingBoard(ModBlocks.WARPED_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.PIGLIN, DyeColor.CYAN));
+        output.accept(getDecoratedCuttingBoard(ModBlocks.WARPED_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.MOJANG, DyeColor.CYAN));
     }
 
     public static void displayModItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {

@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -39,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 import vectorwing.farmersdelight.FarmersDelight;
 import vectorwing.farmersdelight.common.tag.ModTags;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @SuppressWarnings("deprecation")
@@ -67,6 +70,7 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         BlockEntity tileEntity = level.getBlockEntity(pos);
+
         if (tileEntity instanceof DecoratedCuttingBoardBlockEntity cuttingBoardEntity) {
             ItemStack heldStack = player.getItemInHand(hand);
             ItemStack offhandStack = player.getOffhandItem();
@@ -118,8 +122,12 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
 
         BlockEntity tileEntity = level.getBlockEntity(pos);
         if (tileEntity instanceof DecoratedCuttingBoardBlockEntity cuttingBoard) {
+            // Drop item placed on top of the cutting board.
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.getStoredItem());
             level.updateNeighbourForOutputSignal(pos, this);
+
+            // Drop the cutting board itself.
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.getItem());
         }
 
         super.onRemove(state, level, pos, newState, isMoving);
@@ -194,6 +202,22 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
         return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
     }
 
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        BlockEntity be = level.getBlockEntity(pos);
+        return be instanceof DecoratedCuttingBoardBlockEntity ? ((DecoratedCuttingBoardBlockEntity) be).getItem() :
+                super.getCloneItemStack(level, pos, state);
+    }
+
+    @Override
+    public void setPlacedBy(Level worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+        BlockEntity blockentity = worldIn.getBlockEntity(pos);
+
+        if (blockentity instanceof DecoratedCuttingBoardBlockEntity) {
+            ((DecoratedCuttingBoardBlockEntity) blockentity).loadFromItemStack(stack);
+        }
+    }
+
     public static void spawnCuttingParticles(Level level, BlockPos pos, ItemStack stack, int count) {
         for (int i = 0; i < count; ++i) {
             Vec3 vec3d = new Vec3(((double) level.random.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, ((double) level.random.nextFloat() - 0.5D) * 0.1D);
@@ -203,6 +227,27 @@ public class DecoratedCuttingBoardBlock extends BaseEntityBlock implements Simpl
                 level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, stack), pos.getX() + 0.5F, pos.getY() + 0.1F, pos.getZ() + 0.5F, vec3d.x, vec3d.y + 0.05D, vec3d.z);
             }
         }
+    }
+
+    @Override
+    protected void spawnDestroyParticles(Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state) {
+        BlockState blockState = null;
+
+        // We want to render the particles of the Cutting Board.
+        if (level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity blockEntity) {
+            ItemStack board = blockEntity.getCuttingBoard();
+
+            if (board.getItem() instanceof BlockItem blockItem) {
+                blockState = blockItem.getBlock().defaultBlockState();
+            }
+        }
+
+        // Fallback to oak planks if something goes wrong.
+        if (blockState == null) {
+            blockState = Blocks.OAK_PLANKS.defaultBlockState();
+        }
+
+        level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(blockState));
     }
 
     @Mod.EventBusSubscriber(modid = FarmersDelight.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)

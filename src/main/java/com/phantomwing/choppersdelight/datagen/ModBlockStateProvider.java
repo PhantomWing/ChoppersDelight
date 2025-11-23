@@ -14,7 +14,7 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import vectorwing.farmersdelight.common.block.BasketBlock;
+import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -29,30 +29,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         ModBlocks.MINECRAFT_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, ChoppersDelight.MOD_ID));
-
-        if (Compatibility.IsBiomesOPlentyLoaded()) {
-            ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
-        }
-
-        if (Compatibility.IsBiomesWeveGoneLoaded()) {
-            ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
-        }
+        ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
+        ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((supplier) -> cuttingBoardBlock(supplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
 
         cuttingBoardBlock(ModBlocks.DECORATED_CUTTING_BOARD, ChoppersDelight.MOD_ID);
     }
 
     private void cuttingBoardBlock(Supplier<Block> supplier, String modId) {
         Block block = supplier.get();
+
         customHorizontalBlock(block,
-                $ -> BlockUtils.getModel(models(), modId, block), BasketBlock.WATERLOGGED);
+            $ -> BlockUtils.getModel(models(), modId, block), CuttingBoardBlock.WATERLOGGED);
     }
 
     // Helper functions.
     private void customHorizontalBlock(Block block, Function<BlockState, ModelFile> modelFunc, Property<?>... ignored) {
         getVariantBuilder(block)
-                .forAllStatesExcept(state -> ConfiguredModel.builder()
-                        .modelFile(modelFunc.apply(state))
-                        .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + DEFAULT_ANGLE_OFFSET) % 360)
-                        .build(), ignored);
+            .forAllStatesExcept(state -> ConfiguredModel.builder()
+                .modelFile(modelFunc.apply(state))
+                .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + DEFAULT_ANGLE_OFFSET) % 360)
+                .build(), ignored);
     }
 }

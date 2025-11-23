@@ -5,11 +5,17 @@ import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.item.ModItems;
 import com.phantomwing.choppersdelight.recipe.ModRecipes;
+import com.phantomwing.choppersdelight.renderer.DecoratedCuttingBoardItemStackRenderer;
+import com.phantomwing.choppersdelight.renderer.DecoratedCuttingBoardRenderer;
 import com.phantomwing.choppersdelight.ui.ModCreativeModeTab;
 import com.phantomwing.choppersdelight.utils.BlockUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,7 +24,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -69,41 +77,21 @@ public class ChoppersDelight
         public static void onClientSetup(FMLClientSetupEvent event)
         {
         }
-    }
 
+        @SubscribeEvent
+        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(ModBlockEntityTypes.DECORATED_CUTTING_BOARD.get(), DecoratedCuttingBoardRenderer::new);
+        }
+    }
 
     // Reflection helper: append blocks to the private validBlocks/set field of a BlockEntityType
     public static void addValidBlocksTo(BlockEntityType<?> targetType, Block... blocks) {
         try {
-            Field targetField = null;
-            // try common field names first
-            for (String name : new String[] { "validBlocks", "valid_blocks", "blocks" }) {
-                try {
-                    targetField = BlockEntityType.class.getDeclaredField(name);
-                    break;
-                } catch (NoSuchFieldException ignored) {}
-            }
-            // fallback: find first field of type java.util.Set
-            if (targetField == null) {
-                for (Field f : BlockEntityType.class.getDeclaredFields()) {
-                    if (Set.class.isAssignableFrom(f.getType())) {
-                        targetField = f;
-                        break;
-                    }
-                }
-            }
-            if (targetField == null) {
-                ChoppersDelight.LOGGER.error("Could not find a Set field on BlockEntityType to modify valid blocks.");
-                return;
-            }
+            Field targetField = BlockEntityType.class.getDeclaredField("validBlocks");
 
             targetField.setAccessible(true);
-            @SuppressWarnings("unchecked")
             Set<Block> set = (Set<Block>) targetField.get(targetType);
-            if (set == null) {
-                ChoppersDelight.LOGGER.error("The target BlockEntityType's block set is null.");
-                return;
-            }
+
             set.addAll(Arrays.asList(blocks));
             ChoppersDelight.LOGGER.info("Added {} blocks to BlockEntityType {}", blocks.length, targetType);
         } catch (Throwable t) {

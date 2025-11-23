@@ -12,7 +12,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
@@ -44,14 +43,10 @@ public class BannerUtils {
 
     public static List<Pair<Holder<BannerPattern>, DyeColor>> getPatternLayers(ItemStack banner) {
         if (!banner.isEmpty() && banner.getItem() instanceof BannerItem bannerItem) {
-            CompoundTag compoundTag = BlockItem.getBlockEntityData(banner);
-            if (compoundTag != null && compoundTag.contains("Patterns")) {
-                ListTag listtag = compoundTag.getList("Patterns", 10);
+            ListTag listtag = BannerBlockEntity.getItemPatterns(banner);
+            DyeColor dyeColor = bannerItem.getColor();
 
-                DyeColor dyeColor = bannerItem.getColor();
-
-                return BannerBlockEntity.createPatterns(dyeColor, listtag);
-            }
+            return BannerBlockEntity.createPatterns(dyeColor, listtag);
         }
 
         return null;

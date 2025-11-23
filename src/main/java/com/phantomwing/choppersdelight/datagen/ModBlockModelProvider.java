@@ -22,14 +22,8 @@ public class ModBlockModelProvider extends BlockModelProvider {
     @Override
     protected void registerModels() {
         ModBlocks.MINECRAFT_CUTTING_BOARDS.forEach((supplier) -> this.cuttingBoardModel(supplier, ChoppersDelight.MOD_ID));
-
-        if (Compatibility.IsBiomesOPlentyLoaded()) {
-            ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((supplier) -> this.cuttingBoardModel(supplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
-        }
-
-        if (Compatibility.IsBiomesWeveGoneLoaded()) {
-            ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((supplier) -> this.cuttingBoardModel(supplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
-        }
+        ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((supplier) -> this.cuttingBoardModel(supplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
+        ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((supplier) -> this.cuttingBoardModel(supplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
     }
 
     private BlockModelBuilder cuttingBoardModel(Supplier<Block> blockSupplier, String modId) {

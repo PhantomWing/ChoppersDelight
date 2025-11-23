@@ -69,20 +69,22 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
                     bannerStack.setCount(1);
                 } else if (stack.is(ModTags.Items.CUTTING_BOARDS)) {
                     cuttingBoardStack = stack.copy();
+                    cuttingBoardStack.setCount(1);
                 }
             }
         }
 
-        if (cuttingBoardStack.isEmpty()) {
-            return ItemStack.EMPTY;
-        } else {
+        if (!cuttingBoardStack.isEmpty() && !bannerStack.isEmpty()) {
             ItemStack itemstack = new ItemStack(ModItems.DECORATED_CUTTING_BOARD.get());
+
             CompoundTag decoratedData = itemstack.getOrCreateTagElement(ModDataComponents.DECORATED_CUTTING_BOARD_DATA);
             decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_CUTTING_BOARD_DATA, cuttingBoardStack.save(new CompoundTag()));
             decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_BANNER_DATA, bannerStack.save(new CompoundTag()));
 
             return itemstack;
         }
+
+        return ItemStack.EMPTY;
     }
 
     @Override

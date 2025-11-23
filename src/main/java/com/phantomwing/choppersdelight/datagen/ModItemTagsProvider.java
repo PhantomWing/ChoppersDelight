@@ -33,29 +33,25 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         }));
 
         // Add Biomes O' Plenty cutting boards
-        if (Compatibility.IsBiomesOPlentyLoaded()) {
-            ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((blockSupplier -> {
-                this.tag(ModTags.Items.CUTTING_BOARDS).addOptional(
-                        ResourceLocation.fromNamespaceAndPath(
-                                Compatibility.BIOMES_O_PLENTY_MOD_ID,
-                                BlockUtils.getName(blockSupplier.get()
-                                )
-                        )
-                );
-            }));
-        }
+        ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((blockSupplier -> {
+            this.tag(ModTags.Items.CUTTING_BOARDS).addOptional(
+                    ResourceLocation.fromNamespaceAndPath(
+                            Compatibility.BIOMES_O_PLENTY_MOD_ID,
+                            BlockUtils.getName(blockSupplier.get()
+                            )
+                    )
+            );
+        }));
 
         // Add Biomes We've Gone cutting boards
-        if (Compatibility.IsBiomesWeveGoneLoaded()) {
-            ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((blockSupplier -> {
-                this.tag(ModTags.Items.CUTTING_BOARDS).addOptional(
-                        ResourceLocation.fromNamespaceAndPath(
-                                Compatibility.BIOMES_WEVE_GONE_MOD_ID,
-                                BlockUtils.getName(blockSupplier.get()
-                                )
-                        )
-                );
-            }));
-        }
+        ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((blockSupplier -> {
+            this.tag(ModTags.Items.CUTTING_BOARDS).addOptional(
+                    ResourceLocation.fromNamespaceAndPath(
+                            Compatibility.BIOMES_WEVE_GONE_MOD_ID,
+                            BlockUtils.getName(blockSupplier.get()
+                            )
+                    )
+            );
+        }));
     }
 }

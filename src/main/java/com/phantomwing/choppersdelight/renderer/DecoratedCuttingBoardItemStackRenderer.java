@@ -56,7 +56,7 @@ public class DecoratedCuttingBoardItemStackRenderer extends BlockEntityWithoutLe
             bannerItemStack = new ItemStack(Items.WHITE_BANNER);
         }
 
-        if (bannerItemStack.getItem() instanceof BannerItem bannerItem) {
+        if (bannerItemStack.getItem() instanceof BannerItem) {
             // Prepare PoseStack based on display context.
             BakedModel model = itemRenderer.getModel(cuttingBoardItem, null, null, 0);
             BannerUtils.handleCameraTransforms(poseStack, model, displayContext, false);

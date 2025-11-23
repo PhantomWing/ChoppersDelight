@@ -2,6 +2,7 @@ package com.phantomwing.choppersdelight.block;
 
 import com.google.common.collect.Sets;
 import com.phantomwing.choppersdelight.ChoppersDelight;
+import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.custom.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,9 +20,9 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, ChoppersDelight.MOD_ID);
     public static final DeferredRegister<Block> BIOMES_O_PLENTY_BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, ChoppersDelight.MOD_ID);
+            DeferredRegister.create(ForgeRegistries.BLOCKS, Compatibility.BIOMES_O_PLENTY_MOD_ID);
     public static final DeferredRegister<Block> BIOMES_WEVE_GONE_BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, ChoppersDelight.MOD_ID);
+            DeferredRegister.create(ForgeRegistries.BLOCKS, Compatibility.BIOMES_WEVE_GONE_MOD_ID);
 
     public static LinkedHashSet<Supplier<Block>> CUTTING_BOARDS = Sets.newLinkedHashSet();
     public static LinkedHashSet<Supplier<Block>> MINECRAFT_CUTTING_BOARDS = Sets.newLinkedHashSet();
@@ -125,5 +126,13 @@ public class ModBlocks {
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
+
+        if (Compatibility.IsBiomesOPlentyLoaded()) {
+            BIOMES_O_PLENTY_BLOCKS.register(eventBus);
+        }
+
+        if (Compatibility.IsBiomesWeveGoneLoaded()) {
+            BIOMES_WEVE_GONE_BLOCKS.register(eventBus);
+        }
     }
 }

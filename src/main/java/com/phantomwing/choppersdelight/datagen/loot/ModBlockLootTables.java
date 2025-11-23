@@ -44,14 +44,8 @@ public class ModBlockLootTables implements LootTableSubProviderWithConditions {
     // Actually add our loot tables.
     protected void generateLootTables() {
         ModBlocks.MINECRAFT_CUTTING_BOARDS.forEach(this::dropSelf);
-
-        if (Compatibility.IsBiomesOPlentyLoaded()) {
-            ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((blockSupplier) -> this.dropSelfOptional(blockSupplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
-        }
-
-        if (Compatibility.IsBiomesWeveGoneLoaded()) {
-            ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((blockSupplier) -> this.dropSelfOptional(blockSupplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
-        }
+        ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((blockSupplier) -> this.dropSelfOptional(blockSupplier, Compatibility.BIOMES_O_PLENTY_MOD_ID));
+        ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((blockSupplier) -> this.dropSelfOptional(blockSupplier, Compatibility.BIOMES_WEVE_GONE_MOD_ID));
 
         dropNothing(ModBlocks.DECORATED_CUTTING_BOARD);
     }
@@ -59,16 +53,13 @@ public class ModBlockLootTables implements LootTableSubProviderWithConditions {
     protected @NotNull Iterable<Block> getKnownBlocks() {
         Stream<Block> blocks = getKnownBlocksForRegistry(ModBlocks.BLOCKS);
 
-        // Compatibility blocks.
-        if (Compatibility.IsBiomesOPlentyLoaded()) {
-            Stream<Block> biomesOPlentyBlocks = getKnownBlocksForRegistry(ModBlocks.BIOMES_O_PLENTY_BLOCKS);
-            blocks = Stream.concat(blocks, biomesOPlentyBlocks);
-        }
+        // Biomes O' Plenty blocks.
+        Stream<Block> biomesOPlentyBlocks = getKnownBlocksForRegistry(ModBlocks.BIOMES_O_PLENTY_BLOCKS);
+        blocks = Stream.concat(blocks, biomesOPlentyBlocks);
 
-        if (Compatibility.IsBiomesWeveGoneLoaded()) {
-            Stream<Block> biomesWeveGoneBlocks = getKnownBlocksForRegistry(ModBlocks.BIOMES_WEVE_GONE_BLOCKS);
-            blocks = Stream.concat(blocks, biomesWeveGoneBlocks);
-        }
+        // Biomes we've gone blocks.
+        Stream<Block> biomesWeveGoneBlocks = getKnownBlocksForRegistry(ModBlocks.BIOMES_WEVE_GONE_BLOCKS);
+        blocks = Stream.concat(blocks, biomesWeveGoneBlocks);
 
         return blocks.toList();
     }
