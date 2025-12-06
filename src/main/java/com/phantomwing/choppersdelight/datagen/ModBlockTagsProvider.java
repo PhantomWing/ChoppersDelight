@@ -8,6 +8,7 @@ import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -50,5 +51,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 )
             );
         }));
+
+        // Register as mineable with Axe.
+        this.tag(BlockTags.MINEABLE_WITH_AXE).addTag(ModTags.Blocks.CUTTING_BOARDS);
     }
 }

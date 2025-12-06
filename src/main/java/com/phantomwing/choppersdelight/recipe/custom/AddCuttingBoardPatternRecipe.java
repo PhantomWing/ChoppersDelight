@@ -67,6 +67,7 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
                     bannerStack.setCount(1);
                 } else if (stack.is(ModTags.Items.CUTTING_BOARDS)) {
                     cuttingBoardStack = stack.copy();
+                    cuttingBoardStack.setCount(1);
                 }
             }
         }

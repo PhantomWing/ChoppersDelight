@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import vectorwing.farmersdelight.common.block.BasketBlock;
+import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -37,7 +37,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     private void cuttingBoardBlock(Supplier<Block> supplier, String modId) {
         Block block = supplier.get();
         customHorizontalBlock(block,
-                $ -> BlockUtils.getModel(models(), modId, block), BasketBlock.WATERLOGGED);
+                $ -> BlockUtils.getModel(models(), modId, block), CuttingBoardBlock.WATERLOGGED);
     }
 
     // Helper functions.

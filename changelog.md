@@ -1,3 +1,8 @@
+# 1.0.2
+### Fixes
+- Fix decorated cutting boards's internal Cutting Board stack size not resetting to `1` when crafted.
+- Fix cutting boards not being broken faster with an Axe
+
 # 1.0.1
 ### Fixes
 - Fix crash on startup when running the mod on a server
