@@ -2,11 +2,13 @@ package com.phantomwing.choppersdelight.block;
 
 import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
+import com.phantomwing.choppersdelight.block.entity.ModCuttingBoardBlockEntity;
+import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
-
 import java.util.function.Supplier;
 
 public class ModBlockEntityTypes
@@ -15,6 +17,10 @@ public class ModBlockEntityTypes
 
     public static final Supplier<BlockEntityType<DecoratedCuttingBoardBlockEntity>> DECORATED_CUTTING_BOARD = TILES.register("decorated_cutting_board", () -> BlockEntityType.Builder.of(DecoratedCuttingBoardBlockEntity::new,
         ModBlocks.DECORATED_CUTTING_BOARD.get()
+    ).build(null));
+
+    public static final Supplier<BlockEntityType<ModCuttingBoardBlockEntity>> MOD_CUTTING_BOARD = TILES.register("cutting_board", () -> BlockEntityType.Builder.of(ModCuttingBoardBlockEntity::new,
+        BlockUtils.getCuttingBoards().toArray(Block[]::new)
     ).build(null));
 
     public static void register(IEventBus eventBus) {

@@ -1,3 +1,8 @@
+# 1.0.1
+### Fixes
+- Fix items not being visible on cutting boards
+
+
 # 1.0.0
 
 ### Additions

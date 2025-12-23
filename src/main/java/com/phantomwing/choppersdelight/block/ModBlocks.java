@@ -11,7 +11,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 
 import java.util.LinkedHashSet;
 import java.util.function.Supplier;
@@ -116,8 +115,8 @@ public class ModBlocks {
         return block;
     }
 
-    private static CuttingBoardBlock createCuttingBoard() {
-        return new CuttingBoardBlock(Block.Properties.copy(Blocks.OAK_PLANKS).strength(2.0f).sound(SoundType.WOOD));
+    private static ModCuttingBoardBlock createCuttingBoard() {
+        return new ModCuttingBoardBlock(Block.Properties.copy(Blocks.OAK_PLANKS).strength(2.0f).sound(SoundType.WOOD));
     }
 
     private static RegistryObject<Block> registerDecoratedCuttingBoard(String name) {

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.phantomwing.choppersdelight.block.custom.DecoratedCuttingBoardBlock;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
+import com.phantomwing.choppersdelight.block.entity.ModCuttingBoardBlockEntity;
 import com.phantomwing.choppersdelight.utils.BannerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
+import vectorwing.farmersdelight.common.registry.ModItems;
 
 import javax.annotation.Nonnull;
 
@@ -79,18 +81,35 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
             blockState = blockState.setValue(CuttingBoardBlock.WATERLOGGED, oldBlockState.getValue(DecoratedCuttingBoardBlock.WATERLOGGED));
 
             // Create a CuttingBoardBlockEntity from the decorated board.
-            CuttingBoardBlockEntity cuttingBoard = new CuttingBoardBlockEntity(blockEntity.getBlockPos(), blockState);
-            cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+            if (board.is(ModItems.CUTTING_BOARD.get())) {
+                // If it is Farmer's Delight Cutting Board, render that type.
+                CuttingBoardBlockEntity cuttingBoard = new CuttingBoardBlockEntity(blockEntity.getBlockPos(), blockState);
+                cuttingBoard.addItem(blockEntity.getStoredItem().copy());
 
-            // Render the new CuttingBoardBlockEntity.
-            BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
-            BlockEntityRenderer<CuttingBoardBlockEntity> boardRenderer = dispatcher.getRenderer(cuttingBoard);
+                // Render the new CuttingBoardBlockEntity.
+                BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
+                BlockEntityRenderer<CuttingBoardBlockEntity> boardRenderer = dispatcher.getRenderer(cuttingBoard);
 
-            if (boardRenderer != null) {
-                poseStack.pushPose();
-                boardRenderer.render(cuttingBoard, partialTicks, poseStack, buffer, light, overlay);
-                poseStack.popPose();
-            }
+                if (boardRenderer != null) {
+                    poseStack.pushPose();
+                    boardRenderer.render(cuttingBoard, partialTicks, poseStack, buffer, light, overlay);
+                    poseStack.popPose();
+                }
+            } else {
+                // Otherwise, render our mod's Cutting Board.
+                ModCuttingBoardBlockEntity cuttingBoard = new ModCuttingBoardBlockEntity(blockEntity.getBlockPos(), blockState);
+                cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+
+                // Render the new CuttingBoardBlockEntity.
+                BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
+                BlockEntityRenderer<ModCuttingBoardBlockEntity> boardRenderer = dispatcher.getRenderer(cuttingBoard);
+
+                if (boardRenderer != null) {
+                    poseStack.pushPose();
+                    boardRenderer.render(cuttingBoard, partialTicks, poseStack, buffer, light, overlay);
+                    poseStack.popPose();
+                }            }
+
         }
     }
 }
