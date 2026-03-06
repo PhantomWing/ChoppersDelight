@@ -52,7 +52,7 @@
   "block.choppersdelight.pale_oak_cutting_board": "Lichte eikenhouten snijplank",
   "block.choppersdelight.spruce_cutting_board": "Sparrenhouten snijplank",
   "block.choppersdelight.warped_cutting_board": "Spookachtige snijplank",
-
+  "block_type.choppersdelight.cutting_board": "%s snijplank",
   "block.farmersdelight.cutting_board": "Sparrenhouten snijplank",
 
   "itemGroup.choppersdelight": "Chopper's Delight",

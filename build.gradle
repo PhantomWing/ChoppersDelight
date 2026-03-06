@@ -101,6 +101,7 @@ neoForge {
 
             include_biomesoplenty = "true"
             include_biomeswevegone = "true"
+            include_everycompat = "true"
         }
 
         configureEach {
@@ -155,6 +156,14 @@ dependencies {
     if (include_biomesoplenty.toBoolean()) {
         localRuntime "com.github.glitchfiend:GlitchCore-neoforge:${minecraft_version}-${glitchcore_version}"
         localRuntime "com.github.glitchfiend:BiomesOPlenty-neoforge:${minecraft_version}-${biomesoplenty_version}"
+    }
+
+    // Every Compat (Wood Good)
+    compileOnly "curse.maven:selene-499980:7708176" // Moonlight Lib
+    compileOnly "curse.maven:every-compat-628539:7698404"
+    if (include_everycompat.toBoolean()) {
+        localRuntime "curse.maven:selene-499980:7708176"
+        localRuntime "curse.maven:every-compat-628539:7698404"
     }
 }
 

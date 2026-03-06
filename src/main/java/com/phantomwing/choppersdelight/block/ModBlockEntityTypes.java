@@ -1,7 +1,6 @@
 package com.phantomwing.choppersdelight.block;
 
 import com.phantomwing.choppersdelight.ChoppersDelight;
-import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.core.registries.Registries;

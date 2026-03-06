@@ -7,9 +7,7 @@ import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -48,8 +46,7 @@ public class DecoratedCuttingBoardItem extends FuelBlockItem {
 
     @Override
     public @NotNull String getDescriptionId(@NotNull ItemStack stack) {
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(getCuttingBoardStack(stack).getItem());
-        return "block." + id.getNamespace() + "." + id.getPath();
+        return getCuttingBoardStack(stack).getItem().getDescriptionId();
     }
 
     @Override

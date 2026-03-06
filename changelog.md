@@ -1,3 +1,8 @@
+# 1.1.0
+### Additions
+- Added Every Compat support for cutting boards
+- Added cutting boards to the `#create:brittle` block tag
+
 # 1.0.2
 ### Fixes
 - Fix decorated cutting boards's internal Cutting Board stack size not resetting to `1` when crafted.

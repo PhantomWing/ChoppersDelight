@@ -2,6 +2,7 @@ package com.phantomwing.choppersdelight.ui;
 
 import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.Compatibility;
+import com.phantomwing.choppersdelight.EveryCompatSetup;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
@@ -71,6 +72,7 @@ public class ModCreativeModeTab {
         displayModItems(parameters, output);
         displayBiomesOPlentyItems(parameters, output);
         displayBiomesWeveGoneItems(parameters, output);
+        displayEveryCompatItems(parameters, output);
 
         // Add some preconfigured designs.
         output.accept(getDecoratedCuttingBoard(ModBlocks.CHERRY_CUTTING_BOARD, Items.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK));
@@ -112,6 +114,15 @@ public class ModCreativeModeTab {
         ModItems.BIOMES_WEVE_GONE_CREATIVE_TAB_ITEMS.forEach((item) -> {
             output.accept(item.get());
         });
+    }
+
+    public static void displayEveryCompatItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
+        if (!Compatibility.IsEveryCompatLoaded()) {
+            return;
+        }
+
+        // Add items to this tab.
+        EveryCompatSetup.forEachCuttingBoardItem(output::accept);
     }
 
     public static Holder<BannerPattern> getCreeperPattern() {

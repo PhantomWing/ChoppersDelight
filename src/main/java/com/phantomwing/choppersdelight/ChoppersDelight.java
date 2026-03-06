@@ -40,7 +40,7 @@ public class ChoppersDelight {
 
         NeoForge.EVENT_BUS.register(this);
 
-        Compatibility.checkInstalledMods();
+        Compatibility.init();
         registerManagers(eventBus);
     }
 
