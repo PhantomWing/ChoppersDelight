@@ -54,7 +54,7 @@
   "block.choppersdelight.warped_cutting_board": "Warped Cutting Board",
 
   "block.farmersdelight.cutting_board": "Spruce Cutting Board",
-
+  "block_type.choppersdelight.cutting_board": "%s Cutting Board",
   "itemGroup.choppersdelight": "Chopper's Delight",
 
   "tag.item.choppersdelight.cutting_boards": "Cutting Boards",

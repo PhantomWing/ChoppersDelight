@@ -54,7 +54,7 @@
   "block.choppersdelight.warped_cutting_board": "Spookachtige snijplank",
 
   "block.farmersdelight.cutting_board": "Sparrenhouten snijplank",
-
+  "block_type.choppersdelight.cutting_board": "%s snijplank",
   "itemGroup.choppersdelight": "Chopper's Delight",
 
   "tag.item.choppersdelight.cutting_boards": "Snijplanken",

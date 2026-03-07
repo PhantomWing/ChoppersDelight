@@ -1,6 +1,7 @@
 package com.phantomwing.choppersdelight.utils;
 
 import com.phantomwing.choppersdelight.Compatibility;
+import com.phantomwing.choppersdelight.EveryCompatSetup;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -34,6 +35,10 @@ public class BlockUtils {
 
         if (Compatibility.IsBiomesWeveGoneLoaded()) {
             blocks = Stream.concat(blocks, ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.stream().map(Supplier::get));
+        }
+
+        if (Compatibility.IsEveryCompatLoaded()) {
+            blocks = Stream.concat(blocks, EveryCompatSetup.getCuttingBoardBlocks());
         }
 
         return blocks;

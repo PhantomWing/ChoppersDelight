@@ -1,3 +1,9 @@
+# 1.1.0
+### Additions
+- Added Every Compat support for cutting boards
+- Added cutting boards to the `#create:brittle` block tag
+
+
 # 1.0.1
 ### Fixes
 - Fix items not being visible on cutting boards

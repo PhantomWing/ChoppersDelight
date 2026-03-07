@@ -168,6 +168,18 @@ dependencies {
         runtimeOnly fg.deobf("com.github.glitchfiend:GlitchCore-forge:${minecraft_version}-${glitchcore_version}")
         runtimeOnly fg.deobf("com.github.glitchfiend:BiomesOPlenty-forge:${minecraft_version}-${biomesoplenty_version}")
     }
+
+    // Every Compat
+    compileOnly fg.deobf("curse.maven:every-compat-628539:7597912")
+    compileOnly fg.deobf("curse.maven:selene-499980:7664875")
+    if (include_everycompat.toBoolean()) {
+        runtimeOnly fg.deobf("curse.maven:every-compat-628539:7597912")
+        runtimeOnly fg.deobf("curse.maven:selene-499980:7664875")
+    }
+
+    // Test
+    implementation fg.deobf("curse.maven:autumnity-365045:6151402")
+    implementation fg.deobf("curse.maven:blueprint-382216:5292242")
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']

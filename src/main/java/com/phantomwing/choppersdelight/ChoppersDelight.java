@@ -25,18 +25,17 @@ import org.slf4j.Logger;
 public class ChoppersDelight
 {
     public static final String MOD_ID = "choppersdelight";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public ChoppersDelight()
     {
-        Compatibility.checkInstalledMods();
-
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
 
+        Compatibility.init();
         registerManagers(modEventBus);
     }
 

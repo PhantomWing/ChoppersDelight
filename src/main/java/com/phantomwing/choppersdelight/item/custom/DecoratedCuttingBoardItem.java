@@ -53,8 +53,7 @@ public class DecoratedCuttingBoardItem extends FuelBlockItem {
 
     @Override
     public @NotNull String getDescriptionId(@NotNull ItemStack stack) {
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(getCuttingBoardStack(stack).getItem());
-        return "block." + id.getNamespace() + "." + id.getPath();
+        return getCuttingBoardStack(stack).getItem().getDescriptionId();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 
+import com.phantomwing.choppersdelight.tags.CompatibilityTags;
 import com.phantomwing.choppersdelight.tags.ModTags;
 import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.core.HolderLookup;
@@ -55,5 +56,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
         // Register as mineable with Axe.
         tag(BlockTags.MINEABLE_WITH_AXE).addTag(ModTags.Blocks.CUTTING_BOARDS);
+
+        // Register as brittle (Create)
+        this.tag(CompatibilityTags.CREATE_BRITTLE).addTag(ModTags.Blocks.CUTTING_BOARDS);
     }
 }
