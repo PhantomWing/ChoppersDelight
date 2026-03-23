@@ -17,7 +17,7 @@ public class EveryCompatSetup {
     private static WoodGood woodGood;
 
     public static void init() {
-        woodGood = new WoodGood(ChoppersDelight.MOD_ID);
+        woodGood = new WoodGood();
         EveryCompatAPI.registerModule(woodGood);
     }
 

@@ -1,5 +1,6 @@
 package com.phantomwing.choppersdelight.recipe.custom;
 
+import com.phantomwing.choppersdelight.block.custom.ModCuttingBoardBlock;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
 import com.phantomwing.choppersdelight.recipe.ModRecipes;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
@@ -38,8 +40,7 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
                     }
 
                     bannerStack = stack;
-                } else if (stack.is(ModTags.Items.CUTTING_BOARDS)) {
-
+                } else if (isCuttingBoard(stack)) {
                     if (!cuttingBoardStack.isEmpty()) {
                         return false;
                     }
@@ -67,7 +68,7 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
                 if (stack.getItem() instanceof BannerItem) {
                     bannerStack = stack.copy();
                     bannerStack.setCount(1);
-                } else if (stack.is(ModTags.Items.CUTTING_BOARDS)) {
+                } else if (isCuttingBoard(stack)) {
                     cuttingBoardStack = stack.copy();
                     cuttingBoardStack.setCount(1);
                 }
@@ -96,5 +97,20 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
     @Override
     public RecipeSerializer<?> getSerializer() {
         return ModRecipes.ADD_PATTERN_RECIPE.get();
+    }
+
+    /**
+     * Check if an item is a cutting board. Uses the tag first, then falls back to
+     * an instanceof check for EveryCompat-generated blocks that may not be in the
+     * server-side tag.
+     */
+    private static boolean isCuttingBoard(ItemStack stack) {
+        if (stack.is(ModTags.Items.CUTTING_BOARDS)) {
+            return true;
+        }
+        // Fallback: check if the item is a BlockItem for a ModCuttingBoardBlock.
+        // This covers EveryCompat-generated cutting boards that may not be in the tag on the server.
+        return stack.getItem() instanceof BlockItem blockItem
+                && blockItem.getBlock() instanceof ModCuttingBoardBlock;
     }
 }

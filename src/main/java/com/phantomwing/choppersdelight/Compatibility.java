@@ -27,7 +27,9 @@ public class Compatibility {
         _isBiomesOPlentyLoaded = modList.isLoaded(Compatibility.BIOMES_O_PLENTY_MOD_ID);
         _isBiomesWeveGoneLoaded = modList.isLoaded(Compatibility.BIOMES_WEVE_GONE_MOD_ID);
         _isEveryCompatLoaded = modList.isLoaded(Compatibility.EVERY_COMPAT_MOD_ID);
+    }
 
+    public static void initEveryCompat() {
         // Add Every Compat support if the mod is loaded.
         // This is done in a separate class to avoid loading EveryCompat classes when the mod is not installed.
         if (_isEveryCompatLoaded) {

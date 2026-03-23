@@ -37,6 +37,7 @@ public class ChoppersDelight
 
         Compatibility.init();
         registerManagers(modEventBus);
+        Compatibility.initEveryCompat();
     }
 
     // Register all managers to the event bus.
