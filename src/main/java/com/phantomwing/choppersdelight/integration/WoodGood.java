@@ -3,13 +3,13 @@ package com.phantomwing.choppersdelight.integration;
 import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.tags.ModTags;
+import com.phantomwing.choppersdelight.ui.ModCreativeModeTab;
 import net.mehvahdjukaar.every_compat.api.PaletteStrategies;
 import net.mehvahdjukaar.every_compat.api.SimpleEntrySet;
 import net.mehvahdjukaar.every_compat.api.SimpleModule;
 import net.mehvahdjukaar.moonlight.api.set.wood.VanillaWoodTypes;
 import net.mehvahdjukaar.moonlight.api.util.Utils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.mehvahdjukaar.moonlight.api.set.wood.WoodType;
 import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
@@ -20,8 +20,6 @@ public class WoodGood extends SimpleModule {
     public WoodGood(String modId) {
         super(modId, "chd", Compatibility.EVERY_COMPAT_MOD_ID);
 
-        ResourceLocation tab = modRes("main");
-
         cuttingBoard = SimpleEntrySet.builder(WoodType.class, "cutting_board",
                         ModBlocks.OAK_CUTTING_BOARD, () -> VanillaWoodTypes.OAK,
                         w -> new CuttingBoardBlock(Utils.copyPropertySafe(w.log))
@@ -29,7 +27,7 @@ public class WoodGood extends SimpleModule {
                 .addTexture(modRes("block/oak_cutting_board"), PaletteStrategies.PLANKS_STANDARD)
                 .addTag(ModTags.Items.CUTTING_BOARDS, Registries.ITEM)
                 .addTag(ModTags.Blocks.CUTTING_BOARDS, Registries.BLOCK)
-                .setTabKey(tab)
+                .setTabKey(ModCreativeModeTab.MOD_TAB.getKey().location())
                 .defaultRecipe()
                 .build();
         this.addEntry(cuttingBoard);

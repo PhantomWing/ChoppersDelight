@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -51,10 +50,7 @@ public class ChoppersDelight {
         ModBlockEntityTypes.register(eventBus);
         ModDataComponents.register(eventBus);
         ModRecipes.register(eventBus);
-
-        if (FMLEnvironment.dist.isClient()) {
-            ModCreativeModeTab.register(eventBus);
-        }
+        ModCreativeModeTab.register(eventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

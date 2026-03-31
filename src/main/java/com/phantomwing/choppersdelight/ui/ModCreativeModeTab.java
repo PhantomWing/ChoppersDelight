@@ -7,7 +7,6 @@ import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -21,6 +20,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -36,12 +36,24 @@ public class ModCreativeModeTab {
             .displayItems(ModCreativeModeTab::displayItems)
             .build());
 
+    /**
+     * Returns the client-side Level, or null if not on the client or not in a world.
+     * This avoids referencing Minecraft directly in method bodies, which would
+     * trigger RuntimeDistCleaner when this class is loaded on a dedicated server.
+     */
+    private static Level getClientLevel() {
+        if (!FMLEnvironment.dist.isClient()) {
+            return null;
+        }
+        return ClientHelper.getLevel();
+    }
+
     public static ItemStack getTabIcon() {
         return getDecoratedCuttingBoard(ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK);
     }
 
     public static ItemStack getDecoratedCuttingBoard(DeferredBlock<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
-        Level level = Minecraft.getInstance().level;
+        Level level = getClientLevel();
 
         if (level != null) {
             // Generate a base cutting board
@@ -126,7 +138,7 @@ public class ModCreativeModeTab {
     }
 
     public static Holder<BannerPattern> getCreeperPattern() {
-        Level level = Minecraft.getInstance().level;
+        Level level = getClientLevel();
         if (level == null) {
             return null; // not in a world yet
         }
@@ -139,5 +151,16 @@ public class ModCreativeModeTab {
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
+    }
+
+    /**
+     * Inner class that isolates the Minecraft client reference.
+     * This class is only ever loaded when FMLEnvironment.dist.isClient() is true,
+     * so it will never trigger RuntimeDistCleaner on a dedicated server.
+     */
+    private static class ClientHelper {
+        static Level getLevel() {
+            return net.minecraft.client.Minecraft.getInstance().level;
+        }
     }
 }

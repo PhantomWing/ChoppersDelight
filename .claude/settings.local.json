@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(grep -i \"\\\\.jar$\")",
+      "Read(//tmp/**)",
+      "Bash(javap -p -c net/mehvahdjukaar/every_compat/api/AbstractSimpleEntrySet$Builder.class)"
+    ]
+  }
+}

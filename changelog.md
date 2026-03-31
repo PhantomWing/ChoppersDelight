@@ -1,3 +1,7 @@
+# 1.1.1
+### Fixes
+- Fix incorrect tab key passed to Every Compat
+
 # 1.1.0
 ### Additions
 - Added Every Compat support for cutting boards
