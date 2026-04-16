@@ -1,3 +1,7 @@
+# 1.1.2
+### Fixes
+- Fix game crashing when opening Creative Inventory with Every Compat installed in a production environment
+
 # 1.1.1
 ### Fixes
 - Fix incorrect tab key passed to Every Compat

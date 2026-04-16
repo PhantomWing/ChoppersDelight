@@ -84,7 +84,6 @@ public class ModCreativeModeTab {
         displayModItems(parameters, output);
         displayBiomesOPlentyItems(parameters, output);
         displayBiomesWeveGoneItems(parameters, output);
-        displayEveryCompatItems(parameters, output);
 
         // Add some preconfigured designs.
         output.accept(getDecoratedCuttingBoard(ModBlocks.CHERRY_CUTTING_BOARD, Items.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK));
@@ -126,27 +125,6 @@ public class ModCreativeModeTab {
         ModItems.BIOMES_WEVE_GONE_CREATIVE_TAB_ITEMS.forEach((item) -> {
             output.accept(item.get());
         });
-    }
-
-    public static void displayEveryCompatItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
-        if (!Compatibility.IsEveryCompatLoaded()) {
-            return;
-        }
-
-        // Add items to this tab.
-        EveryCompatSetup.forEachCuttingBoardItem(output::accept);
-    }
-
-    public static Holder<BannerPattern> getCreeperPattern() {
-        Level level = getClientLevel();
-        if (level == null) {
-            return null; // not in a world yet
-        }
-
-        Registry<BannerPattern> registry =
-                level.registryAccess().registryOrThrow(Registries.BANNER_PATTERN);
-
-        return registry.getHolderOrThrow(BannerPatterns.CREEPER);
     }
 
     public static void register(IEventBus eventBus) {
