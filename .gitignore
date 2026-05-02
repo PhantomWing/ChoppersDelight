@@ -22,6 +22,9 @@ eclipse
 run
 runs
 run-data
+libs
+.cache
+src/*/generated/.cache
 
 repo
 

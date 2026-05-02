@@ -1,3 +1,11 @@
+# 1.2.0
+### Changes
+- Updated for Farmer's Delight 1.3.1
+- For now, restored the original Farmer's Delight cutting board appearance to match Chopper's Delight textures
+
+### Fixes
+- Decorated cutting boards no longer drop themselves when destroyed by a player in creative mode
+
 # 1.1.2
 ### Fixes
 - Fix game crashing when opening Creative Inventory with Every Compat installed in a production environment
