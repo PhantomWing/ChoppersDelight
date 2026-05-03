@@ -37,7 +37,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         // Add Biomes O' Plenty cutting boards
         ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((blockSupplier -> {
             this.tag(ModTags.Blocks.CUTTING_BOARDS).addOptional(
-                    ResourceLocation.fromNamespaceAndPath(
+                    new ResourceLocation(
                             Compatibility.BIOMES_O_PLENTY_MOD_ID,
                             BlockUtils.getName(blockSupplier.get())
                     )
@@ -47,7 +47,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         // Add Biomes We've Gone cutting boards
         ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((blockSupplier -> {
             this.tag(ModTags.Blocks.CUTTING_BOARDS).addOptional(
-                    ResourceLocation.fromNamespaceAndPath(
+                    new ResourceLocation(
                             Compatibility.BIOMES_WEVE_GONE_MOD_ID,
                             BlockUtils.getName(blockSupplier.get())
                     )

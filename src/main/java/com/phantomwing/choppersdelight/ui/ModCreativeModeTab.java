@@ -5,14 +5,12 @@ import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatterns;
@@ -36,33 +34,26 @@ public class ModCreativeModeTab {
     }
 
     public static ItemStack getDecoratedCuttingBoard(RegistryObject<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
-        Level level = Minecraft.getInstance().level;
+        // Generate base items
+        ItemStack cuttingBoard = new ItemStack(board.get());
+        ItemStack bannerStack = new ItemStack(banner);
 
-        if (level != null) {
-            // Generate base items
-            ItemStack cuttingBoard = new ItemStack(board.get());
-            ItemStack bannerStack = new ItemStack(banner);
+        // Contruct a patterns tag.
+        BannerPattern.Builder builder = new BannerPattern.Builder();
+        builder.addPattern(pattern, patternColor);
+        ListTag patternsList = builder.toListTag();
 
-            // Contruct a patterns tag.
-            BannerPattern.Builder builder = new BannerPattern.Builder();
-            builder.addPattern(pattern, patternColor);
-            ListTag patternsList = builder.toListTag();
+        // Prepare BlockEntityTag and Patterns list
+        CompoundTag blockEntityTag = bannerStack.getOrCreateTagElement("BlockEntityTag");
+        blockEntityTag.put("Patterns", patternsList);
 
-            // Prepare BlockEntityTag and Patterns list
-            CompoundTag blockEntityTag = bannerStack.getOrCreateTagElement("BlockEntityTag");
-            blockEntityTag.put("Patterns", patternsList);
+        // Generate the final item
+        ItemStack itemStack = new ItemStack(ModItems.DECORATED_CUTTING_BOARD.get());
+        CompoundTag decoratedData = itemStack.getOrCreateTagElement(ModDataComponents.DECORATED_CUTTING_BOARD_DATA);
+        decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_CUTTING_BOARD_DATA, cuttingBoard.save(new CompoundTag()));
+        decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_BANNER_DATA, bannerStack.save(new CompoundTag()));
 
-            // Generate the final item
-            ItemStack itemStack = new ItemStack(ModItems.DECORATED_CUTTING_BOARD.get());
-            CompoundTag decoratedData = itemStack.getOrCreateTagElement(ModDataComponents.DECORATED_CUTTING_BOARD_DATA);
-            decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_CUTTING_BOARD_DATA, cuttingBoard.save(new CompoundTag()));
-            decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_BANNER_DATA, bannerStack.save(new CompoundTag()));
-
-            return itemStack;
-        }
-
-        // Fallback.
-        return new ItemStack(ModBlocks.DECORATED_CUTTING_BOARD.get());
+        return itemStack;
     }
 
     public static void displayItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {

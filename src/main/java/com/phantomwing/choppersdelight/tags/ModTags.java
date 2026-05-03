@@ -14,7 +14,7 @@ public class ModTags {
         public static final TagKey<Block> CUTTING_BOARDS = tag("cutting_boards");
 
         private static TagKey<Block> tag(String name) {
-            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(ChoppersDelight.MOD_ID, name));
+            return BlockTags.create(new ResourceLocation(ChoppersDelight.MOD_ID, name));
         }
     }
 
@@ -23,7 +23,7 @@ public class ModTags {
         public static final TagKey<Item> CUTTING_BOARDS = tag("cutting_boards");
 
         private static TagKey<Item> tag(String name) {
-            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(ChoppersDelight.MOD_ID, name));
+            return ItemTags.create(new ResourceLocation(ChoppersDelight.MOD_ID, name));
         }
     }
 }

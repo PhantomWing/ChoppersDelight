@@ -19,7 +19,7 @@ public class BlockUtils {
     }
 
     public static ResourceLocation getResourceLocation(String modId, Block block) {
-        return ResourceLocation.fromNamespaceAndPath(modId, "block/" + getName(block));
+        return new ResourceLocation(modId, "block/" + getName(block));
     }
 
     public static ModelFile getModel(BlockModelProvider provider, String modId, Block block) {

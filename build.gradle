@@ -114,19 +114,23 @@ repositories {
     // AppleSkin
     maven { url = "https://maven.ryanliptak.com/" }
 
-    // JEI
+    // JEI (Progwml6 maven returns HTTP 523 and poisons ForgeGradle's deobf resolution; using ModMaven mirror only)
     maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
 
-    // Farmer's Delight
+    maven {
+        name = "Greenhouse Maven"
+        url = "https://maven.greenhouse.lgbt/releases"
+    }
+
+    // Modrinth Maven (Farmer's Delight)
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+
+    // CurseMaven (Farmer's Delight CF artifacts, Every Compat, Selene)
     maven { url = 'https://www.cursemaven.com' }
 }
 
@@ -136,9 +140,10 @@ dependencies {
     // Farmer's Delight
     implementation fg.deobf("curse.maven:farmersdelight-398521:${farmersdelight_version}")
 
-    // JEI
+    // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    // at runtime, use the full JEI jar for Forge
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // Appleskin
@@ -177,9 +182,9 @@ dependencies {
         runtimeOnly fg.deobf("curse.maven:selene-499980:7664875")
     }
 
-    // Test
-    implementation fg.deobf("curse.maven:autumnity-365045:6151402")
-    implementation fg.deobf("curse.maven:blueprint-382216:5292242")
+    // Test (commented out — leftover test mods that cannot currently resolve via deobf cache)
+    // implementation fg.deobf("curse.maven:autumnity-365045:6151402")
+    // implementation fg.deobf("curse.maven:blueprint-382216:5292242")
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
@@ -187,6 +192,7 @@ def replaceProperties = [
     minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
     forge_version: forge_version, forge_version_range: forge_version_range,
     loader_version_range: loader_version_range,
+    farmersdelight_version_range: farmersdelight_version_range,
     mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
     mod_authors: mod_authors, mod_description: mod_description
 ]

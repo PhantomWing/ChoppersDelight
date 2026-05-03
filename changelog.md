@@ -1,3 +1,10 @@
+# 1.2.0
+### Changes
+- Updated for Farmer's Delight 1.3.1
+- Add compatibility with Every Compat
+- For now, restored the original Farmer's Delight cutting board appearance to match Chopper's Delight textures
+
+
 # 1.1.0
 ### Additions
 - Added Every Compat support for cutting boards

@@ -8,6 +8,7 @@ import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -17,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagsProvider extends ItemTagsProvider {
-    public ModItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
+    public ModItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagsProvider.TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, blockTags, ChoppersDelight.MOD_ID, existingFileHelper);
     }
 
@@ -35,7 +36,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         // Add Biomes O' Plenty cutting boards
         ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach((blockSupplier -> {
             this.tag(ModTags.Items.CUTTING_BOARDS).addOptional(
-                    ResourceLocation.fromNamespaceAndPath(
+                    new ResourceLocation(
                             Compatibility.BIOMES_O_PLENTY_MOD_ID,
                             BlockUtils.getName(blockSupplier.get()
                             )
@@ -46,7 +47,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         // Add Biomes We've Gone cutting boards
         ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach((blockSupplier -> {
             this.tag(ModTags.Items.CUTTING_BOARDS).addOptional(
-                    ResourceLocation.fromNamespaceAndPath(
+                    new ResourceLocation(
                             Compatibility.BIOMES_WEVE_GONE_MOD_ID,
                             BlockUtils.getName(blockSupplier.get()
                             )

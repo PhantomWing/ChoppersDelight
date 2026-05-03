@@ -12,6 +12,6 @@ public class ItemUtils {
     }
 
     public static ResourceLocation getResourceLocation(String modId, Item item) {
-        return ResourceLocation.fromNamespaceAndPath(modId, "item/" + getName(item));
+        return new ResourceLocation(modId, "item/" + getName(item));
     }
 }
