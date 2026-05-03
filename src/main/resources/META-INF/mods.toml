@@ -37,3 +37,31 @@ configBackground = "minecraft:textures/block/bricks.png"
     versionRange="${minecraft_version_range}"
     ordering="AFTER"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="biomesoplenty"
+    mandatory=false
+    versionRange="*"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="biomeswevegone"
+    mandatory=false
+    versionRange="*"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="everycomp"
+    mandatory=false
+    versionRange="*"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="moonlight"
+    mandatory=false
+    versionRange="*"
+    ordering="AFTER"
+    side="BOTH"

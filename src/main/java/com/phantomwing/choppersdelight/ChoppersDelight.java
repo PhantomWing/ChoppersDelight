@@ -46,10 +46,7 @@ public class ChoppersDelight
         ModItems.register(eventBus);
         ModBlockEntityTypes.register(eventBus);
         ModRecipes.register(eventBus);
-
-        if (FMLEnvironment.dist.isClient()) {
-            ModCreativeModeTab.register(eventBus);
-        }
+        ModCreativeModeTab.register(eventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

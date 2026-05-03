@@ -2,10 +2,8 @@ package com.phantomwing.choppersdelight;
 
 import com.phantomwing.choppersdelight.integration.WoodGood;
 import net.mehvahdjukaar.every_compat.api.EveryCompatAPI;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -24,10 +22,5 @@ public class EveryCompatSetup {
     public static Stream<Block> getCuttingBoardBlocks() {
         if (woodGood == null) return Stream.empty();
         return woodGood.cuttingBoard.blocks.values().stream();
-    }
-
-    public static void forEachCuttingBoardItem(Consumer<Item> consumer) {
-        if (woodGood == null) return;
-        woodGood.cuttingBoard.items.forEach((w, item) -> consumer.accept(item));
     }
 }
