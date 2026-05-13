@@ -1,3 +1,8 @@
+# 1.0.2
+### Fixes
+- Fix decorated cutting boards's internal Cutting Board stack size not resetting to `1` when crafted.
+- Fix cutting boards not being broken faster with an Axe
+
 # 1.0.1
 ### Fixes
 - Fixed Farmer's Delight's Cutting Board recipe not being overridden (it still allowed any wood type), causing some other cutting boards to be unobtainable
