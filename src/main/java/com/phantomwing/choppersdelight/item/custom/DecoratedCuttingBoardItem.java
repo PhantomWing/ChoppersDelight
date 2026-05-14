@@ -4,9 +4,7 @@ import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -47,8 +45,29 @@ public class DecoratedCuttingBoardItem extends FuelBlockItem {
 
     @Override
     public @NotNull String getDescriptionId(@NotNull ItemStack stack) {
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(getCuttingBoardStack(stack).getItem());
-        return "block." + id.getNamespace() + "." + id.getPath();
+        // Delegate to the wrapped cutting board item so mods (notably Every Compat) that resolve their
+        // block name through a custom translation key — instead of the raw `block.<namespace>.<path>` key —
+        // produce the right id.
+        ItemStack boardStack = getCuttingBoardStack(stack);
+        return boardStack.getItem().getDescriptionId(boardStack);
+    }
+
+    @Override
+    public @NotNull Component getName(@NotNull ItemStack stack) {
+        // getName drives the displayed name. For EveryCompat-generated cutting boards there is no direct
+        // `block.<namespace>.<path>` lang entry — their name comes from Moonlight/Every Compat applying
+        // the `block_type.choppersdelight.cutting_board` template to the wood type at runtime. Delegating
+        // to the wrapped board's hover name picks that up automatically, while still respecting any
+        // custom name/translation set on our decorated item itself.
+        Component customName = stack.get(DataComponents.CUSTOM_NAME);
+        if (customName != null) {
+            return customName;
+        }
+        Component itemName = stack.get(DataComponents.ITEM_NAME);
+        if (itemName != null) {
+            return itemName;
+        }
+        return getCuttingBoardStack(stack).getHoverName();
     }
 
     @Override

@@ -4,7 +4,7 @@
 
 ### Changes
 - Updated for Farmer's Delight Refabricated 3.3.2.
-- Restored the original Farmer's Delight cutting board appearance to match Chopper's Delight textures.
+- For now, restored the original Farmer's Delight cutting board appearance to match Chopper's Delight textures.
 
 ### Fixes
 - Decorated cutting boards no longer drop themselves when destroyed by a player in creative mode.
