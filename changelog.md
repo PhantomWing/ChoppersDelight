@@ -1,3 +1,15 @@
+# 1.1.0
+### Additions
+- Added Every Compat (Wood Good) support — cutting boards now generate for every wood type registered through Every Compat.
+
+### Changes
+- Updated for Farmer's Delight Refabricated 3.3.2.
+- Restored the original Farmer's Delight cutting board appearance to match Chopper's Delight textures.
+
+### Fixes
+- Decorated cutting boards no longer drop themselves when destroyed by a player in creative mode.
+- Sneak-carving a tool now works on decorated cutting boards (the carving event handler was previously not registered).
+
 # 1.0.2
 ### Fixes
 - Fix decorated cutting boards's internal Cutting Board stack size not resetting to `1` when crafted.

@@ -1,7 +1,6 @@
 package com.phantomwing.choppersdelight.mixin;
 
-import com.phantomwing.choppersdelight.Compatibility;
-import com.phantomwing.choppersdelight.block.ModBlocks;
+import com.phantomwing.choppersdelight.utils.BlockUtils;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,16 +25,7 @@ public class BlockEntityTypeMixin {
             choppersdelight$blocksAdded = true;
 
             Set<Block> validBlocks = ((BlockEntityTypeAccessor)this).getValidBlocks();
-
-            ModBlocks.MINECRAFT_CUTTING_BOARDS.forEach(b -> validBlocks.add(b.get()));
-
-            if (Compatibility.IsBiomesOPlentyLoaded()) {
-                ModBlocks.BIOMES_O_PLENTY_CUTTING_BOARDS.forEach(b -> validBlocks.add(b.get()));
-            }
-
-            if (Compatibility.IsBiomesWeveGoneLoaded()) {
-                ModBlocks.BIOMES_WEVE_GONE_CUTTING_BOARDS.forEach(b -> validBlocks.add(b.get()));
-            }
+            BlockUtils.getCuttingBoards().forEach(validBlocks::add);
         }
     }
 }

@@ -5,6 +5,15 @@ build/
 out/
 classes/
 
+# datagen output
+
+src/main/generated/
+.cache/
+
+# local FDR patched jar (loom 1.16 classtweaker workaround — derived from public Modrinth jar)
+
+libs/
+
 # eclipse
 
 *.launch

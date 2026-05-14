@@ -1,5 +1,5 @@
 {
-  "parent": "farmersdelight:block/cutting_board",
+  "parent": "choppersdelight:block/cutting_board",
   "textures": {
     "particle": "choppersdelight:block/bamboo_cutting_board",
     "top": "choppersdelight:block/bamboo_cutting_board"

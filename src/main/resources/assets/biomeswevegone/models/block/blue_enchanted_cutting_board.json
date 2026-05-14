@@ -1,5 +1,5 @@
 {
-  "parent": "farmersdelight:block/cutting_board",
+  "parent": "choppersdelight:block/cutting_board",
   "textures": {
     "particle": "biomeswevegone:block/blue_enchanted_cutting_board",
     "top": "biomeswevegone:block/blue_enchanted_cutting_board"

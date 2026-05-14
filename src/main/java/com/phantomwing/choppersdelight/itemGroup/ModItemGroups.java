@@ -7,8 +7,9 @@ import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
 import com.phantomwing.choppersdelight.utils.RegisterUtils;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.client.Minecraft;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -33,12 +34,25 @@ public class ModItemGroups {
             .displayItems(ModItemGroups::displayItems)
             .build(), BuiltInRegistries.CREATIVE_MODE_TAB);
 
+    /**
+     * Returns the client-side Level, or null if not on the client or not in a world.
+     * The actual {@code Minecraft.getInstance().level} call is isolated in {@link ClientHelper}
+     * so that loading this class on a dedicated server (e.g. when EveryCompat's WoodGood
+     * references {@link #MOD_TAB}) doesn't pull in the client-only {@code ClientLevel} class.
+     */
+    private static Level getClientLevel() {
+        if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) {
+            return null;
+        }
+        return ClientHelper.getLevel();
+    }
+
     private static ItemStack getTabIcon() {
         return getDecoratedCuttingBoard(ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK);
     }
 
     private static ItemStack getDecoratedCuttingBoard(Supplier<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
-        Level level = Minecraft.getInstance().level;
+        Level level = getClientLevel();
 
         if (level != null) {
             // Generate a base cutting board
@@ -114,5 +128,16 @@ public class ModItemGroups {
 
     public static void registerModItemGroups() {
         ChoppersDelight.LOGGER.info("Registering item groups for " + ChoppersDelight.MOD_ID);
+    }
+
+    /**
+     * Inner class that isolates the {@code Minecraft.getInstance().level} reference.
+     * Only loaded when {@link #getLevel()} is invoked, which only happens on the client,
+     * so the client-only {@code ClientLevel} type is never resolved on a dedicated server.
+     */
+    private static class ClientHelper {
+        static Level getLevel() {
+            return net.minecraft.client.Minecraft.getInstance().level;
+        }
     }
 }

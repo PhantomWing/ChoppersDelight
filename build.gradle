@@ -1,10 +1,15 @@
 plugins {
-	id 'fabric-loom' version '1.10-SNAPSHOT'
+	id 'fabric-loom' version '1.17.0-alpha.8'
 	id 'maven-publish'
 }
 
 version = mod_version
 group = maven_group
+
+tasks.withType(Copy).configureEach {
+	// Only override during runData execution
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
 
 base {
 	archivesName.set("${mod_id}-fabric-${minecraft_version}")
@@ -12,6 +17,11 @@ base {
 
 repositories {
 	mavenLocal()
+
+	// Local patched FD Refabricated jar (loom 1.16+ classtweaker workaround)
+	flatDir {
+		dirs 'libs'
+	}
 
 	// Parchment, Fabric
 	maven { url = "https://maven.parchmentmc.org" }
@@ -55,8 +65,11 @@ repositories {
 }
 
 fabricApi {
-	configureDataGeneration()
+	configureDataGeneration {
+		modId = mod_id
+	}
 }
+
 
 dependencies {
 	// Minecraft
@@ -72,8 +85,10 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-	// Farmer's Delight Refabricated
-	modCompileOnly("maven.modrinth:farmers-delight-refabricated:${minecraft_version}-${farmersdelight_version}") {
+	// Farmer's Delight Refabricated — local patched jar that strips classtweaker enum extensions
+	// (those crash loom 1.16+ remap with NPE in EnumExtensionClassVisitor.visitEnd).
+	// Ship this jar in `libs/` alongside the project; end users still install the unpatched jar at runtime.
+	modImplementation(name: "farmers-delight-refabricated-${minecraft_version}-${farmersdelight_version}-patched") {
 		exclude(group: "net.fabricmc")
 	}
 
@@ -107,6 +122,14 @@ dependencies {
 	if (include_biomesoplenty.toBoolean()) {
 		modLocalRuntime "com.github.glitchfiend:GlitchCore-fabric:${minecraft_version}-${glitchcore_version}"
 		modLocalRuntime "com.github.glitchfiend:BiomesOPlenty-fabric:${minecraft_version}-${biomesoplenty_version}"
+	}
+
+	// Every Compat (Wood Good) — needs Moonlight Lib
+	modCompileOnly "maven.modrinth:moonlight:${moonlight_version}"
+	modCompileOnly "maven.modrinth:every-compat:${everycompat_version}"
+	if (include_everycompat.toBoolean()) {
+		modLocalRuntime "maven.modrinth:moonlight:${moonlight_version}"
+		modLocalRuntime "maven.modrinth:every-compat:${everycompat_version}"
 	}
 }
 
