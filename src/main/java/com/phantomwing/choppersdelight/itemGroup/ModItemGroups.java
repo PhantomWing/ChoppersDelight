@@ -10,8 +10,7 @@ import com.phantomwing.choppersdelight.utils.RegisterUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -24,6 +23,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class ModItemGroups {
@@ -48,35 +48,38 @@ public class ModItemGroups {
     }
 
     private static ItemStack getTabIcon() {
-        return getDecoratedCuttingBoard(ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK);
-    }
-
-    private static ItemStack getDecoratedCuttingBoard(Supplier<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
         Level level = getClientLevel();
 
-        if (level != null) {
-            // Generate a base cutting board
-            ItemStack cuttingBoard = new ItemStack(board.get());
-            Registry<BannerPattern> bannerPatternRegistry = level.registryAccess().registryOrThrow(Registries.BANNER_PATTERN);
-            Holder<BannerPattern> patternHolder = bannerPatternRegistry.getHolderOrThrow(pattern);
+        return Optional.ofNullable(level)
+                .flatMap(l -> getDecoratedCuttingBoard(l.registryAccess(), ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK))
+                .orElseGet(() -> new ItemStack(ModBlocks.DECORATED_CUTTING_BOARD.get()));
+    }
 
-            // Generate a banner
-            ItemStack bannerStack = new ItemStack(banner);
-            BannerPatternLayers layers = new BannerPatternLayers.Builder()
-                    .add(patternHolder, patternColor)
-                    .build();
-            bannerStack.set(DataComponents.BANNER_PATTERNS, layers);
+    /**
+     * Empty when the registries have no such banner pattern. Banner patterns are a datapack registry, so they
+     * come from whoever builds the tab - on a server there is no client level to read them from.
+     */
+    private static Optional<ItemStack> getDecoratedCuttingBoard(HolderLookup.Provider registries, Supplier<Block> board, Item banner, ResourceKey<BannerPattern> pattern, DyeColor patternColor) {
+        return registries.lookup(Registries.BANNER_PATTERN)
+                .flatMap(patterns -> patterns.get(pattern))
+                .map(patternHolder -> {
+                    // Generate a base cutting board
+                    ItemStack cuttingBoard = new ItemStack(board.get());
 
-            // Generate the final item
-            ItemStack itemStack = new ItemStack(ModBlocks.DECORATED_CUTTING_BOARD.get());
-            DecoratedCuttingBoardData cuttingBoardData = new DecoratedCuttingBoardData(cuttingBoard, bannerStack);
-            itemStack.set(ModDataComponents.DECORATED_CUTTING_BOARD_DATA.get(), cuttingBoardData);
+                    // Generate a banner
+                    ItemStack bannerStack = new ItemStack(banner);
+                    BannerPatternLayers layers = new BannerPatternLayers.Builder()
+                            .add(patternHolder, patternColor)
+                            .build();
+                    bannerStack.set(DataComponents.BANNER_PATTERNS, layers);
 
-            return itemStack;
-        }
+                    // Generate the final item
+                    ItemStack itemStack = new ItemStack(ModBlocks.DECORATED_CUTTING_BOARD.get());
+                    DecoratedCuttingBoardData cuttingBoardData = new DecoratedCuttingBoardData(cuttingBoard, bannerStack);
+                    itemStack.set(ModDataComponents.DECORATED_CUTTING_BOARD_DATA.get(), cuttingBoardData);
 
-        // Fallback.
-        return new ItemStack(ModBlocks.DECORATED_CUTTING_BOARD.get());
+                    return itemStack;
+                });
     }
 
     private static void displayItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
@@ -84,11 +87,13 @@ public class ModItemGroups {
         displayBiomesOPlentyItems(parameters, output);
         displayBiomesWeveGoneItems(parameters, output);
 
-        // Add some preconfigured designs.
-        output.accept(getDecoratedCuttingBoard(ModBlocks.CHERRY_CUTTING_BOARD, Items.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK));
-        output.accept(getDecoratedCuttingBoard(ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK));
-        output.accept(getDecoratedCuttingBoard(ModBlocks.CRIMSON_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.SKULL, DyeColor.WHITE));
-        output.accept(getDecoratedCuttingBoard(ModBlocks.WARPED_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.FLOW, DyeColor.CYAN));
+        // Add some preconfigured designs. A design whose pattern is missing is left out: a plain stand-in for each
+        // would be the same stack four times, which the tab refuses.
+        HolderLookup.Provider registries = parameters.holders();
+        getDecoratedCuttingBoard(registries, ModBlocks.CHERRY_CUTTING_BOARD, Items.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK).ifPresent(output::accept);
+        getDecoratedCuttingBoard(registries, ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK).ifPresent(output::accept);
+        getDecoratedCuttingBoard(registries, ModBlocks.CRIMSON_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.SKULL, DyeColor.WHITE).ifPresent(output::accept);
+        getDecoratedCuttingBoard(registries, ModBlocks.WARPED_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.FLOW, DyeColor.CYAN).ifPresent(output::accept);
     }
 
     private static void displayModItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
