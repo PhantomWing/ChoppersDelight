@@ -36,7 +36,8 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
                     }
 
                     bannerStack = stack;
-                } else if (stack.is(ModTags.Items.CUTTING_BOARDS)) {
+                } else if (stack.is(ModTags.Items.CUTTING_BOARDS) && !stack.is(ModItems.DECORATED_CUTTING_BOARD.get())) {
+                    // The tag holds the decorated board too; decorating one again would nest it.
 
                     if (!cuttingBoardStack.isEmpty()) {
                         return false;

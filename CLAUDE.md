@@ -21,6 +21,8 @@ before publishing a line through the plugin (`publishing.md`).
 
 - Java 21, Mojang mappings with Parchment.
 - Datagen: `runData`. Output: `src/generated/resources`, never hand-edited.
-- No game tests yet. Writing the first one for whatever is ported next is the highest-value test available (`verification.md`).
+- Game tests in `src/test`, laid out as The Lead Age's (`GameTests`, `GameTestRegistration`, `TestCompat`,
+  `verification.md`), run with `runGameTestServer`. The test source set joins the mod in `neoForge.mods`, and
+  the `gameTestServer` run uses it.
 - No `publishMods` on this line: add the block before publishing it through the plugin (`publishing.md`).
 - Hand-authored access transformer: `src/main/resources/META-INF/accesstransformer.cfg`. A first suspect when a port fails to load.

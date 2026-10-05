@@ -1,5 +1,6 @@
 package com.phantomwing.choppersdelight.integration;
 
+import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.utils.BlockUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -7,7 +8,6 @@ import mezz.jei.api.registration.*;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import vectorwing.farmersdelight.FarmersDelight;
 import vectorwing.farmersdelight.integration.jei.FDRecipeTypes;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -18,7 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @SuppressWarnings("unused")
 public class JEIPlugin implements IModPlugin
 {
-    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(FarmersDelight.MODID, "jei_plugin");
+    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(ChoppersDelight.MOD_ID, "jei_plugin");
 
     @Override
     public ResourceLocation getPluginUid() {

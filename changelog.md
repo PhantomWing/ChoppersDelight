@@ -1,3 +1,11 @@
+# 1.2.1
+
+### Fixes
+- Fix the preset decorated cutting boards appearing as duplicates when the Creative Inventory tab is built without a world loaded on the client (e.g. on a server), which stopped the tab from loading
+- Decorated cutting boards can no longer be decorated with a second banner
+- Fix the JEI plugin using Farmer's Delight's plugin ID
+
+
 # 1.2.0
 ### Changes
 - Updated for Farmer's Delight 1.3.1

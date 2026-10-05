@@ -92,6 +92,7 @@ neoForge {
 
         gameTestServer {
             type = "gameTestServer"
+            sourceSet = sourceSets.test
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
@@ -110,12 +111,16 @@ neoForge {
         }
     }
 
+    // The game tests load as part of the mod, so the test server finds them and their structures.
     mods {
         "${mod_id}" {
             sourceSet(sourceSets.main)
+            sourceSet(sourceSets.test)
         }
     }
 }
+
+neoForge.addModdingDependenciesTo(sourceSets.test)
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
