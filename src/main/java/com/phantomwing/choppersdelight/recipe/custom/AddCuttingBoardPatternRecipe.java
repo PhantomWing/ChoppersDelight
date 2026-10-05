@@ -105,6 +105,10 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
      * server-side tag.
      */
     private static boolean isCuttingBoard(ItemStack stack) {
+        // The tag holds the decorated board too; decorating one again would nest it.
+        if (stack.is(ModItems.DECORATED_CUTTING_BOARD.get())) {
+            return false;
+        }
         if (stack.is(ModTags.Items.CUTTING_BOARDS)) {
             return true;
         }

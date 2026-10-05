@@ -1,3 +1,11 @@
+# 1.2.1
+
+### Fixes
+- Require Farmer's Delight 1.3.1 or newer. Older versions were allowed to load and crashed the game as soon as a cutting board was used
+- Decorated cutting boards can no longer be decorated with a second banner
+- Fix the JEI plugin using Farmer's Delight's plugin ID
+
+
 # 1.2.0
 ### Changes
 - Updated for Farmer's Delight 1.3.1
