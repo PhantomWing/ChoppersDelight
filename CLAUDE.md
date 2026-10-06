@@ -13,9 +13,8 @@ which describes another line; for this folder, this file is the one that applies
 An add-on for Farmer's Delight that adds cutting board variants for each wood type, decorated with
 banners. Mod ID `choppersdelight`.
 
-Released since 2025-09, uploaded by hand: no line has `publishMods` or platform IDs in
-`gradle.properties`. The Modrinth and CurseForge IDs are in `mods.json`; add the block and copy them
-before publishing a line through the plugin (`publishing.md`).
+Released since 2025-09. Releases up to 1.2.0 (1.1.0 on Fabric) were uploaded by hand; every line now
+publishes through `publishMods` (`publishing.md`), with the platform IDs in `gradle.properties`.
 
 ## This line
 
@@ -24,5 +23,5 @@ before publishing a line through the plugin (`publishing.md`).
 - Game tests in `src/test`, laid out as The Lead Age's (`GameTests`, `GameTestRegistration`, `TestCompat`,
   `verification.md`), run with `runGameTestServer`. The test source set joins the mod in `neoForge.mods`, and
   the `gameTestServer` run uses it.
-- No `publishMods` on this line: add the block before publishing it through the plugin (`publishing.md`).
+- Publishes with `publishMods` to Modrinth and CurseForge, tagged NeoForge and 1.21, 1.21.1 (`publishing.md`).
 - Hand-authored access transformer: `src/main/resources/META-INF/accesstransformer.cfg`. A first suspect when a port fails to load.
