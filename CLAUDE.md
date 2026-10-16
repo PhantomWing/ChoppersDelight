@@ -2,7 +2,7 @@
 
 # Choppers Delight - `neoforge/1.21`
 
-**This file describes the `neoforge/1.21` line**: Minecraft 1.21.1 (the jar covers 1.21 and 1.21.1), NeoForge. A **baseline** line: new features start here.
+**This file describes the `neoforge/1.21` line**: Minecraft 1.21.1, NeoForge. A **baseline** line: new features start here.
 Built with NeoForge ModDevGradle.
 
 It belongs to whichever folder has this branch checked out - the main `ChoppersDelight` folder or a worktree
@@ -23,5 +23,5 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 - Game tests in `src/test`, laid out as The Lead Age's (`GameTests`, `GameTestRegistration`, `TestCompat`,
   `verification.md`), run with `runGameTestServer`. The test source set joins the mod in `neoForge.mods`, and
   the `gameTestServer` run uses it.
-- Publishes with `publishMods` to Modrinth and CurseForge, tagged NeoForge and 1.21, 1.21.1 (`publishing.md`).
+- Publishes with `publishMods` to Modrinth and CurseForge, tagged NeoForge and 1.21.1 alone, since NeoForge 21.1 exists for 1.21.1 only (`publishing.md`).
 - Hand-authored access transformer: `src/main/resources/META-INF/accesstransformer.cfg`. A first suspect when a port fails to load.
