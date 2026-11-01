@@ -13,8 +13,9 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class AddCuttingBoardPatternRecipe extends CustomRecipe {
-    public AddCuttingBoardPatternRecipe(CraftingBookCategory category) {
-        super(category);
+    public static final AddCuttingBoardPatternRecipe INSTANCE = new AddCuttingBoardPatternRecipe();
+
+    private AddCuttingBoardPatternRecipe() {
     }
 
     @Override
@@ -50,7 +51,7 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
     }
 
     @Override
-    public @NotNull ItemStack assemble(CraftingInput inv, HolderLookup.@NotNull Provider provider) {
+    public @NotNull ItemStack assemble(@NotNull CraftingInput inv) {
         ItemStack bannerStack = ItemStack.EMPTY;
         ItemStack cuttingBoardStack = ItemStack.EMPTY;
 

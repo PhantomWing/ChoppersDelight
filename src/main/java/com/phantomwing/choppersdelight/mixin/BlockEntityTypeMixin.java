@@ -21,7 +21,7 @@ public class BlockEntityTypeMixin {
             choppersdelight$blocksAdded = true;
 
             BlockEntityType<?> cuttingBoard = (BlockEntityType<?>)(Object)this;
-            BlockUtils.getCuttingBoards().forEach(cuttingBoard::addSupportedBlock);
+            BlockUtils.getCuttingBoards().forEach(cuttingBoard::addValidBlock);
         }
     }
 }

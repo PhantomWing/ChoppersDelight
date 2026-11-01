@@ -10,8 +10,9 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class RemoveCuttingBoardPatternRecipe extends CustomRecipe {
-    public RemoveCuttingBoardPatternRecipe(CraftingBookCategory category) {
-        super(category);
+    public static final RemoveCuttingBoardPatternRecipe INSTANCE = new RemoveCuttingBoardPatternRecipe();
+
+    private RemoveCuttingBoardPatternRecipe() {
     }
 
     @Override
@@ -34,7 +35,7 @@ public class RemoveCuttingBoardPatternRecipe extends CustomRecipe {
     }
 
     @Override
-    public @NotNull ItemStack assemble(CraftingInput inv, HolderLookup.@NotNull Provider provider) {
+    public @NotNull ItemStack assemble(@NotNull CraftingInput inv) {
         ItemStack itemstack = ItemStack.EMPTY;
 
         for (int i = 0; i < inv.size(); ++i) {

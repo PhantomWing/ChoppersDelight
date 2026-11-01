@@ -8,7 +8,7 @@ import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
 import com.phantomwing.choppersdelight.utils.RegisterUtils;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 
 public class ModItemGroups {
     public static final Supplier<CreativeModeTab> MOD_TAB =
-       RegisterUtils.register(ChoppersDelight.MOD_ID + "_tab", () -> FabricItemGroup.builder()
+       RegisterUtils.register(ChoppersDelight.MOD_ID + "_tab", () -> FabricCreativeModeTab.builder()
             .icon(ModItemGroups::getTabIcon)
             .title(Component.translatable(("itemGroup." + ChoppersDelight.MOD_ID)))
             .displayItems(ModItemGroups::displayItems)

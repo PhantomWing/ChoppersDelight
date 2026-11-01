@@ -14,9 +14,9 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.MaterialSet;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.BannerItem;
@@ -34,12 +34,12 @@ import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
 
 public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<DecoratedCuttingBoardBlockEntity, DecoratedCuttingBoardRenderer.State> {
     private final Model.Simple bannerModel;
-    private final MaterialSet materials;
+    private final SpriteGetter sprites;
     private final ItemModelResolver itemModelResolver;
 
     public DecoratedCuttingBoardRenderer(BlockEntityRendererProvider.Context context) {
         this.bannerModel = BannerUtils.createBannerModel();
-        this.materials = context.materials();
+        this.sprites = context.sprites();
         this.itemModelResolver = context.itemModelResolver();
     }
 
@@ -125,7 +125,7 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
         }
 
         if (state.bannerColor != null) {
-            BannerUtils.submitBanner(materials, poseStack, collector, bannerModel, state.lightCoords, OverlayTexture.NO_OVERLAY, state.direction, state.bannerColor, state.bannerPatterns, state.breakProgress, 0);
+            BannerUtils.submitBanner(sprites, poseStack, collector, bannerModel, state.lightCoords, OverlayTexture.NO_OVERLAY, state.direction, state.bannerColor, state.bannerPatterns, state.breakProgress, 0);
         }
 
         // Render the content on the board, based on the CuttingBoardBlockEntity rendering.

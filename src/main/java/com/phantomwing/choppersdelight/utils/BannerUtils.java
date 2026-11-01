@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BannerRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.resources.model.MaterialSet;
-import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.DyeColor;
@@ -31,7 +31,7 @@ public class BannerUtils {
         return new Model.Simple(new ModelPart(cuboids, new HashMap<>()), RenderTypes::entitySolid);
     }
 
-    public static void submitBanner(MaterialSet materials, PoseStack poseStack, SubmitNodeCollector collector, Model.Simple model, int light, int overlay, Direction direction, DyeColor dyeColor, BannerPatternLayers patternLayers, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress, int outlineColor) {
+    public static void submitBanner(SpriteGetter sprites, PoseStack poseStack, SubmitNodeCollector collector, Model.Simple model, int light, int overlay, Direction direction, DyeColor dyeColor, BannerPatternLayers patternLayers, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress, int outlineColor) {
         poseStack.pushPose();
 
         poseStack.translate(0.5D, 0.5D, 0.5D);
@@ -47,7 +47,8 @@ public class BannerUtils {
 
         // Scale
         poseStack.scale(-0.351F, -0.351F, 1.1F);
-        BannerRenderer.submitPatterns(materials, poseStack, collector, light, overlay, model, Unit.INSTANCE, ModelBakery.BANNER_BASE, true, dyeColor, patternLayers, false, breakProgress, outlineColor);
+        collector.submitModel(model, Unit.INSTANCE, poseStack, light, overlay, -1, Sheets.BANNER_BASE, sprites, outlineColor, breakProgress);
+        BannerRenderer.submitPatterns(sprites, poseStack, collector, light, overlay, model, Unit.INSTANCE, true, dyeColor, patternLayers, breakProgress);
 
         poseStack.popPose();
     }

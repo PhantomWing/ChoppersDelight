@@ -54,7 +54,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     /**
-     * Mirror of FD Refabricated 3.6.16 CuttingBoardBlock#useItemOn, but matching against {@link DecoratedCuttingBoardBlockEntity}.
+     * Mirror of FD Refabricated 3.6.30 CuttingBoardBlock#useItemOn, but matching against {@link DecoratedCuttingBoardBlockEntity}.
      */
     @Override
     public @NotNull InteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
@@ -65,8 +65,11 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
         ItemStack mainHandStack = player.getMainHandItem();
 
         if (mainHandStack.isEmpty()) {
-            if (cuttingBoard.isEmpty() || level.isClientSide()) {
+            if (cuttingBoard.isEmpty()) {
                 return InteractionResult.CONSUME;
+            }
+            if (level.isClientSide()) {
+                return InteractionResult.SUCCESS;
             }
             ItemStack removedStack = cuttingBoard.removeItem();
             if (!player.isCreative()) {
@@ -149,7 +152,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     /**
-     * Mirror of FD Refabricated 3.6.16's CuttingBoardBlock.ToolCarvingEvent for our decorated variant.
+     * Mirror of FD Refabricated 3.6.30's CuttingBoardBlock.ToolCarvingEvent for our decorated variant.
      * FD's own handler only matches CuttingBoardBlockEntity, so we register our own to handle DecoratedCuttingBoardBlockEntity.
      * Registered via {@link UseBlockCallback#EVENT} in the mod initializer.
      */

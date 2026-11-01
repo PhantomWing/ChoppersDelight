@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
-import net.minecraft.client.resources.model.MaterialSet;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
@@ -34,11 +34,11 @@ public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<D
     public static final Identifier ID = Identifier.fromNamespaceAndPath(ChoppersDelight.MOD_ID, "decorated_cutting_board");
 
     private final Model.Simple bannerModel;
-    private final MaterialSet materials;
+    private final SpriteGetter sprites;
 
-    public DecoratedCuttingBoardItemRenderer(MaterialSet materials) {
+    public DecoratedCuttingBoardItemRenderer(SpriteGetter sprites) {
         this.bannerModel = BannerUtils.createBannerModel();
-        this.materials = materials;
+        this.sprites = sprites;
     }
 
     public static void register() {
@@ -57,7 +57,7 @@ public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<D
     }
 
     @Override
-    public void submit(@Nullable Decoration decoration, @NotNull ItemDisplayContext displayContext, @NotNull PoseStack poseStack, @NotNull SubmitNodeCollector collector, int light, int overlay, boolean hasFoil, int outlineColor) {
+    public void submit(@Nullable Decoration decoration, @NotNull PoseStack poseStack, @NotNull SubmitNodeCollector collector, int light, int overlay, boolean hasFoil, int outlineColor) {
         if (decoration == null) {
             return;
         }
@@ -71,7 +71,7 @@ public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<D
         boardRenderState.submit(poseStack, collector, light, overlay, outlineColor);
         poseStack.popPose();
 
-        BannerUtils.submitBanner(materials, poseStack, collector, bannerModel, light, overlay, Direction.SOUTH, decoration.color(), decoration.patterns(), null, outlineColor);
+        BannerUtils.submitBanner(sprites, poseStack, collector, bannerModel, light, overlay, Direction.SOUTH, decoration.color(), decoration.patterns(), null, outlineColor);
     }
 
     @Override
@@ -92,12 +92,12 @@ public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<D
     public record Decoration(Item board, DyeColor color, BannerPatternLayers patterns) {
     }
 
-    public record Unbaked() implements SpecialModelRenderer.Unbaked {
+    public record Unbaked() implements SpecialModelRenderer.Unbaked<Decoration> {
         public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(new Unbaked());
 
         @Override
-        public SpecialModelRenderer<?> bake(@NotNull SpecialModelRenderer.BakingContext context) {
-            return new DecoratedCuttingBoardItemRenderer(context.materials());
+        public SpecialModelRenderer<Decoration> bake(@NotNull SpecialModelRenderer.BakingContext context) {
+            return new DecoratedCuttingBoardItemRenderer(context.sprites());
         }
 
         @Override
