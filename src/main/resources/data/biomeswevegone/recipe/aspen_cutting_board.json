@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "biomeswevegone:aspen_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "biomeswevegone:aspen_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##",

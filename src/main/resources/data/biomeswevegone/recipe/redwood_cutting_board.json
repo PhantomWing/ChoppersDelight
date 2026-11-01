@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "biomeswevegone:redwood_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "biomeswevegone:redwood_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##",

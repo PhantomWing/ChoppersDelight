@@ -1,5 +1,4 @@
 {
-  "parent": "builtin/entity",
   "textures": {
     "particle": "choppersdelight:block/oak_cutting_board"
   }

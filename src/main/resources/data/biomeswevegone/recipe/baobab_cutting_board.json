@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "biomeswevegone:baobab_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "biomeswevegone:baobab_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##",

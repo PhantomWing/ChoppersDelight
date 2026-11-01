@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:pale_oak_planks",
+    "/": "minecraft:stick"
+  },
+  "pattern": [
+    "/##",
+    "/##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "choppersdelight:pale_oak_cutting_board"
+  }
+}

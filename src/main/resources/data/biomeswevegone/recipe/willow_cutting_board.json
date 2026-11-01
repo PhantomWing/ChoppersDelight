@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "biomeswevegone:willow_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "biomeswevegone:willow_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##",

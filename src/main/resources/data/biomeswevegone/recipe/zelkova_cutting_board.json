@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "biomeswevegone:zelkova_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "biomeswevegone:zelkova_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##",

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "biomesoplenty:jacaranda_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "biomesoplenty:jacaranda_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##",

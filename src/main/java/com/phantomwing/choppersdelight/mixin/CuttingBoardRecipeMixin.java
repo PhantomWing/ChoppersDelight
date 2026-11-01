@@ -2,19 +2,20 @@ package com.phantomwing.choppersdelight.mixin;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.FileNotFoundException;
 import java.util.Map;
-
 
 @Mixin(RecipeManager.class)
 public class CuttingBoardRecipeMixin {
@@ -24,12 +25,8 @@ public class CuttingBoardRecipeMixin {
           "type": "minecraft:crafting_shaped",
           "category": "misc",
           "key": {
-            "#": {
-              "item": "minecraft:spruce_planks"
-            },
-            "/": {
-              "item": "minecraft:stick"
-            }
+            "#": "minecraft:spruce_planks",
+            "/": "minecraft:stick"
           },
           "pattern": [
             "/##",
@@ -42,12 +39,16 @@ public class CuttingBoardRecipeMixin {
         }
     """;
 
-    @Inject(
-        method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V",
-        at = @At("HEAD"))
-    private void onApply(Map<ResourceLocation, JsonElement> jsons, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo ci) throws FileNotFoundException {
+    // Farmer's Delight's own recipe takes any planks, and its data is read after ours, so ours is put in place
+    // once every pack has been read.
+    @WrapOperation(
+        method = "prepare(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)Lnet/minecraft/world/item/crafting/RecipeMap;",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/SimpleJsonResourceReloadListener;scanDirectory(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/resources/FileToIdConverter;Lcom/mojang/serialization/DynamicOps;Lcom/mojang/serialization/Codec;Ljava/util/Map;)V"))
+    private <T> void overrideCuttingBoardRecipe(ResourceManager resourceManager, FileToIdConverter converter, DynamicOps<JsonElement> ops, Codec<T> codec, Map<ResourceLocation, T> recipes, Operation<Void> original) {
+        original.call(resourceManager, converter, ops, codec, recipes);
+
         ResourceLocation targetId = ResourceLocation.fromNamespaceAndPath("farmersdelight", "cutting_board");
-        JsonElement el = JsonParser.parseString(DEFAULT_CUTTING_BOARD_JSON);
-        jsons.put(targetId, el);
+        codec.parse(ops, JsonParser.parseString(DEFAULT_CUTTING_BOARD_JSON))
+                .ifSuccess(recipe -> recipes.put(targetId, recipe));
     }
 }

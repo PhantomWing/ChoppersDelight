@@ -6,8 +6,7 @@
   "mixins": [
     "BlockEntityTypeMixin",
     "CuttingBoardRecipeMixin",
-    "CuttingBoardTranslationMixin",
-    "accessor.BlockEntityTypeAccessor"
+    "CuttingBoardTranslationMixin"
   ],
   "client": [],
   "server": [],

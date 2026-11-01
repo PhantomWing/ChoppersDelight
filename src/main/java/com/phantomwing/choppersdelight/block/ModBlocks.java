@@ -6,6 +6,9 @@ import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.custom.DecoratedCuttingBoardBlock;
 import com.phantomwing.choppersdelight.utils.RegisterUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -36,7 +39,6 @@ public class ModBlocks {
     public static final Supplier<Block> CRIMSON_CUTTING_BOARD = registerVanillaCuttingBoard("crimson_cutting_board");
     public static final Supplier<Block> WARPED_CUTTING_BOARD = registerVanillaCuttingBoard("warped_cutting_board");
 
-    // Not yet in 1.21.1, but made available through Creative Mode.
     public static final Supplier<Block> PALE_OAK_CUTTING_BOARD = registerVanillaCuttingBoard("pale_oak_cutting_board");
 
     // Biomes O' Plenty
@@ -103,20 +105,25 @@ public class ModBlocks {
     }
 
     private static Supplier<Block> registerCuttingBoard(String name, String namespace) {
-        Supplier<Block> block = registerBlock(name, ModBlocks::createCuttingBoard, namespace);
+        Supplier<Block> block = registerBlock(name, () -> createCuttingBoard(properties(name, namespace)), namespace);
         CUTTING_BOARDS.add(block);
 
         return block;
     }
 
-    private static CuttingBoardBlock createCuttingBoard() {
-        return new CuttingBoardBlock(Block.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(2.0f).sound(SoundType.WOOD));
+    private static CuttingBoardBlock createCuttingBoard(Block.Properties properties) {
+        return new CuttingBoardBlock(properties);
+    }
+
+    private static Block.Properties properties(String name, String namespace) {
+        return Block.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(2.0f).sound(SoundType.WOOD)
+                .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(namespace, name)));
     }
 
     private static Supplier<Block> registerDecoratedCuttingBoard(String name) {
         return registerBlock(
                 name,
-                () -> new DecoratedCuttingBoardBlock(Block.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(2.0f).sound(SoundType.WOOD)),
+                () -> new DecoratedCuttingBoardBlock(properties(name, ChoppersDelight.MOD_ID)),
                 ChoppersDelight.MOD_ID
         );
     }

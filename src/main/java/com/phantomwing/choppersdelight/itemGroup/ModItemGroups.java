@@ -37,7 +37,7 @@ public class ModItemGroups {
     /**
      * Returns the client-side Level, or null if not on the client or not in a world.
      * The actual {@code Minecraft.getInstance().level} call is isolated in {@link ClientHelper}
-     * so that loading this class on a dedicated server (e.g. when EveryCompat's WoodGood
+     * so that loading this class on a dedicated server (e.g. when another mod
      * references {@link #MOD_TAB}) doesn't pull in the client-only {@code ClientLevel} class.
      */
     private static Level getClientLevel() {

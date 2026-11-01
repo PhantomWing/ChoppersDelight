@@ -72,12 +72,7 @@ public class RemoveCuttingBoardPatternRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public @NotNull RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<RemoveCuttingBoardPatternRecipe> getSerializer() {
         return ModRecipes.REMOVE_PATTERN_RECIPE.get();
     }
 }

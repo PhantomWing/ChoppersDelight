@@ -47,8 +47,6 @@ public class ChoppersDelight implements ModInitializer {
 				)
 		);
 
-		// Must run after ModBlocks is initialized so EveryCompat's WoodGood module
-		// can reference OAK_CUTTING_BOARD as its base block.
 		Compatibility.init();
 	}
 }

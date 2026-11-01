@@ -3,15 +3,20 @@ package com.phantomwing.choppersdelight.item.custom;
 import com.phantomwing.choppersdelight.component.DecoratedCuttingBoardData;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.item.FuelBlockItem;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class DecoratedCuttingBoardItem extends FuelBlockItem {
 
@@ -44,60 +49,53 @@ public class DecoratedCuttingBoardItem extends FuelBlockItem {
     }
 
     @Override
-    public @NotNull String getDescriptionId(@NotNull ItemStack stack) {
-        // Delegate to the wrapped cutting board item so mods (notably Every Compat) that resolve their
-        // block name through a custom translation key — instead of the raw `block.<namespace>.<path>` key —
-        // produce the right id.
-        ItemStack boardStack = getCuttingBoardStack(stack);
-        return boardStack.getItem().getDescriptionId(boardStack);
-    }
-
-    @Override
     public @NotNull Component getName(@NotNull ItemStack stack) {
-        // getName drives the displayed name. For EveryCompat-generated cutting boards there is no direct
-        // `block.<namespace>.<path>` lang entry — their name comes from Moonlight/Every Compat applying
-        // the `block_type.choppersdelight.cutting_board` template to the wood type at runtime. Delegating
-        // to the wrapped board's hover name picks that up automatically, while still respecting any
-        // custom name/translation set on our decorated item itself.
-        Component customName = stack.get(DataComponents.CUSTOM_NAME);
-        if (customName != null) {
-            return customName;
-        }
-        Component itemName = stack.get(DataComponents.ITEM_NAME);
+        // Named after the wrapped board, while still respecting any custom name/translation set on our
+        // decorated item itself.
+        Component itemName = ownComponent(stack, DataComponents.ITEM_NAME);
         if (itemName != null) {
             return itemName;
         }
         return getCuttingBoardStack(stack).getHoverName();
     }
 
+    /**
+     * A component the stack carries itself rather than from its item: from 1.21.2 every item has an item name.
+     */
+    private static @Nullable Component ownComponent(ItemStack stack, DataComponentType<Component> type) {
+        Optional<? extends Component> component = stack.getComponentsPatch().get(type);
+        return component != null ? component.orElse(null) : null;
+    }
+
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+    public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, @NotNull TooltipDisplay tooltipDisplay, @NotNull Consumer<Component> tooltipAdder, @NotNull TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipDisplay, tooltipAdder, tooltipFlag);
 
         // Add Banner tooltip.
         ItemStack banner = getBannerStack(stack);
         if (!banner.isEmpty()) {
-            Component customName = banner.get(DataComponents.CUSTOM_NAME);
+            Component customName = ownComponent(banner, DataComponents.CUSTOM_NAME);
             if (customName != null) {
                 // Display the alternate custom name.
-                tooltipComponents.add(
+                tooltipAdder.accept(
                         customName.copy().withStyle(ChatFormatting.GRAY)
                 );
             } else {
-                Component itemName = banner.get(DataComponents.ITEM_NAME);
+                Component itemName = ownComponent(banner, DataComponents.ITEM_NAME);
                 if (itemName != null)
                 {
                     // Display the alternate item name.
-                    tooltipComponents.add(
+                    tooltipAdder.accept(
                             itemName.copy().withStyle(ChatFormatting.GRAY)
                     );
                 } else {
                     // Display the contents of the Banner.
-                    tooltipComponents.add(
-                        Component.translatable(banner.getDescriptionId()).withStyle(ChatFormatting.GRAY)
+                    tooltipAdder.accept(
+                        Component.translatable(banner.getItem().getDescriptionId()).withStyle(ChatFormatting.GRAY)
                     );
 
-                    BannerItem.appendHoverTextFromBannerBlockEntityTag(banner, tooltipComponents);
+                    banner.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY)
+                            .addToTooltip(context, tooltipAdder, tooltipFlag, banner);
                 }
             }
         }

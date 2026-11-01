@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
@@ -29,7 +30,8 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
         this.bannerModelPart = BannerUtils.initializeBannerModelPart();
     }
 
-    public void render(DecoratedCuttingBoardBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+    @Override
+    public void render(DecoratedCuttingBoardBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int light, int overlay, @NotNull Vec3 cameraPos) {
         Direction direction = blockEntity.getBlockState().getValue(DecoratedCuttingBoardBlock.FACING).getOpposite();
 
         // Render the board itself.
@@ -37,7 +39,7 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
         BannerUtils.renderBanner(poseStack, buffer, this.bannerModelPart, light, overlay, direction, blockEntity);
 
         // Render the content on the board, based on the CuttingBoardBlockEntity rendering.
-        renderBoardContent(blockEntity, partialTicks, poseStack, buffer, light, overlay);
+        renderBoardContent(blockEntity, partialTicks, poseStack, buffer, light, overlay, cameraPos);
     }
 
     private void renderBoard(Direction direction, DecoratedCuttingBoardBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
@@ -66,7 +68,7 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
     }
 
     // Create a CuttingBoardBlockEntity instance and render it.
-    private void renderBoardContent(DecoratedCuttingBoardBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+    private void renderBoardContent(DecoratedCuttingBoardBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay, Vec3 cameraPos) {
         ItemStack board = blockEntity.getCuttingBoard();
 
         if (board != null && board.getItem() instanceof BlockItem blockItem) {
@@ -79,7 +81,11 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
 
             // Create a CuttingBoardBlockEntity from the decorated board.
             CuttingBoardBlockEntity cuttingBoard = new CuttingBoardBlockEntity(blockEntity.getBlockPos(), blockState);
-            cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+            if (blockEntity.isItemCarvingBoard()) {
+                cuttingBoard.carveToolOnBoard(blockEntity.getStoredItem().copy());
+            } else {
+                cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+            }
 
             // Render the new CuttingBoardBlockEntity.
             BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
@@ -87,7 +93,7 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
 
             if (boardRenderer != null) {
                 poseStack.pushPose();
-                boardRenderer.render(cuttingBoard, partialTicks, poseStack, buffer, light, overlay);
+                boardRenderer.render(cuttingBoard, partialTicks, poseStack, buffer, light, overlay, cameraPos);
                 poseStack.popPose();
             }
         }

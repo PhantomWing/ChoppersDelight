@@ -1,13 +1,14 @@
 # 1.2.1
 
 ### Fixes
-- Require Farmer's Delight Refabricated 3.3.0 or newer. Older versions were allowed to load and crashed the game as soon as a cutting board was used.
 - Fix the preset decorated cutting boards appearing as duplicates when the Creative Inventory tab is built without a world loaded on the client (e.g. on a server with Polymer), which stopped the tab from loading (#4).
 - Decorated cutting boards can no longer be decorated with a second banner.
-- Fix the JEI plugin using Farmer's Delight's plugin ID.
+- Fix tools carved into a decorated cutting board lying flat on it
+- Fix a renamed Farmer's Delight Cutting Board showing as Spruce Cutting Board
 
-### Changes
-- Version numbers now line up with NeoForge's: this release has the same features as Chopper's Delight 1.2 there (Farmer's Delight 1.3 support), so Fabric moves from 1.1 to 1.2.
+### Additions
+- Ported to Minecraft 1.21.5
+- Added a crafting recipe for the Pale Oak Cutting Board
 
 
 # 1.1.0

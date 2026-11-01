@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "choppersdelight:item/decorated_cutting_board",
+    "model": {
+      "type": "choppersdelight:decorated_cutting_board"
+    }
+  }
+}

@@ -3,6 +3,7 @@ package com.phantomwing.choppersdelight.block;
 import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import com.phantomwing.choppersdelight.utils.RegisterUtils;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -11,7 +12,7 @@ import java.util.function.Supplier;
 
 public class ModBlockEntityTypes
 {
-    public static final Supplier<BlockEntityType<DecoratedCuttingBoardBlockEntity>> DECORATED_CUTTING_BOARD = registerBlockEntity("decorated_cutting_board", () -> BlockEntityType.Builder.of(DecoratedCuttingBoardBlockEntity::new,
+    public static final Supplier<BlockEntityType<DecoratedCuttingBoardBlockEntity>> DECORATED_CUTTING_BOARD = registerBlockEntity("decorated_cutting_board", () -> FabricBlockEntityTypeBuilder.create(DecoratedCuttingBoardBlockEntity::new,
         ModBlocks.DECORATED_CUTTING_BOARD.get()
     ).build());
 

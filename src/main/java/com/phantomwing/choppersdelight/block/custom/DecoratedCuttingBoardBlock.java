@@ -5,19 +5,17 @@ import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -28,11 +26,10 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
-import vectorwing.farmersdelight.common.registry.ModSounds;
+import vectorwing.farmersdelight.common.tag.ModTags;
 
 public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
 {
@@ -54,73 +51,60 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     /**
-     * Mirror of FD Refabricated 3.3.2 CuttingBoardBlock#useItemOn, but matching against {@link DecoratedCuttingBoardBlockEntity}.
+     * Mirror of FD Refabricated 3.2.5 CuttingBoardBlock#useItemOn, but matching against {@link DecoratedCuttingBoardBlockEntity}.
      */
     @Override
-    public @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+    public @NotNull InteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity cuttingBoard)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
-        ItemStack mainHandStack = player.getMainHandItem();
+        ItemStack heldStack = player.getItemInHand(hand);
+        ItemStack offhandStack = player.getOffhandItem();
 
-        if (mainHandStack.isEmpty()) {
-            if (cuttingBoard.isEmpty() || level.isClientSide) {
-                return ItemInteractionResult.CONSUME;
+        if (cuttingBoard.isEmpty()) {
+            if (!offhandStack.isEmpty()) {
+                if (hand.equals(InteractionHand.MAIN_HAND) && !offhandStack.is(ModTags.OFFHAND_EQUIPMENT) && !(heldStack.getItem() instanceof BlockItem)) {
+                    return InteractionResult.TRY_WITH_EMPTY_HAND; // Pass to off-hand if that item is placeable
+                }
+                if (hand.equals(InteractionHand.OFF_HAND) && offhandStack.is(ModTags.OFFHAND_EQUIPMENT)) {
+                    return InteractionResult.TRY_WITH_EMPTY_HAND; // Items in this tag should not be placed from the off-hand
+                }
             }
-            ItemStack removedStack = cuttingBoard.removeItem();
+            if (heldStack.isEmpty()) {
+                return InteractionResult.TRY_WITH_EMPTY_HAND;
+            } else if (cuttingBoard.addItem(player.getAbilities().instabuild ? heldStack.copy() : heldStack)) {
+                level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
+                return InteractionResult.SUCCESS;
+            }
+        } else if (!heldStack.isEmpty()) {
+            ItemStack boardStack = cuttingBoard.getStoredItem().copy();
+            if (cuttingBoard.processStoredItemUsingTool(heldStack, player)) {
+                spawnCuttingParticles(level, pos, boardStack, 5);
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.CONSUME;
+        } else if (hand.equals(InteractionHand.MAIN_HAND)) {
             if (!player.isCreative()) {
-                player.getInventory().add(removedStack);
+                if (!player.getInventory().add(cuttingBoard.removeItem())) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), cuttingBoard.removeItem());
+                }
+            } else {
+                cuttingBoard.removeItem();
             }
-            Vec3 centerPos = pos.getCenter();
-            level.playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModSounds.BLOCK_CUTTING_BOARD_REMOVE.get(), SoundSource.BLOCKS, 0.25F, 0.5F);
-            return ItemInteractionResult.SUCCESS;
+            level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.WOOD_HIT, SoundSource.BLOCKS, 0.25F, 0.5F);
+            return InteractionResult.SUCCESS;
         }
-        if (cuttingBoard.canAddItem(mainHandStack)) {
-            if (level.isClientSide) {
-                return ItemInteractionResult.CONSUME;
-            }
-            ItemStack remainderStack = cuttingBoard.addItem(player.getAbilities().instabuild ? mainHandStack.copy() : mainHandStack);
-            if (!player.isCreative()) {
-                player.setItemSlot(EquipmentSlot.MAINHAND, remainderStack);
-            }
-            Vec3 centerPos = pos.getCenter();
-            level.playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModSounds.BLOCK_CUTTING_BOARD_PLACE.get(), SoundSource.BLOCKS, 1.0F, 0.8F);
-            return ItemInteractionResult.SUCCESS;
-        } else {
-            if (cuttingBoard.processStoredItemUsingTool(mainHandStack, player)) {
-                return ItemInteractionResult.SUCCESS;
-            }
-        }
-        return ItemInteractionResult.CONSUME;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     @Override
     public BlockState playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
-        // Mark creative-mode destruction so onRemove can skip dropping the decorated board item itself.
+        // Mark creative-mode destruction so the block entity's removal can skip dropping the decorated board item itself.
         if (player.isCreative() && level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity decoratedBoard) {
             decoratedBoard.setDestroyedByCreativePlayer(true);
         }
         return super.playerWillDestroy(level, pos, state, player);
-    }
-
-    @Override
-    public void onRemove(BlockState state, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
-        if (state.is(newState.getBlock())) {
-            return;
-        }
-
-        if (level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity decoratedBoard) {
-            // Drop the stored item (matches FD's onRemove behavior — items in containers always drop, even in creative).
-            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), decoratedBoard.getStoredItem());
-            level.updateNeighbourForOutputSignal(pos, this);
-            // Drop the decorated cutting board item itself with NBT preserved, unless a creative player broke it.
-            if (!decoratedBoard.isDestroyedByCreativePlayer()) {
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), decoratedBoard.getItem());
-            }
-        }
-
-        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override
@@ -130,18 +114,17 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
         }
         ItemStack storedStack = cuttingBoard.getStoredItem();
         if (!storedStack.isEmpty()) {
-            float proportions = (float) storedStack.getCount() / Math.min(cuttingBoard.getMaxStackSize(), storedStack.getMaxStackSize());
-            return Mth.floor(proportions * 14.0F) + 1;
+            return 15;
         }
         return 0;
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
+    protected @NotNull ItemStack getCloneItemStack(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state, boolean includeData) {
         BlockEntity be = level.getBlockEntity(pos);
         return be instanceof DecoratedCuttingBoardBlockEntity decoratedBoard
                 ? decoratedBoard.getItem()
-                : super.getCloneItemStack(level, pos, state);
+                : super.getCloneItemStack(level, pos, state, includeData);
     }
 
     @Override
@@ -172,7 +155,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     /**
-     * Mirror of FD Refabricated 3.3.2's CuttingBoardBlock.ToolCarvingEvent for our decorated variant.
+     * Mirror of FD Refabricated 3.2.5's CuttingBoardBlock.ToolCarvingEvent for our decorated variant.
      * FD's own handler only matches CuttingBoardBlockEntity, so we register our own to handle DecoratedCuttingBoardBlockEntity.
      * Registered via {@link UseBlockCallback#EVENT} in the mod initializer.
      */
@@ -183,30 +166,18 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
                 return InteractionResult.PASS;
 
             BlockPos pos = hit.getBlockPos();
-            if (!(level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity cuttingBoard)) {
-                return InteractionResult.PASS;
-            }
-
             ItemStack heldStack = player.getMainHandItem();
 
-            if (!player.isSecondaryUseActive() || heldStack.isEmpty()) {
-                return InteractionResult.PASS;
-            }
-
-            // Only "tool-like" items qualify for carving.
-            if (!(heldStack.getItem() instanceof TieredItem
-                    || heldStack.getItem() instanceof TridentItem
-                    || heldStack.getItem() instanceof ShearsItem)) {
-                return InteractionResult.PASS;
-            }
-
-            if (cuttingBoard.carveToolOnBoard(player.getAbilities().instabuild ? heldStack.copy() : heldStack)) {
-                if (!player.isCreative()) {
-                    player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            if (player.isSecondaryUseActive() && !heldStack.isEmpty() && level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity cuttingBoard) {
+                if (heldStack.has(DataComponents.TOOL) ||
+                        heldStack.getItem() instanceof TridentItem ||
+                        heldStack.getItem() instanceof ShearsItem) {
+                    boolean success = cuttingBoard.carveToolOnBoard(player.getAbilities().instabuild ? heldStack.copy() : heldStack);
+                    if (success) {
+                        level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
+                        return InteractionResult.SUCCESS;
+                    }
                 }
-                Vec3 centerPos = pos.getCenter();
-                level.playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModSounds.BLOCK_CUTTING_BOARD_CARVE.get(), SoundSource.BLOCKS, 1.0F, 0.8F);
-                return InteractionResult.SUCCESS;
             }
             return InteractionResult.PASS;
         }

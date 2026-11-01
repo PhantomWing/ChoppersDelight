@@ -80,12 +80,7 @@ public class AddCuttingBoardPatternRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public @NotNull RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<AddCuttingBoardPatternRecipe> getSerializer() {
         return ModRecipes.ADD_PATTERN_RECIPE.get();
     }
 }

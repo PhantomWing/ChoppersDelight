@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "biomesoplenty:maple_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "biomesoplenty:maple_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##",

@@ -1,8 +1,8 @@
 @~/Documents/Projects/Minecraft/MinecraftDeveloperPortal/.claude/profiles/fabric-loom.md
 
-# Choppers Delight - `fabric/1.21`
+# Choppers Delight - `fabric/1.21.5`
 
-**This file describes the `fabric/1.21` line**: Minecraft 1.21.1 (the jar covers 1.21 and 1.21.1), Fabric. A **baseline** line: new features start here.
+**This file describes the `fabric/1.21.5` line**: Minecraft 1.21.5, Fabric. Migrated from `fabric/1.21` on 2026-11-01.
 Built with Fabric Loom.
 
 It belongs to whichever folder has this branch checked out - the main `ChoppersDelight` folder or a worktree
@@ -19,7 +19,17 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 ## This line
 
 - Java 21, Mojang mappings with Parchment.
+- Farmer's Delight Refabricated 1.21.5-3.2.5, from the Greenhouse maven: the only build for 1.21.5, a port of Farmer's
+  Delight 1.2, so its cutting board holds one item at a time. The decorated cutting board mirrors 3.2.5's
+  `CuttingBoardBlock` and `CuttingBoardBlockEntity` (`DecoratedCuttingBoardBlock`, `DecoratedCuttingBoardBlockEntity`);
+  check them against Farmer's Delight's own when it updates.
+- Farmer's Delight Refabricated has no JEI integration on 1.21.5 (it integrates REI), so there is no JEI plugin here.
+- Every Compat and Oh The Biomes We've Gone have no 1.21.5 build: no Every Compat module, and the BWG cutting boards
+  are registered but nothing in a dev run loads BWG. Biomes O' Plenty runs in dev runs.
+- Every item has an `items/` definition (1.21.4); the decorated cutting board's is a special model,
+  `DecoratedCuttingBoardItemRenderer`, registered into `SpecialModelRenderers.ID_MAPPER`.
+- Farmer's Delight's own cutting board recipe is replaced in `RecipeManager#prepare` (`CuttingBoardRecipeMixin`).
 - Datagen: `runDatagen`. No generated resources are committed on this line. Pinned to this mod with `modId = mod_id`.
 - No game tests yet. Writing the first one for whatever is ported next is the highest-value test available (`verification.md`).
-- Publishes the `remapJar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 1.21, 1.21.1 (`publishing.md`).
+- Publishes the `remapJar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 1.21.5 (`publishing.md`).
 - GitHub Actions: `build.yml`.

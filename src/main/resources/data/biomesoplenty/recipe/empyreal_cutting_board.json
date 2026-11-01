@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "biomesoplenty:empyreal_planks"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "biomesoplenty:empyreal_planks",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##",
