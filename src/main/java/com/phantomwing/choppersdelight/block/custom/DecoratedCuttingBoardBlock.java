@@ -5,6 +5,7 @@ import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -51,7 +52,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     /**
-     * Mirror of FD Refabricated 3.3.3 CuttingBoardBlock#useItemOn, but matching against {@link DecoratedCuttingBoardBlockEntity}.
+     * Mirror of FD Refabricated 3.4.2 CuttingBoardBlock#useItemOn, but matching against {@link DecoratedCuttingBoardBlockEntity}.
      */
     @Override
     public @NotNull InteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
@@ -108,7 +109,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     @Override
-    public int getAnalogOutputSignal(@NotNull BlockState state, Level level, @NotNull BlockPos pos) {
+    public int getAnalogOutputSignal(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Direction direction) {
         if (!(level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity cuttingBoard)) {
             return 0;
         }
@@ -155,7 +156,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     /**
-     * Mirror of FD Refabricated 3.3.3's CuttingBoardBlock.ToolCarvingEvent for our decorated variant.
+     * Mirror of FD Refabricated 3.4.2's CuttingBoardBlock.ToolCarvingEvent for our decorated variant.
      * FD's own handler only matches CuttingBoardBlockEntity, so we register our own to handle DecoratedCuttingBoardBlockEntity.
      * Registered via {@link UseBlockCallback#EVENT} in the mod initializer.
      */

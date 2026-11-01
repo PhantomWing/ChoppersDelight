@@ -7,7 +7,7 @@
 - Fix a renamed Farmer's Delight Cutting Board showing as Spruce Cutting Board
 
 ### Additions
-- Ported to Minecraft 1.21.7 and 1.21.8
+- Ported to Minecraft 1.21.9 and 1.21.10
 - Added a crafting recipe for the Pale Oak Cutting Board
 
 

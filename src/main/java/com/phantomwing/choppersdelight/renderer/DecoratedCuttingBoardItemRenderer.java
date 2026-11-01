@@ -6,12 +6,12 @@ import com.phantomwing.choppersdelight.ChoppersDelight;
 import com.phantomwing.choppersdelight.item.custom.DecoratedCuttingBoardItem;
 import com.phantomwing.choppersdelight.utils.BannerUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderers;
+import net.minecraft.client.resources.model.MaterialSet;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -32,11 +32,12 @@ import java.util.Set;
 public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<DecoratedCuttingBoardItemRenderer.Decoration> {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(ChoppersDelight.MOD_ID, "decorated_cutting_board");
 
-    private final ModelPart bannerModelPart;
-    private final ItemStackRenderState boardRenderState = new ItemStackRenderState();
+    private final Model.Simple bannerModel;
+    private final MaterialSet materials;
 
-    public DecoratedCuttingBoardItemRenderer() {
-        this.bannerModelPart = BannerUtils.initializeBannerModelPart();
+    public DecoratedCuttingBoardItemRenderer(MaterialSet materials) {
+        this.bannerModel = BannerUtils.createBannerModel();
+        this.materials = materials;
     }
 
     public static void register() {
@@ -55,7 +56,7 @@ public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<D
     }
 
     @Override
-    public void render(@Nullable Decoration decoration, @NotNull ItemDisplayContext displayContext, @NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int light, int overlay, boolean hasFoil) {
+    public void submit(@Nullable Decoration decoration, @NotNull ItemDisplayContext displayContext, @NotNull PoseStack poseStack, @NotNull SubmitNodeCollector collector, int light, int overlay, boolean hasFoil, int outlineColor) {
         if (decoration == null) {
             return;
         }
@@ -63,11 +64,13 @@ public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<D
         // The base model's display transforms are already applied, so the board is drawn without its own.
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
+        // A state of its own each time: what is submitted is drawn later, from the state it was given.
+        ItemStackRenderState boardRenderState = new ItemStackRenderState();
         Minecraft.getInstance().getItemModelResolver().updateForTopItem(boardRenderState, new ItemStack(decoration.board()), ItemDisplayContext.NONE, null, null, 0);
-        boardRenderState.render(poseStack, buffer, light, overlay);
+        boardRenderState.submit(poseStack, collector, light, overlay, outlineColor);
         poseStack.popPose();
 
-        BannerUtils.renderBanner(poseStack, buffer, bannerModelPart, light, overlay, Direction.SOUTH, decoration.color(), decoration.patterns());
+        BannerUtils.submitBanner(materials, poseStack, collector, bannerModel, light, overlay, Direction.SOUTH, decoration.color(), decoration.patterns(), null, outlineColor);
     }
 
     @Override
@@ -92,8 +95,8 @@ public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<D
         public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(new Unbaked());
 
         @Override
-        public SpecialModelRenderer<?> bake(@NotNull EntityModelSet entityModels) {
-            return new DecoratedCuttingBoardItemRenderer();
+        public SpecialModelRenderer<?> bake(@NotNull SpecialModelRenderer.BakingContext context) {
+            return new DecoratedCuttingBoardItemRenderer(context.materials());
         }
 
         @Override
