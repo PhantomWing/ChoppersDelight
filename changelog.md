@@ -5,6 +5,7 @@
 - Decorated cutting boards can no longer be decorated with a second banner.
 - Fix tools carved into a decorated cutting board lying flat on it
 - Fix a renamed Farmer's Delight Cutting Board showing as Spruce Cutting Board
+- Fix hoppers and pipes not reaching the item on a decorated cutting board
 
 ### Additions
 - Ported to Minecraft 26.2
