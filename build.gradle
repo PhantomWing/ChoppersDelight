@@ -66,7 +66,7 @@ dependencies {
 		exclude(group: "net.fabricmc")
 	}
 
-	// No JEI: Farmer's Delight Refabricated has no JEI integration on 1.21.6, so there is nothing for it to show.
+	// No JEI: Farmer's Delight Refabricated has no JEI integration on 1.21.8, so there is nothing for it to show.
 
 	// Appleskin
 	modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") { // Appleskin requires Cloth Config
@@ -79,13 +79,13 @@ dependencies {
 		modLocalRuntime "com.github.glitchfiend:TerraBlender-fabric:${minecraft_version}-${terrablender_version}"
 	}
 
-	// Oh The Biomes We've Gone and Every Compat have no 1.21.6 build: their cutting boards stay out of
-	// this line's dev runs, and their data loads only where the mod is installed.
+	// Every Compat has no 1.21.8 build, and Oh The Biomes We've Gone has one on Modrinth only: their cutting boards stay
+	// out of this line's dev runs, and their data loads only where the mod is installed.
 
 	// Biomes O' Plenty
 	compileOnly "com.github.glitchfiend:BiomesOPlenty-fabric:${minecraft_version}-${biomesoplenty_version}"
 	if (include_biomesoplenty.toBoolean()) {
-		modLocalRuntime "com.github.glitchfiend:GlitchCore-fabric:${minecraft_version}-${glitchcore_version}"
+		modLocalRuntime "com.github.glitchfiend:GlitchCore-fabric:${glitchcore_minecraft_version}-${glitchcore_version}"
 		modLocalRuntime "com.github.glitchfiend:BiomesOPlenty-fabric:${minecraft_version}-${biomesoplenty_version}"
 	}
 }

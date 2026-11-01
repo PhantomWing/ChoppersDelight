@@ -51,7 +51,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     /**
-     * Mirror of FD Refabricated 3.2.3 CuttingBoardBlock#useItemOn, but matching against {@link DecoratedCuttingBoardBlockEntity}.
+     * Mirror of FD Refabricated 3.3.3 CuttingBoardBlock#useItemOn, but matching against {@link DecoratedCuttingBoardBlockEntity}.
      */
     @Override
     public @NotNull InteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
@@ -155,7 +155,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     /**
-     * Mirror of FD Refabricated 3.2.3's CuttingBoardBlock.ToolCarvingEvent for our decorated variant.
+     * Mirror of FD Refabricated 3.3.3's CuttingBoardBlock.ToolCarvingEvent for our decorated variant.
      * FD's own handler only matches CuttingBoardBlockEntity, so we register our own to handle DecoratedCuttingBoardBlockEntity.
      * Registered via {@link UseBlockCallback#EVENT} in the mod initializer.
      */
