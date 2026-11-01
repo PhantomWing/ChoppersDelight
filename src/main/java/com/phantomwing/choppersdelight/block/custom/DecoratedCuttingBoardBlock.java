@@ -75,7 +75,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
             if (!player.isCreative()) {
                 player.getInventory().add(removedStack);
             }
-            Vec3 centerPos = pos.getCenter();
+            Vec3 centerPos = Vec3.atCenterOf(pos);
             level.playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModSounds.BLOCK_CUTTING_BOARD_REMOVE.get(), SoundSource.BLOCKS, 0.25F, 0.5F);
             return InteractionResult.SUCCESS;
         }
@@ -87,7 +87,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
             if (!player.isCreative()) {
                 player.setItemSlot(EquipmentSlot.MAINHAND, remainderStack);
             }
-            Vec3 centerPos = pos.getCenter();
+            Vec3 centerPos = Vec3.atCenterOf(pos);
             level.playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), ModSounds.BLOCK_CUTTING_BOARD_PLACE.get(), SoundSource.BLOCKS, 1.0F, 0.8F);
             return InteractionResult.SUCCESS_SERVER;
         }
@@ -175,7 +175,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
                         if (!player.getAbilities().instabuild) {
                             heldStack.shrink(1);
                         }
-                        Vec3 centerPos = pos.getCenter();
+                        Vec3 centerPos = Vec3.atCenterOf(pos);
                         level.playSound(null, centerPos.x(), centerPos.y(), centerPos.z(), SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
                         return InteractionResult.SUCCESS;
                     }

@@ -51,7 +51,7 @@ public class ModItemGroups {
         Level level = getClientLevel();
 
         return Optional.ofNullable(level)
-                .flatMap(l -> getDecoratedCuttingBoard(l.registryAccess(), ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK))
+                .flatMap(l -> getDecoratedCuttingBoard(l.registryAccess(), ModBlocks.DARK_OAK_CUTTING_BOARD, Items.BANNER.pick(DyeColor.GREEN), BannerPatterns.CREEPER, DyeColor.BLACK))
                 .orElseGet(() -> new ItemStack(ModBlocks.DECORATED_CUTTING_BOARD.get()));
     }
 
@@ -90,10 +90,10 @@ public class ModItemGroups {
         // Add some preconfigured designs. A design whose pattern is missing is left out: a plain stand-in for each
         // would be the same stack four times, which the tab refuses.
         HolderLookup.Provider registries = parameters.holders();
-        getDecoratedCuttingBoard(registries, ModBlocks.CHERRY_CUTTING_BOARD, Items.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK).ifPresent(output::accept);
-        getDecoratedCuttingBoard(registries, ModBlocks.DARK_OAK_CUTTING_BOARD, Items.GREEN_BANNER, BannerPatterns.CREEPER, DyeColor.BLACK).ifPresent(output::accept);
-        getDecoratedCuttingBoard(registries, ModBlocks.CRIMSON_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.SKULL, DyeColor.WHITE).ifPresent(output::accept);
-        getDecoratedCuttingBoard(registries, ModBlocks.WARPED_CUTTING_BOARD, Items.BLACK_BANNER, BannerPatterns.FLOW, DyeColor.CYAN).ifPresent(output::accept);
+        getDecoratedCuttingBoard(registries, ModBlocks.CHERRY_CUTTING_BOARD, Items.BANNER.pick(DyeColor.WHITE), BannerPatterns.FLOWER, DyeColor.PINK).ifPresent(output::accept);
+        getDecoratedCuttingBoard(registries, ModBlocks.DARK_OAK_CUTTING_BOARD, Items.BANNER.pick(DyeColor.GREEN), BannerPatterns.CREEPER, DyeColor.BLACK).ifPresent(output::accept);
+        getDecoratedCuttingBoard(registries, ModBlocks.CRIMSON_CUTTING_BOARD, Items.BANNER.pick(DyeColor.BLACK), BannerPatterns.SKULL, DyeColor.WHITE).ifPresent(output::accept);
+        getDecoratedCuttingBoard(registries, ModBlocks.WARPED_CUTTING_BOARD, Items.BANNER.pick(DyeColor.BLACK), BannerPatterns.FLOW, DyeColor.CYAN).ifPresent(output::accept);
     }
 
     private static void displayModItems(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {

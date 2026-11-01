@@ -88,7 +88,7 @@ dependencies {
 		localRuntime "com.github.glitchfiend:TerraBlender-fabric:${minecraft_version}-${terrablender_version}"
 	}
 
-	// Every Compat has no 26.1 build, and Oh The Biomes We've Gone has one on Modrinth only: their cutting boards stay
+	// Every Compat has no 26.2 build, and Oh The Biomes We've Gone has one on Modrinth only: their cutting boards stay
 	// out of this line's dev runs, and their data loads only where the mod is installed.
 
 	// Biomes O' Plenty

@@ -46,7 +46,7 @@ public class DecoratedCuttingBoardItem extends FuelBlockItem {
             }
         }
 
-        return new ItemStack(Items.WHITE_BANNER);
+        return new ItemStack(Items.BANNER.pick(DyeColor.WHITE));
     }
 
     @Override

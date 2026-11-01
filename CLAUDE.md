@@ -1,8 +1,8 @@
 @~/Documents/Projects/Minecraft/MinecraftDeveloperPortal/.claude/profiles/fabric-loom.md
 
-# Choppers Delight - `fabric/26.1`
+# Choppers Delight - `fabric/26.2`
 
-**This file describes the `fabric/26.1` line**: Minecraft 26.1.2 (the jar covers 26.1, 26.1.1 and 26.1.2), Fabric. Migrated from `fabric/1.21.11` on 2026-11-01.
+**This file describes the `fabric/26.2` line**: Minecraft 26.2, Fabric. Migrated from `fabric/26.1` on 2026-11-01.
 Built with Fabric Loom.
 
 It belongs to whichever folder has this branch checked out - the main `ChoppersDelight` folder or a worktree
@@ -23,7 +23,7 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
   `jar` is what `publishMods` uploads.
 - Farmer's Delight Refabricated 3.6.30 from the Modrinth maven, one build per Minecraft version family
   (`farmersdelight_minecraft_version`), a port of Farmer's Delight 1.3: its cutting board holds a stack. It asks for
-  Fabric Loader 0.19.5, above the ladder's for 26.1.2, so `loader_version` and the manifest's floor are 0.19.5. The
+  Fabric Loader 0.19.5, so `loader_version` and the manifest's floor are 0.19.5. The
   decorated cutting board mirrors 3.6.30's `CuttingBoardBlock` and `CuttingBoardBlockEntity` (`DecoratedCuttingBoardBlock`,
   `DecoratedCuttingBoardBlockEntity`); check them against Farmer's Delight's own when it updates.
 - `JEIPlugin` adds the cutting boards as crafting stations of Farmer's Delight's JEI cutting category; JEI runs in dev runs.
@@ -39,5 +39,5 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 - Farmer's Delight's own cutting board recipe is replaced in `RecipeManager#prepare` (`CuttingBoardRecipeMixin`).
 - Datagen: `runDatagen`. No generated resources are committed on this line. Pinned to this mod with `modId = mod_id`.
 - No game tests yet. Writing the first one for whatever is ported next is the highest-value test available (`verification.md`).
-- Publishes the `jar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 26.1, 26.1.1, 26.1.2 (`publishing.md`).
+- Publishes the `jar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 26.2 (`publishing.md`).
 - GitHub Actions: `build.yml`.

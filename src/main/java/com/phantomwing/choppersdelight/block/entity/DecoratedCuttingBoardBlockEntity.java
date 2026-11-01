@@ -28,6 +28,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
@@ -103,7 +104,7 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
         this.cuttingBoard = input.read("CuttingBoardStack", ItemStack.CODEC)
                 .orElseGet(() -> new ItemStack(vectorwing.farmersdelight.common.registry.ModItems.CUTTING_BOARD.get()));
         this.banner = input.read("BannerStack", ItemStack.CODEC)
-                .orElseGet(() -> new ItemStack(Items.WHITE_BANNER));
+                .orElseGet(() -> new ItemStack(Items.BANNER.pick(DyeColor.WHITE)));
     }
 
     @Override
@@ -287,7 +288,7 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
         } else {
             // Set default state (this is how it appears in Creative Mode inventory)
             this.cuttingBoard = new ItemStack(vectorwing.farmersdelight.common.registry.ModItems.CUTTING_BOARD.get());
-            this.banner = new ItemStack(Items.WHITE_BANNER);
+            this.banner = new ItemStack(Items.BANNER.pick(DyeColor.WHITE));
         }
     }
 
