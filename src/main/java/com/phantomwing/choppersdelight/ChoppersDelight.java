@@ -3,6 +3,7 @@ package com.phantomwing.choppersdelight;
 import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.block.custom.DecoratedCuttingBoardBlock;
+import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
 
@@ -28,6 +29,7 @@ public class ChoppersDelight implements ModInitializer {
 		ModDataComponents.registerModDataComponents();
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
+		DecoratedCuttingBoardBlockEntity.init();
 		ModRecipes.registerModRecipes();
 
 		// Sneak + tool carving on our decorated cutting boards

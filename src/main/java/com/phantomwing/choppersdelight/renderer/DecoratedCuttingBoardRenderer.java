@@ -79,7 +79,11 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
 
             // Create a CuttingBoardBlockEntity from the decorated board.
             CuttingBoardBlockEntity cuttingBoard = new CuttingBoardBlockEntity(blockEntity.getBlockPos(), blockState);
-            cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+            if (blockEntity.isItemCarvingBoard()) {
+                cuttingBoard.carveToolOnBoard(blockEntity.getStoredItem().copy());
+            } else {
+                cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+            }
 
             // Render the new CuttingBoardBlockEntity.
             BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();

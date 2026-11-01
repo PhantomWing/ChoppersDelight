@@ -1,3 +1,11 @@
+# 1.2.2
+
+### Fixes
+- Fix hoppers and pipes not reaching the item on a decorated cutting board
+- Fix tools carved into a decorated cutting board lying flat on it
+- Fix a renamed Farmer's Delight Cutting Board showing as Spruce Cutting Board
+
+
 # 1.2.1
 
 ### Fixes
