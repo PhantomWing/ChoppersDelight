@@ -14,15 +14,16 @@ import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import net.minecraft.client.resources.model.MaterialSet;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
-import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * The decorated cutting board's item: the board it was made from, with the banner laid on it.
@@ -30,7 +31,7 @@ import java.util.Set;
  * gives the display transforms.
  */
 public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<DecoratedCuttingBoardItemRenderer.Decoration> {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(ChoppersDelight.MOD_ID, "decorated_cutting_board");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(ChoppersDelight.MOD_ID, "decorated_cutting_board");
 
     private final Model.Simple bannerModel;
     private final MaterialSet materials;
@@ -74,12 +75,12 @@ public class DecoratedCuttingBoardItemRenderer implements SpecialModelRenderer<D
     }
 
     @Override
-    public void getExtents(@NotNull Set<Vector3f> output) {
+    public void getExtents(@NotNull Consumer<Vector3fc> output) {
         // The board lies flat at the bottom of the block, the banner a pixel's height on top of it.
         for (float x : new float[] {1.0F / 16.0F, 15.0F / 16.0F}) {
             for (float y : new float[] {0.0F, 0.07F}) {
                 for (float z : new float[] {1.0F / 16.0F, 15.0F / 16.0F}) {
-                    output.add(new Vector3f(x, y, z));
+                    output.accept(new Vector3f(x, y, z));
                 }
             }
         }

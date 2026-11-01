@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.17.0-alpha.7'
+	id 'fabric-loom' version '1.17.21'
 	id 'maven-publish'
 	id 'me.modmuss50.mod-publish-plugin' version '2.0.0'
 }
@@ -74,9 +74,6 @@ dependencies {
 	modImplementation("maven.modrinth:farmers-delight-refabricated:${minecraft_version}-${farmersdelight_version}") {
 		exclude(group: "net.fabricmc")
 	}
-	// Farmer's Delight Refabricated nests Fabric ASM, which extends a vanilla enum for it; the Modrinth maven has no POM to
-	// bring it into dev runs, where the client otherwise dies in its entrypoint.
-	modLocalRuntime "com.github.Chocohead:Fabric-ASM:v2.3"
 
 	// JEI API
 	modCompileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
@@ -84,6 +81,8 @@ dependencies {
 
 	// JEI
 	modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
+	// JEI needs mezz_config, which Loom doesn't bring in from its POM.
+	modLocalRuntime("net.mezzdev.config:mezz_config-${minecraft_version}-fabric:${mezz_config_version}")
 
 	// Appleskin
 	modLocalRuntime("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") { // Appleskin requires Cloth Config
@@ -96,7 +95,7 @@ dependencies {
 		modLocalRuntime "com.github.glitchfiend:TerraBlender-fabric:${minecraft_version}-${terrablender_version}"
 	}
 
-	// Every Compat has no 1.21.10 build, and Oh The Biomes We've Gone has one on Modrinth only: their cutting boards stay
+	// Every Compat has no 1.21.11 build, and Oh The Biomes We've Gone has one on Modrinth only: their cutting boards stay
 	// out of this line's dev runs, and their data loads only where the mod is installed.
 
 	// Biomes O' Plenty

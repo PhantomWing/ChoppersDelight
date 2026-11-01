@@ -8,7 +8,7 @@ import com.phantomwing.choppersdelight.utils.RegisterUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -117,7 +117,7 @@ public class ModBlocks {
 
     private static Block.Properties properties(String name, String namespace) {
         return Block.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(2.0f).sound(SoundType.WOOD)
-                .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(namespace, name)));
+                .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(namespace, name)));
     }
 
     private static Supplier<Block> registerDecoratedCuttingBoard(String name) {

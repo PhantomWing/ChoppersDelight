@@ -9,7 +9,7 @@ import com.phantomwing.choppersdelight.utils.RegisterUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import vectorwing.farmersdelight.common.item.FuelBlockItem;
@@ -84,7 +84,7 @@ public class ModItems {
     // Helper functions
     private static Item.Properties baseItem(String name, String namespace) {
         return new Item.Properties()
-                .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(namespace, name)))
+                .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(namespace, name)))
                 .useBlockDescriptionPrefix();
     }
 

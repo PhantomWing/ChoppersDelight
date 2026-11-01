@@ -12,7 +12,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class ChoppersDelight implements ModInitializer {
 		// the regular mod-pack stack, so files inside them take precedence.
 		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container ->
 				ResourceManagerHelper.registerBuiltinResourcePack(
-						ResourceLocation.fromNamespaceAndPath(MOD_ID, "farmersdelight_overrides"),
+						Identifier.fromNamespaceAndPath(MOD_ID, "farmersdelight_overrides"),
 						container,
 						ResourcePackActivationType.ALWAYS_ENABLED
 				)

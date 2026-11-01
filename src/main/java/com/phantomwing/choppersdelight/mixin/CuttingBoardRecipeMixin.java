@@ -7,7 +7,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -44,10 +44,10 @@ public class CuttingBoardRecipeMixin {
     @WrapOperation(
         method = "prepare(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)Lnet/minecraft/world/item/crafting/RecipeMap;",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/server/packs/resources/SimpleJsonResourceReloadListener;scanDirectory(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/resources/FileToIdConverter;Lcom/mojang/serialization/DynamicOps;Lcom/mojang/serialization/Codec;Ljava/util/Map;)V"))
-    private <T> void overrideCuttingBoardRecipe(ResourceManager resourceManager, FileToIdConverter converter, DynamicOps<JsonElement> ops, Codec<T> codec, Map<ResourceLocation, T> recipes, Operation<Void> original) {
+    private <T> void overrideCuttingBoardRecipe(ResourceManager resourceManager, FileToIdConverter converter, DynamicOps<JsonElement> ops, Codec<T> codec, Map<Identifier, T> recipes, Operation<Void> original) {
         original.call(resourceManager, converter, ops, codec, recipes);
 
-        ResourceLocation targetId = ResourceLocation.fromNamespaceAndPath("farmersdelight", "cutting_board");
+        Identifier targetId = Identifier.fromNamespaceAndPath("farmersdelight", "cutting_board");
         codec.parse(ops, JsonParser.parseString(DEFAULT_CUTTING_BOARD_JSON))
                 .ifSuccess(recipe -> recipes.put(targetId, recipe));
     }

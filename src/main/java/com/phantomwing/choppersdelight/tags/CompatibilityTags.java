@@ -1,7 +1,7 @@
 package com.phantomwing.choppersdelight.tags;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -17,10 +17,10 @@ public class CompatibilityTags
     public static final TagKey<Block> CREATE_BRITTLE = externalBlockTag(CREATE, "brittle");
 
     private static TagKey<Item> externalItemTag(String modId, String path) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(modId, path));
+        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(modId, path));
     }
 
     private static TagKey<Block> externalBlockTag(String modId, String path) {
-        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(modId, path));
+        return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(modId, path));
     }
 }

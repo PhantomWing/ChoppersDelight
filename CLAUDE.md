@@ -1,8 +1,8 @@
 @~/Documents/Projects/Minecraft/MinecraftDeveloperPortal/.claude/profiles/fabric-loom.md
 
-# Choppers Delight - `fabric/1.21.10`
+# Choppers Delight - `fabric/1.21.11`
 
-**This file describes the `fabric/1.21.10` line**: Minecraft 1.21.10 (the jar covers 1.21.9 and 1.21.10), Fabric. Migrated from `fabric/1.21.8` on 2026-11-01.
+**This file describes the `fabric/1.21.11` line**: Minecraft 1.21.11, Fabric. Migrated from `fabric/1.21.10` on 2026-11-01.
 Built with Fabric Loom.
 
 It belongs to whichever folder has this branch checked out - the main `ChoppersDelight` folder or a worktree
@@ -18,14 +18,15 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 
 ## This line
 
-- Java 21, Mojang mappings with Parchment.
-- Farmer's Delight Refabricated 1.21.10-3.4.2, from the Modrinth maven (the Greenhouse one stops at 3.4.1), a port of
-  Farmer's Delight 1.2, so its cutting board holds one item at a time. The decorated cutting board mirrors 3.4.2's
+- Java 21, Mojang mappings with Parchment. Loom 1.17.21 on Gradle 9.5.1: Loom 1.17.0's alphas fail to remap Farmer's
+  Delight Refabricated, whose class tweaker extends enums (1.21.1 builds against a patched jar for the same reason).
+- Farmer's Delight Refabricated 1.21.11-3.6.16, from the Modrinth maven, a port of Farmer's Delight 1.3: its cutting
+  board holds a stack again, as on 1.21.1. The decorated cutting board mirrors 3.6.16's
   `CuttingBoardBlock` and `CuttingBoardBlockEntity` (`DecoratedCuttingBoardBlock`, `DecoratedCuttingBoardBlockEntity`);
   check them against Farmer's Delight's own when it updates.
 - Farmer's Delight Refabricated has JEI integration again: `JEIPlugin` adds the cutting boards as catalysts of its
   cutting category, and JEI runs in dev runs.
-- Every Compat has no 1.21.10 build: no Every Compat module. Oh The Biomes We've Gone has one on Modrinth only; the BWG
+- Every Compat has no 1.21.11 build: no Every Compat module. Oh The Biomes We've Gone has one on Modrinth only; the BWG
   cutting boards are registered but nothing in a dev run loads BWG. Biomes O' Plenty runs in dev runs.
 - Every item has an `items/` definition (1.21.4); the decorated cutting board's is a special model,
   `DecoratedCuttingBoardItemRenderer`, registered into `SpecialModelRenderers.ID_MAPPER`.
@@ -35,5 +36,5 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 - Farmer's Delight's own cutting board recipe is replaced in `RecipeManager#prepare` (`CuttingBoardRecipeMixin`).
 - Datagen: `runDatagen`. No generated resources are committed on this line. Pinned to this mod with `modId = mod_id`.
 - No game tests yet. Writing the first one for whatever is ported next is the highest-value test available (`verification.md`).
-- Publishes the `remapJar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 1.21.9, 1.21.10 (`publishing.md`).
+- Publishes the `remapJar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 1.21.11 (`publishing.md`).
 - GitHub Actions: `build.yml`.

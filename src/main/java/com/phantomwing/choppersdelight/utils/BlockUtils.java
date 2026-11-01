@@ -3,7 +3,7 @@ package com.phantomwing.choppersdelight.utils;
 import com.phantomwing.choppersdelight.Compatibility;
 import com.phantomwing.choppersdelight.block.ModBlocks;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
@@ -14,8 +14,8 @@ public class BlockUtils {
         return BuiltInRegistries.BLOCK.getKey(block).getPath();
     }
 
-    public static ResourceLocation getResourceLocation(String modId, Block block) {
-        return ResourceLocation.fromNamespaceAndPath(modId, "block/" + getName(block));
+    public static Identifier getResourceLocation(String modId, Block block) {
+        return Identifier.fromNamespaceAndPath(modId, "block/" + getName(block));
     }
 
     public static Stream<Block> getCuttingBoards() {

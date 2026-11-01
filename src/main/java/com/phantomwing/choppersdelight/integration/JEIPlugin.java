@@ -5,21 +5,19 @@ import com.phantomwing.choppersdelight.utils.BlockUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vectorwing.farmersdelight.integration.jei.FDRecipeTypes;
 
 @JeiPlugin
-@MethodsReturnNonnullByDefault
 @SuppressWarnings("unused")
 public class JEIPlugin implements IModPlugin
 {
-    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(ChoppersDelight.MOD_ID, "jei_plugin");
+    private static final Identifier ID = Identifier.fromNamespaceAndPath(ChoppersDelight.MOD_ID, "jei_plugin");
 
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return ID;
     }
 

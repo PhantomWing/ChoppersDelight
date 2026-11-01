@@ -5,7 +5,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BannerRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
@@ -28,7 +28,7 @@ public class BannerUtils {
         cubeListBuilder.addBox(-10.0F, 0.0F, -2.0F, 20.0F, 40.0F, 1.0F);
         List<ModelPart.Cube> cuboids = cubeListBuilder.getCubes().stream().map(modelCuboidData -> modelCuboidData.bake(64, 64)).collect(Collectors.toList());
 
-        return new Model.Simple(new ModelPart(cuboids, new HashMap<>()), RenderType::entitySolid);
+        return new Model.Simple(new ModelPart(cuboids, new HashMap<>()), RenderTypes::entitySolid);
     }
 
     public static void submitBanner(MaterialSet materials, PoseStack poseStack, SubmitNodeCollector collector, Model.Simple model, int light, int overlay, Direction direction, DyeColor dyeColor, BannerPatternLayers patternLayers, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress, int outlineColor) {
