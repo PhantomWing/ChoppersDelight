@@ -32,6 +32,8 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.block.entity.SyncedBlockEntity;
@@ -50,7 +52,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Mirror of FD Refabricated 3.2.5's CuttingBoardBlockEntity, which holds one item at a time, plus the decoration.
+ * Mirror of FD Refabricated 3.2.3's CuttingBoardBlockEntity, which holds one item at a time, plus the decoration.
  */
 public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
 {
@@ -83,33 +85,31 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
     }
 
     @Override
-    public void loadAdditional(@NotNull CompoundTag compound, HolderLookup.@NotNull Provider provider) {
-        super.loadAdditional(compound, provider);
+    public void loadAdditional(@NotNull ValueInput input) {
+        super.loadAdditional(input);
 
-        isItemCarvingBoard = compound.getBooleanOr("IsItemCarved", false);
-        inventory.deserializeNBT(provider, compound.getCompoundOrEmpty("Inventory"));
+        isItemCarvingBoard = input.getBooleanOr("IsItemCarved", false);
+        inventory.deserialize(input.childOrEmpty("Inventory"));
 
-        this.cuttingBoard = compound.getCompound("CuttingBoardStack")
-                .flatMap(tag -> ItemStack.parse(provider, tag))
+        this.cuttingBoard = input.read("CuttingBoardStack", ItemStack.CODEC)
                 .orElseGet(() -> new ItemStack(vectorwing.farmersdelight.common.registry.ModItems.CUTTING_BOARD.get()));
-        this.banner = compound.getCompound("BannerStack")
-                .flatMap(tag -> ItemStack.parse(provider, tag))
+        this.banner = input.read("BannerStack", ItemStack.CODEC)
                 .orElseGet(() -> new ItemStack(Items.WHITE_BANNER));
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compound, HolderLookup.@NotNull Provider provider) {
-        super.saveAdditional(compound, provider);
+    public void saveAdditional(@NotNull ValueOutput output) {
+        super.saveAdditional(output);
 
-        compound.put("Inventory", inventory.serializeNBT(provider));
-        compound.putBoolean("IsItemCarved", isItemCarvingBoard);
+        inventory.serialize(output.child("Inventory"));
+        output.putBoolean("IsItemCarved", isItemCarvingBoard);
 
         if (!this.cuttingBoard.isEmpty()) {
-            compound.put("CuttingBoardStack", this.cuttingBoard.save(provider));
+            output.store("CuttingBoardStack", ItemStack.CODEC, this.cuttingBoard);
         }
 
         if (!this.banner.isEmpty()) {
-            compound.put("BannerStack", this.banner.save(provider));
+            output.store("BannerStack", ItemStack.CODEC, this.banner);
         }
     }
 
@@ -278,9 +278,7 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
 
     @Override
     public @NotNull CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        this.saveAdditional(tag, provider);
-        return tag;
+        return saveCustomOnly(provider);
     }
 
     public ItemStack getItem() {
