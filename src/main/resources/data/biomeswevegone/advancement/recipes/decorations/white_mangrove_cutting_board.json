@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "biomeswevegone:white_mangrove_cutting_board"
+        "recipes": "biomeswevegone:white_mangrove_cutting_board"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

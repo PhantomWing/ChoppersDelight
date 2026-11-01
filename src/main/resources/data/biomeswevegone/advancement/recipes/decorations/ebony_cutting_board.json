@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "biomeswevegone:ebony_cutting_board"
+        "recipes": "biomeswevegone:ebony_cutting_board"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

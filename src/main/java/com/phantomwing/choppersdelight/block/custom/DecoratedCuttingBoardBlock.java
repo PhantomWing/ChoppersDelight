@@ -1,6 +1,5 @@
 package com.phantomwing.choppersdelight.block.custom;
 
-import com.mojang.serialization.MapCodec;
 import com.phantomwing.choppersdelight.block.ModBlockEntityTypes;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -13,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -21,7 +21,6 @@ import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
@@ -36,15 +35,8 @@ import vectorwing.farmersdelight.common.registry.ModSounds;
 
 public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
 {
-    public static final MapCodec<DecoratedCuttingBoardBlock> CODEC = simpleCodec(DecoratedCuttingBoardBlock::new);
-
     public DecoratedCuttingBoardBlock(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Nullable
@@ -132,7 +124,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     @Override
-    protected void spawnDestroyParticles(@NotNull Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state) {
+    public void spawnDestroyByEntityParticles(@NotNull Level level, @Nullable Entity entity, @NotNull BlockPos pos, @NotNull BlockState state) {
         BlockState particleState = null;
 
         // Render destroy particles using the underlying cutting board's wood, not the decorated board item.
@@ -148,7 +140,7 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
             particleState = Blocks.OAK_PLANKS.defaultBlockState();
         }
 
-        level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(particleState));
+        level.levelEvent(entity, LevelEvent.PARTICLES_AND_SOUND_DESTROY_BLOCK, pos, Block.getId(particleState));
     }
 
     /**

@@ -15,8 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.item.FuelBlockItem;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class DecoratedCuttingBoardItem extends FuelBlockItem {
@@ -64,12 +62,7 @@ public class DecoratedCuttingBoardItem extends FuelBlockItem {
      * A component the stack carries itself rather than from its item: from 1.21.2 every item has an item name.
      */
     private static @Nullable Component ownComponent(ItemStack stack, DataComponentType<Component> type) {
-        for (Map.Entry<DataComponentType<?>, Optional<?>> entry : stack.getComponentsPatch().entrySet()) {
-            if (entry.getKey() == type) {
-                return entry.getValue().map(Component.class::cast).orElse(null);
-            }
-        }
-        return null;
+        return stack.getComponentsPatch().split().added().get(type);
     }
 
     @Override

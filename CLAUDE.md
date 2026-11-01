@@ -1,8 +1,8 @@
 @~/Documents/Projects/Minecraft/MinecraftDeveloperPortal/.claude/profiles/fabric-loom.md
 
-# Choppers Delight - `fabric/26.2`
+# Choppers Delight - `fabric/26.3`
 
-**This file describes the `fabric/26.2` line**: Minecraft 26.2, Fabric. Migrated from `fabric/26.1` on 2026-11-01.
+**This file describes the `fabric/26.3` line**: Minecraft 26.3, Fabric. Migrated from `fabric/26.2` on 2026-11-01.
 Built with Fabric Loom.
 
 It belongs to whichever folder has this branch checked out - the main `ChoppersDelight` folder or a worktree
@@ -36,8 +36,12 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
   and draws the content with Farmer's Delight's own renderer; the banner is a `Model.Simple` drawn as vanilla's banner
   draws its flag (`BannerUtils`).
 - The add and remove pattern recipes hold nothing, so each is one instance its serializer decodes every recipe file to.
-- Farmer's Delight's own cutting board recipe is replaced in `RecipeManager#prepare` (`CuttingBoardRecipeMixin`).
+- Farmer's Delight's own cutting board recipe and its advancement are replaced by the built-in data pack
+  `resourcepacks/farmersdelight_data_overrides` (data format 121), which sits above every mod's data. 26.3's
+  `RecipeManager#prepare` no longer calls `scanDirectory`, so the mixin the earlier lines use has no target here.
+- The dev runs carry the two JVM arguments of Mojang's 26.3 manifest that Loom leaves out (`StackShadowPages`, the
+  `jdk.internal.misc` export).
 - Datagen: `runDatagen`. No generated resources are committed on this line. Pinned to this mod with `modId = mod_id`.
 - No game tests yet. Writing the first one for whatever is ported next is the highest-value test available (`verification.md`).
-- Publishes the `jar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 26.2 (`publishing.md`).
+- Publishes the `jar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 26.3 (`publishing.md`).
 - GitHub Actions: `build.yml`.

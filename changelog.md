@@ -7,7 +7,7 @@
 - Fix a renamed Farmer's Delight Cutting Board showing as Spruce Cutting Board
 
 ### Additions
-- Ported to Minecraft 26.2
+- Ported to Minecraft 26.3
 - Added a crafting recipe for the Pale Oak Cutting Board
 
 

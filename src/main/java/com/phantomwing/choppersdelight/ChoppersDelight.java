@@ -39,13 +39,19 @@ public class ChoppersDelight implements ModInitializer {
 		// "choppersdelight" and overrides we put under assets/farmersdelight/... in our main resources
 		// get ignored at runtime. Built-in packs registered through Fabric Resource Loader sit above
 		// the regular mod-pack stack, so files inside them take precedence.
-		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container ->
+		// The same goes for data: Farmer's Delight's cutting board recipe takes any planks, and ours replaces it.
+		FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container -> {
 				ResourceManagerHelper.registerBuiltinResourcePack(
 						Identifier.fromNamespaceAndPath(MOD_ID, "farmersdelight_overrides"),
 						container,
 						ResourcePackActivationType.ALWAYS_ENABLED
-				)
-		);
+				);
+				ResourceManagerHelper.registerBuiltinResourcePack(
+						Identifier.fromNamespaceAndPath(MOD_ID, "farmersdelight_data_overrides"),
+						container,
+						ResourcePackActivationType.ALWAYS_ENABLED
+				);
+		});
 
 		Compatibility.init();
 	}

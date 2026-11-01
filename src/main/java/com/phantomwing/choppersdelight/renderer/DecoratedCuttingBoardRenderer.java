@@ -115,7 +115,7 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
 
             // Rotate block to face the cutting board's front side
             float f = -state.direction.toYRot();
-            poseStack.mulPose(Axis.YP.rotationDegrees(f));
+            poseStack.rotate(Axis.YP.rotationDegrees(f));
 
             // Resize the block
             poseStack.scale(2.0F, 2.0F, 2.0F);

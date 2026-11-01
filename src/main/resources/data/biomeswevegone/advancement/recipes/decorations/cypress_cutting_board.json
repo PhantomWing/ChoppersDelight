@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "biomeswevegone:cypress_cutting_board"
+        "recipes": "biomeswevegone:cypress_cutting_board"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "choppersdelight:warped_cutting_board"
+        "recipes": "choppersdelight:warped_cutting_board"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

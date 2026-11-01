@@ -16,6 +16,18 @@ base {
 	archivesName.set("${mod_id}-fabric-${minecraft_version}")
 }
 
+loom {
+	// Two JVM arguments from Mojang's 26.3 version manifest that Loom doesn't pass to dev runs (the portal
+	// adds them to its runs too). Without StackShadowPages=32 the client died natively on Windows in about
+	// 4 of 10 starts while compiling shaders; the export puts LWJGL on its production memory backend.
+	runs {
+		configureEach {
+			vmArg '-XX:StackShadowPages=32'
+			vmArgs '--add-exports', 'java.base/jdk.internal.misc=ALL-UNNAMED'
+		}
+	}
+}
+
 repositories {
 	mavenLocal()
 
@@ -88,7 +100,7 @@ dependencies {
 		localRuntime "com.github.glitchfiend:TerraBlender-fabric:${minecraft_version}-${terrablender_version}"
 	}
 
-	// Every Compat has no 26.2 build, and Oh The Biomes We've Gone has one on Modrinth only: their cutting boards stay
+	// Every Compat has no 26.3 build, and Oh The Biomes We've Gone has one on Modrinth only: their cutting boards stay
 	// out of this line's dev runs, and their data loads only where the mod is installed.
 
 	// Biomes O' Plenty

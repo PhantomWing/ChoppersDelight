@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "biomeswevegone:blue_enchanted_cutting_board"
+        "recipes": "biomeswevegone:blue_enchanted_cutting_board"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

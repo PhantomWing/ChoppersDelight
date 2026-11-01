@@ -30,9 +30,9 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.19.5",
-		"minecraft": "26.2",
+		"minecraft": "26.3",
 		"java": ">=25",
 		"fabric-api": "*",
-		"farmersdelight": ">=26.2-3.6.30"
+		"farmersdelight": ">=26.3-3.6.30"
 	}
 }

@@ -35,8 +35,8 @@ public class BannerUtils {
         poseStack.pushPose();
 
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F)); // Make sure the texture is flat on the Cutting Board
-        poseStack.mulPose(Axis.ZP.rotationDegrees(direction.toYRot()));
+        poseStack.rotate(Axis.XP.rotationDegrees(90.0F)); // Make sure the texture is flat on the Cutting Board
+        poseStack.rotate(Axis.ZP.rotationDegrees(direction.toYRot()));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
 
         // Position correctly
@@ -47,8 +47,13 @@ public class BannerUtils {
 
         // Scale
         poseStack.scale(-0.351F, -0.351F, 1.1F);
-        collector.submitModel(model, Unit.INSTANCE, poseStack, light, overlay, -1, Sheets.BANNER_BASE, sprites, outlineColor, breakProgress);
-        BannerRenderer.submitPatterns(sprites, poseStack, collector, light, overlay, model, Unit.INSTANCE, true, dyeColor, patternLayers, breakProgress);
+        collector.submitModel(model, Unit.INSTANCE, poseStack, light, overlay, -1, Sheets.BANNER_BASE, sprites, outlineColor);
+        if (breakProgress != null) {
+            // Over the patterns, as vanilla's banner orders its cracks.
+            collector.order(patternLayers.layers().size() + 2)
+                    .submitCrumblingOverlay(model, Unit.INSTANCE, poseStack, Sheets.BANNER_BASE.renderType(model.renderType()), light, overlay, -1, breakProgress);
+        }
+        BannerRenderer.submitPatterns(sprites, poseStack, collector, light, overlay, model, Unit.INSTANCE, true, dyeColor, patternLayers);
 
         poseStack.popPose();
     }

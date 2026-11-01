@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "choppersdelight:cherry_cutting_board"
+        "recipes": "choppersdelight:cherry_cutting_board"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

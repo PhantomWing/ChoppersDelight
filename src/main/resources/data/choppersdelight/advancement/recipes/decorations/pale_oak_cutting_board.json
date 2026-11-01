@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "choppersdelight:pale_oak_cutting_board"
+        "recipes": "choppersdelight:pale_oak_cutting_board"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
