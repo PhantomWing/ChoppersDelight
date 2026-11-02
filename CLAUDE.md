@@ -20,6 +20,11 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 
 - Java 21, Mojang mappings with Parchment.
 - Datagen: `runDatagen`. No generated resources are committed on this line. Pinned to this mod with `modId = mod_id`.
-- No game tests yet. Writing the first one for whatever is ported next is the highest-value test available (`verification.md`).
+- Game tests in `src/test`, laid out as The Lead Age's (`GameTests`, `GameTestRegistration`, `TestCompat`,
+  `verification.md`), run with `runGameTest`. The test bodies are the same to the byte as `neoforge/1.21`'s; only
+  `TestCompat` (the creative tab, fuel) and the registration differ. The test source set is a mod of its own,
+  `choppersdelight_gametest`, whose `fabric.mod.json` names the `fabric-gametest` entrypoint.
+- Scenarios in `scenarios/`, played by the portal's Play scenarios: cutting on a board, decorating in the crafting
+  grid, Farmer's Delight's board's name, stacking, and a carved tool's look.
 - Publishes the `remapJar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 1.21, 1.21.1 (`publishing.md`).
 - GitHub Actions: `build.yml`.
