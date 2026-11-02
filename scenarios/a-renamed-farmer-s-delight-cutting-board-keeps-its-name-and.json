@@ -6,7 +6,7 @@
       "reset": true
     },
     {
-      "command": "give @p farmersdelight:cutting_board[custom_name='\"Grandma\\'s Board\"']"
+      "command": "give @p farmersdelight:cutting_board[custom_name=\"Grandma's Board\"]"
     },
     {
       "give": "farmersdelight:cutting_board"

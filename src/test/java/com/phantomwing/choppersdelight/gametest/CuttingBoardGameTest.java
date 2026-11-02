@@ -15,12 +15,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
-import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public final class CuttingBoardGameTest {
@@ -108,20 +107,21 @@ public final class CuttingBoardGameTest {
         helper.succeed();
     }
 
-    /** Every board must have Farmer's Delight's block entity: on Fabric the mod adds its boards to that type itself. */
+    /** Every board must have a cutting board's block entity: on Fabric the mod adds its boards to Farmer's Delight's type itself. */
     public static void everyBoardCutsBeefWithAKnife(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Item mincedBeef = TestCompat.item("farmersdelight:minced_beef");
         int boards = 0;
         for (Supplier<Block> board : ModBlocks.MINECRAFT_CUTTING_BOARDS) {
             helper.setBlock(BOARD, board.get());
-            BlockEntity entity = level.getBlockEntity(helper.absolutePos(BOARD));
-            if (!(entity instanceof CuttingBoardBlockEntity cuttingBoard)) {
-                TestCompat.fail(helper, board.get() + " has no cutting board block entity, has " + entity);
+            Optional<TestCompat.Board> found = TestCompat.boardAt(level, helper.absolutePos(BOARD));
+            if (found.isEmpty()) {
+                TestCompat.fail(helper, board.get() + " has no cutting board block entity, has " + level.getBlockEntity(helper.absolutePos(BOARD)));
                 return;
             }
-            cuttingBoard.addItem(new ItemStack(Items.BEEF));
-            TestCompat.assertTrue(helper, cuttingBoard.processStoredItemUsingTool(new ItemStack(TestCompat.item("farmersdelight:iron_knife")), null),
+            TestCompat.Board cuttingBoard = found.get();
+            cuttingBoard.add(new ItemStack(Items.BEEF));
+            TestCompat.assertTrue(helper, cuttingBoard.cut(new ItemStack(TestCompat.item("farmersdelight:iron_knife"))),
                     "A knife should cut beef on " + board.get());
             TestCompat.assertTrue(helper, cuttingBoard.isEmpty(), "The beef should be gone from " + board.get() + " once cut");
             boards++;
@@ -152,12 +152,14 @@ public final class CuttingBoardGameTest {
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
             TestCompat.useItemOn(player, helper.absolutePos(BOARD));
 
-            if (!(helper.getLevel().getBlockEntity(helper.absolutePos(BOARD)) instanceof CuttingBoardBlockEntity cuttingBoard)) {
+            Optional<TestCompat.Board> found = TestCompat.boardAt(helper.getLevel(), helper.absolutePos(BOARD));
+            if (found.isEmpty()) {
                 TestCompat.fail(helper, "The oak cutting board has no cutting board block entity");
                 return;
             }
-            TestCompat.assertTrue(helper, cuttingBoard.isItemCarvingBoard(), "Sneaking with an axe should carve it into the oak cutting board");
-            TestCompat.assertTrue(helper, cuttingBoard.getStoredItem().is(Items.IRON_AXE), "The board should hold the axe, holds " + cuttingBoard.getStoredItem());
+            TestCompat.Board cuttingBoard = found.get();
+            TestCompat.assertTrue(helper, cuttingBoard.isCarved(), "Sneaking with an axe should carve it into the oak cutting board");
+            TestCompat.assertTrue(helper, cuttingBoard.stored().is(Items.IRON_AXE), "The board should hold the axe, holds " + cuttingBoard.stored());
             helper.succeed();
         });
     }
