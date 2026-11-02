@@ -5,6 +5,7 @@
 - Fix tools carved into a decorated cutting board lying flat on it
 - Fix a renamed Farmer's Delight Cutting Board showing as Spruce Cutting Board
 - Fix the mod's icon not showing in Mod Menu
+- Fix decorated cutting boards of the same design not stacking
 
 
 # 1.2.1
