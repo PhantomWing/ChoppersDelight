@@ -30,7 +30,7 @@ public final class DecoratedCuttingBoardGameTest {
     }
 
     public static void decoratedBoardIsNotDecoratedAgain(GameTestHelper helper) {
-        ItemStack banner = new ItemStack(Items.WHITE_BANNER);
+        ItemStack banner = new ItemStack(TestCompat.WHITE_BANNER);
 
         ItemStack decorated = TestCompat.craft(helper.getLevel(), new ItemStack(ModItems.OAK_CUTTING_BOARD.get()), banner);
         TestCompat.assertTrue(helper, decorated.is(ModItems.DECORATED_CUTTING_BOARD.get()),
@@ -59,7 +59,7 @@ public final class DecoratedCuttingBoardGameTest {
         ItemStack first = cherryBoardWith(helper.getLevel(), flowerBanner(helper.getLevel()));
         ItemStack second = cherryBoardWith(helper.getLevel(), flowerBanner(helper.getLevel()));
         TestCompat.assertTrue(helper, TestCompat.sameItemAndData(first, second), "Two decorated cutting boards of one design should stack");
-        ItemStack other = TestCompat.craft(helper.getLevel(), new ItemStack(ModItems.CHERRY_CUTTING_BOARD.get()), new ItemStack(Items.WHITE_BANNER));
+        ItemStack other = TestCompat.craft(helper.getLevel(), new ItemStack(ModItems.CHERRY_CUTTING_BOARD.get()), new ItemStack(TestCompat.WHITE_BANNER));
         TestCompat.assertTrue(helper, !TestCompat.sameItemAndData(first, other), "Decorated cutting boards of two designs shouldn't stack");
         helper.succeed();
     }
@@ -167,7 +167,7 @@ public final class DecoratedCuttingBoardGameTest {
     }
 
     private static ItemStack flowerBanner(ServerLevel level) {
-        return TestCompat.patternedBanner(level, Items.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK);
+        return TestCompat.patternedBanner(level, TestCompat.WHITE_BANNER, BannerPatterns.FLOWER, DyeColor.PINK);
     }
 
     private static ItemStack cherryBoardWith(ServerLevel level, ItemStack banner) {
