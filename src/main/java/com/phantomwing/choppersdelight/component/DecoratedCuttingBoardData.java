@@ -26,4 +26,16 @@ public record DecoratedCuttingBoardData(ItemStack cuttingBoard, ItemStack banner
 
     public static final DataComponentType<DecoratedCuttingBoardData> TYPE =
         DataComponentType.<DecoratedCuttingBoardData>builder().persistent(CODEC).networkSynchronized(STREAM_CODEC).build();
+
+    // ItemStack has no equals of its own, so without these two boards of one design never stacked.
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof DecoratedCuttingBoardData data
+                && ItemStack.matches(cuttingBoard, data.cuttingBoard) && ItemStack.matches(banner, data.banner);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * ItemStack.hashItemAndComponents(cuttingBoard) + ItemStack.hashItemAndComponents(banner);
+    }
 }
