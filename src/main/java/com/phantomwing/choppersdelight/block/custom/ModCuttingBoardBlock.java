@@ -114,9 +114,11 @@ public class ModCuttingBoardBlock extends CuttingBoardBlock
     /**
      * Mirror of FD 1.3.1's CuttingBoardBlock.ToolCarvingEvent for our wood-variant boards.
      * FD's own handler only matches CuttingBoardBlockEntity, so we need our own to handle ModCuttingBoardBlockEntity.
+     * Not named ToolCarvingEvent: Forge's bus names a listener by its class's simple name, method and event, so it and
+     * DecoratedCuttingBoardBlock's took one listener and tools never carved into a plain board.
      */
     @Mod.EventBusSubscriber(modid = ChoppersDelight.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-    public static class ToolCarvingEvent
+    public static class CuttingBoardToolCarvingEvent
     {
         @SubscribeEvent
         @SuppressWarnings("unused")

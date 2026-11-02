@@ -2,6 +2,7 @@
 
 ### Fixes
 - Fix tools carved into a decorated cutting board lying flat on it
+- Fix tools not carving into a cutting board when sneaking
 
 
 # 1.2.1
