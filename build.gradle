@@ -54,6 +54,41 @@ fabricApi {
 	}
 }
 
+loom {
+	// The test source set is a mod of its own, choppersdelight_gametest, whose fabric.mod.json names the class that
+	// registers the tests: an entrypoint in the shipped manifest would name a class the jar doesn't have.
+	mods {
+		register('choppersdelight_gametest') {
+			sourceSet sourceSets.test
+		}
+	}
+
+	runs {
+		// Headless game-test server: runs the tests, prints PASS/FAIL, and exits. ./gradlew runGameTest
+		gameTest {
+			server()
+			name = "Game Test"
+			runDir "run/gametest"
+			source sourceSets.test
+			vmArg '-Dfabric-api.gametest'
+		}
+	}
+}
+
+// Test-only source set for game tests, kept out of `main` so nothing in it ships.
+sourceSets {
+	test {
+		compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+		runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+	}
+}
+
+// The test source set holds game tests, which runGameTest runs; the JUnit `test` task finds none
+// there, and Gradle 9 fails a build whose test task discovers nothing.
+tasks.named('test') {
+	failOnNoDiscoveredTests = false
+}
+
 
 dependencies {
 	// Minecraft

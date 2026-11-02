@@ -1,0 +1,40 @@
+{
+  "name": "A tool carved into a decorated cutting board stands in it as on a plain one",
+  "gamemode": "survival",
+  "steps": [
+    {
+      "reset": true
+    },
+    {
+      "setblock": [
+        -1,
+        0,
+        -2
+      ],
+      "block": "choppersdelight:decorated_cutting_board[facing=north]{Inventory:{Items:[{Slot:0,id:\"minecraft:iron_axe\",count:1}],Size:1},IsItemCarved:1b,CuttingBoardStack:{id:\"choppersdelight:dark_oak_cutting_board\",count:1},BannerStack:{id:\"minecraft:green_banner\",count:1,components:{\"minecraft:banner_patterns\":[{pattern:\"minecraft:creeper\",color:\"black\"}]}}}"
+    },
+    {
+      "setblock": [
+        1,
+        0,
+        -2
+      ],
+      "block": "choppersdelight:oak_cutting_board[facing=north]{Inventory:{Items:[{Slot:0,id:\"minecraft:iron_axe\",count:1}],Size:1},IsItemCarved:1b}"
+    },
+    {
+      "expect": "block",
+      "at": [
+        -1,
+        0,
+        -2
+      ],
+      "is": "choppersdelight:decorated_cutting_board"
+    },
+    {
+      "wait": 10
+    },
+    {
+      "screenshot": "carved-axes"
+    }
+  ]
+}

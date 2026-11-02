@@ -1,0 +1,32 @@
+{
+  "name": "Decorated cutting boards of one design stack",
+  "gamemode": "survival",
+  "steps": [
+    {
+      "reset": true
+    },
+    {
+      "give": "choppersdelight:decorated_cutting_board[choppersdelight:decorated_cutting_board_data={cuttingBoard:{id:\"choppersdelight:dark_oak_cutting_board\",count:1},banner:{id:\"minecraft:green_banner\",count:1,components:{\"minecraft:banner_patterns\":[{pattern:\"minecraft:creeper\",color:\"black\"}]}}}]"
+    },
+    {
+      "give": "choppersdelight:decorated_cutting_board[choppersdelight:decorated_cutting_board_data={cuttingBoard:{id:\"choppersdelight:dark_oak_cutting_board\",count:1},banner:{id:\"minecraft:green_banner\",count:1,components:{\"minecraft:banner_patterns\":[{pattern:\"minecraft:creeper\",color:\"black\"}]}}}]"
+    },
+    {
+      "expect": "inventory",
+      "has": "choppersdelight:decorated_cutting_board",
+      "count": 2
+    },
+    {
+      "inventory": true
+    },
+    {
+      "expect": "slot",
+      "slot": 36,
+      "is": "choppersdelight:decorated_cutting_board",
+      "count": 2
+    },
+    {
+      "close": true
+    }
+  ]
+}
