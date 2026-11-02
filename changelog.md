@@ -4,6 +4,7 @@
 - Fix hoppers and pipes not reaching the item on a decorated cutting board
 - Fix tools carved into a decorated cutting board lying flat on it
 - Fix a renamed Farmer's Delight Cutting Board showing as Spruce Cutting Board
+- Fix the mod's icon not showing in Mod Menu
 
 
 # 1.2.1
