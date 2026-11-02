@@ -4,9 +4,7 @@ import com.phantomwing.choppersdelight.block.ModBlocks;
 import com.phantomwing.choppersdelight.item.ModItems;
 import com.phantomwing.choppersdelight.tags.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
@@ -55,13 +53,13 @@ public final class CuttingBoardGameTest {
         try {
             TestCompat.buildContents(tab, helper.getLevel());
         } catch (IllegalStateException e) {
-            helper.fail("The creative tab couldn't be built on the server: " + e.getMessage());
+            TestCompat.fail(helper, "The creative tab couldn't be built on the server: " + e.getMessage());
         }
 
         long presets = tab.getDisplayItems().stream()
                 .filter(stack -> stack.is(ModItems.DECORATED_CUTTING_BOARD.get()))
                 .count();
-        helper.assertTrue(presets == 4, "Expected the 4 preset decorated cutting boards in the tab, found " + presets);
+        TestCompat.assertTrue(helper, presets == 4, "Expected the 4 preset decorated cutting boards in the tab, found " + presets);
         helper.succeed();
     }
 
@@ -74,7 +72,7 @@ public final class CuttingBoardGameTest {
             ItemStack made = TestCompat.craftGrid(helper.getLevel(), 3, 2, stick, planks, planks, stick, planks, planks);
             if (!made.is(TestCompat.item(row[0]))) wrong.add(row[1] + " made " + (made.isEmpty() ? "nothing" : made.getItem()));
         }
-        helper.assertTrue(wrong.isEmpty(), "Sticks and planks should make that wood's cutting board: " + String.join(", ", wrong));
+        TestCompat.assertTrue(helper, wrong.isEmpty(), "Sticks and planks should make that wood's cutting board: " + String.join(", ", wrong));
         helper.succeed();
     }
 
@@ -85,7 +83,7 @@ public final class CuttingBoardGameTest {
             List<ItemStack> drops = TestCompat.drops(helper.getLevel(), helper.absolutePos(BOARD));
             if (drops.size() != 1 || !drops.get(0).is(board.get().asItem())) wrong.add(board.get() + " dropped " + drops);
         }
-        helper.assertTrue(wrong.isEmpty(), "Each cutting board should drop itself: " + String.join(", ", wrong));
+        TestCompat.assertTrue(helper, wrong.isEmpty(), "Each cutting board should drop itself: " + String.join(", ", wrong));
         helper.succeed();
     }
 
@@ -96,7 +94,7 @@ public final class CuttingBoardGameTest {
             if (!new ItemStack(board).is(ModTags.Items.CUTTING_BOARDS)) wrong.add(board + " isn't in the item tag");
             if (!board.defaultBlockState().is(BlockTags.MINEABLE_WITH_AXE)) wrong.add(board + " isn't mined with an axe");
         }
-        helper.assertTrue(wrong.isEmpty(), String.join(", ", wrong));
+        TestCompat.assertTrue(helper, wrong.isEmpty(), String.join(", ", wrong));
         helper.succeed();
     }
 
@@ -106,7 +104,7 @@ public final class CuttingBoardGameTest {
             int ticks = TestCompat.burnTime(new ItemStack(board));
             if (ticks != 200) wrong.add(board + " burns " + ticks + " ticks");
         }
-        helper.assertTrue(wrong.isEmpty(), "Each cutting board should burn 200 ticks, as Farmer's Delight's does: " + String.join(", ", wrong));
+        TestCompat.assertTrue(helper, wrong.isEmpty(), "Each cutting board should burn 200 ticks, as Farmer's Delight's does: " + String.join(", ", wrong));
         helper.succeed();
     }
 
@@ -119,19 +117,19 @@ public final class CuttingBoardGameTest {
             helper.setBlock(BOARD, board.get());
             BlockEntity entity = level.getBlockEntity(helper.absolutePos(BOARD));
             if (!(entity instanceof CuttingBoardBlockEntity cuttingBoard)) {
-                helper.fail(board.get() + " has no cutting board block entity, has " + entity);
+                TestCompat.fail(helper, board.get() + " has no cutting board block entity, has " + entity);
                 return;
             }
             cuttingBoard.addItem(new ItemStack(Items.BEEF));
-            helper.assertTrue(cuttingBoard.processStoredItemUsingTool(new ItemStack(TestCompat.item("farmersdelight:iron_knife")), null),
+            TestCompat.assertTrue(helper, cuttingBoard.processStoredItemUsingTool(new ItemStack(TestCompat.item("farmersdelight:iron_knife")), null),
                     "A knife should cut beef on " + board.get());
-            helper.assertTrue(cuttingBoard.isEmpty(), "The beef should be gone from " + board.get() + " once cut");
+            TestCompat.assertTrue(helper, cuttingBoard.isEmpty(), "The beef should be gone from " + board.get() + " once cut");
             boards++;
         }
         int expected = boards * 2;
         helper.succeedWhen(() -> {
             int made = countAround(helper, BOARD, mincedBeef);
-            helper.assertTrue(made == expected, "Expected " + expected + " minced beef, found " + made);
+            TestCompat.assertTrue(helper, made == expected, "Expected " + expected + " minced beef, found " + made);
         });
     }
 
@@ -139,27 +137,43 @@ public final class CuttingBoardGameTest {
     public static void aRenamedBoardKeepsItsName(GameTestHelper helper) {
         for (Item board : List.of(TestCompat.item("farmersdelight:cutting_board"), ModItems.OAK_CUTTING_BOARD.get())) {
             ItemStack stack = new ItemStack(board);
-            stack.set(DataComponents.CUSTOM_NAME, Component.literal("Grandma's Board"));
+            TestCompat.rename(stack, "Grandma's Board");
             String name = stack.getHoverName().getString();
-            helper.assertTrue(name.equals("Grandma's Board"), board + " renamed Grandma's Board is called " + name);
+            TestCompat.assertTrue(helper, name.equals("Grandma's Board"), board + " renamed Grandma's Board is called " + name);
         }
         helper.succeed();
     }
 
     public static void sneakingWithAToolCarvesItIntoABoard(GameTestHelper helper) {
         helper.setBlock(BOARD, ModBlocks.OAK_CUTTING_BOARD.get());
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.setShiftKeyDown(true);
-        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
-        TestCompat.useItemOn(player, helper.absolutePos(BOARD));
+        whenSpawnLoaded(helper, 80, () -> {
+            ServerPlayer player = TestCompat.mockPlayer(helper);
+            player.setShiftKeyDown(true);
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
+            TestCompat.useItemOn(player, helper.absolutePos(BOARD));
 
-        if (!(helper.getLevel().getBlockEntity(helper.absolutePos(BOARD)) instanceof CuttingBoardBlockEntity cuttingBoard)) {
-            helper.fail("The oak cutting board has no cutting board block entity");
-            return;
+            if (!(helper.getLevel().getBlockEntity(helper.absolutePos(BOARD)) instanceof CuttingBoardBlockEntity cuttingBoard)) {
+                TestCompat.fail(helper, "The oak cutting board has no cutting board block entity");
+                return;
+            }
+            TestCompat.assertTrue(helper, cuttingBoard.isItemCarvingBoard(), "Sneaking with an axe should carve it into the oak cutting board");
+            TestCompat.assertTrue(helper, cuttingBoard.getStoredItem().is(Items.IRON_AXE), "The board should hold the axe, holds " + cuttingBoard.getStoredItem());
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Runs {@code then} once the entities around the world spawn have loaded: on 1.21.6 to 1.21.8 a mock player waits
+     * for them, and the level can't tick to load them while a test holds it.
+     */
+    static void whenSpawnLoaded(GameTestHelper helper, int ticksLeft, Runnable then) {
+        if (TestCompat.entitiesLoadedAroundSpawn(helper.getLevel(), 2)) {
+            then.run();
+        } else if (ticksLeft <= 0) {
+            TestCompat.fail(helper, "The entities around the world spawn never loaded, so no mock player could be made");
+        } else {
+            helper.runAfterDelay(1, () -> whenSpawnLoaded(helper, ticksLeft - 1, then));
         }
-        helper.assertTrue(cuttingBoard.isItemCarvingBoard(), "Sneaking with an axe should carve it into the oak cutting board");
-        helper.assertTrue(cuttingBoard.getStoredItem().is(Items.IRON_AXE), "The board should hold the axe, holds " + cuttingBoard.getStoredItem());
-        helper.succeed();
     }
 
     static List<Block> boardsAndDecorated() {

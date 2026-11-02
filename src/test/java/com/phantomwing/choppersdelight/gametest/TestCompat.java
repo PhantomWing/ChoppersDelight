@@ -7,6 +7,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +22,7 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
@@ -112,6 +115,37 @@ public final class TestCompat {
     /** The comparator signal a block gives. */
     public static int analogSignal(ServerLevel level, BlockPos pos) {
         return level.getBlockState(pos).getAnalogOutputSignal(level, pos);
+    }
+
+    /** Fails the test. {@code GameTestHelper.fail} takes only a Component from 1.21.5. */
+    public static void fail(GameTestHelper helper, String message) {
+        helper.fail(message);
+    }
+
+    /** Fails the test unless {@code condition} holds. {@code GameTestHelper.assertTrue} takes only a Component from 1.21.5. */
+    public static void assertTrue(GameTestHelper helper, boolean condition, String message) {
+        helper.assertTrue(condition, message);
+    }
+
+    /** Whether two stacks are the same item with the same data, as stacking asks. */
+    public static boolean sameItemAndData(ItemStack first, ItemStack second) {
+        return ItemStack.isSameItemSameComponents(first, second);
+    }
+
+    /** Names a stack as an anvil does. */
+    public static void rename(ItemStack stack, String name) {
+        stack.set(DataComponents.CUSTOM_NAME, Component.literal(name));
+    }
+
+    /** A player on the server, in the test's level, who can click blocks. */
+    public static ServerPlayer mockPlayer(GameTestHelper helper) {
+        return helper.makeMockServerPlayerInLevel();
+    }
+
+    /** Whether the entities of the chunks around the world spawn have loaded, which a mock player waits for. */
+    public static boolean entitiesLoadedAroundSpawn(ServerLevel level, int radius) {
+        return ChunkPos.rangeClosed(new ChunkPos(level.getSharedSpawnPos()), radius)
+                .allMatch(chunk -> level.areEntitiesLoaded(chunk.toLong()));
     }
 
     /** Right-clicks the top of a block with what the player holds, as the game does when a player clicks. */
