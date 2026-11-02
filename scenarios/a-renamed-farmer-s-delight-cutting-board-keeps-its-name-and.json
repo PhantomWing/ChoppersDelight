@@ -1,0 +1,35 @@
+{
+  "name": "A renamed Farmer's Delight cutting board keeps its name and an unnamed one reads Spruce",
+  "gamemode": "survival",
+  "steps": [
+    {
+      "reset": true
+    },
+    {
+      "command": "give @p farmersdelight:cutting_board[custom_name='\"Grandma\\'s Board\"']"
+    },
+    {
+      "give": "farmersdelight:cutting_board"
+    },
+    {
+      "inventory": true
+    },
+    {
+      "hover": 36
+    },
+    {
+      "expect": "tooltip",
+      "line": "Grandma's Board"
+    },
+    {
+      "hover": 37
+    },
+    {
+      "expect": "tooltip",
+      "line": "Spruce Cutting Board"
+    },
+    {
+      "close": true
+    }
+  ]
+}
