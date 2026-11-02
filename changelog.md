@@ -2,6 +2,7 @@
 
 ### Fixes
 - Fix tools carved into a decorated cutting board lying flat on it
+- Fix decorated cutting boards of the same design not stacking
 
 
 # 1.2.1
