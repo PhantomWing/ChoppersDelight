@@ -154,7 +154,8 @@ public final class DecoratedCuttingBoardGameTest {
             DecoratedCuttingBoardBlockEntity board = board(helper);
             TestCompat.assertTrue(helper, board.isItemCarvingBoard(), "Sneaking with an axe should carve it into the decorated cutting board");
             TestCompat.assertTrue(helper, board.getStoredItem().is(Items.IRON_AXE), "The board should hold the axe, holds " + board.getStoredItem());
-            TestCompat.assertTrue(helper, !board.canAddItem(new ItemStack(Items.CARROT)), "A board with a tool carved in shouldn't take anything else");
+            board.addItem(new ItemStack(Items.CARROT));
+            TestCompat.assertTrue(helper, board.getStoredItem().is(Items.IRON_AXE), "A board with a tool carved in shouldn't take a carrot, holds " + board.getStoredItem());
 
             player.setShiftKeyDown(false);
             player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
