@@ -21,7 +21,16 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 - **Forge line (ForgeGradle) despite the `neoforge/` prefix**, and named `1.20.1` where the ladder's suffix for this rung is `1.20`.
 - Java 17, Mojang mappings with Parchment.
 - Datagen: `runData`. Output: `src/generated/resources`, never hand-edited.
-- No game tests yet. Writing the first one for whatever is ported next is the highest-value test available (`verification.md`).
+- Game tests in `src/test`, laid out as The Lead Age's (`GameTests`, `GameTestRegistration`, `TestCompat`,
+  `verification.md`), run with `runGameTestServer`, whose `mods` block takes the test source set beside `main`. The
+  test bodies are the same to the byte as the 1.21.1 lines'; only `TestCompat` and the registration (Forge's
+  `@GameTestHolder`) differ. Here `TestCompat` crafts through a `TransientCraftingContainer`, keeps a banner's pattern
+  in its `BlockEntityTag` NBT, picks a block through Forge's `getCloneItemStack(HitResult, ...)` (the only form the
+  decorated board answers), and makes its player a Forge `FakePlayer`, survival: Forge 1.20.1's
+  `makeMockServerPlayerInLevel` fails on a connection with no channel. Its `Board` wraps the plain boards' own
+  `ModCuttingBoardBlockEntity`, a copy of Farmer's Delight's: Forge 1.20.1 has no event to add blocks to Farmer's
+  Delight's block entity type, as NeoForge's `BlockEntityTypeAddBlocksEvent` does on 1.21.1. The structure is under
+  `structures/`.
 - Publishes with `publishMods` to Modrinth and CurseForge, tagged Forge and NeoForge (NeoForge's 1.20.1 runs Forge
   jars) and 1.20.1 (`publishing.md`). The upload tasks depend on `reobfJar`, which reobfuscates the jar in place.
 - Hand-authored access transformer: `src/main/resources/META-INF/accesstransformer.cfg`. A first suspect when a port fails to load.

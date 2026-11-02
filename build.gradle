@@ -72,9 +72,11 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', mod_id
 
+            // The game tests and their structure are part of the mod in this run only, and never ship.
             mods {
                 "${mod_id}" {
                     source sourceSets.main
+                    source sourceSets.test
                 }
             }
         }
