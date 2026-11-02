@@ -1,0 +1,67 @@
+{
+  "name": "A cutting board places from its item and cuts beef with a knife",
+  "gamemode": "survival",
+  "steps": [
+    {
+      "hold": "choppersdelight:oak_cutting_board"
+    },
+    {
+      "use": [
+        0,
+        -1,
+        -2
+      ],
+      "face": "up"
+    },
+    {
+      "expect": "block",
+      "at": [
+        0,
+        0,
+        -2
+      ],
+      "is": "choppersdelight:oak_cutting_board"
+    },
+    {
+      "hold": "minecraft:beef"
+    },
+    {
+      "use": [
+        0,
+        0,
+        -2
+      ],
+      "face": "up"
+    },
+    {
+      "expect": "holding",
+      "is": "minecraft:air"
+    },
+    {
+      "screenshot": "beef-on-the-board"
+    },
+    {
+      "hold": "farmersdelight:iron_knife"
+    },
+    {
+      "use": [
+        0,
+        0,
+        -2
+      ],
+      "face": "up"
+    },
+    {
+      "walk": [
+        0,
+        0,
+        -3
+      ]
+    },
+    {
+      "expect": "inventory",
+      "has": "farmersdelight:minced_beef",
+      "count": 2
+    }
+  ]
+}
