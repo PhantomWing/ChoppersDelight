@@ -19,6 +19,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -44,6 +45,9 @@ public final class TestCompat {
 
     private TestCompat() {
     }
+
+    /** The white banner. From 26.2 the coloured items are one collection, {@code Items.BANNER.pick(DyeColor.WHITE)}. */
+    public static final Item WHITE_BANNER = Items.WHITE_BANNER;
 
     /**
      * Registers the mod's creative tab on the game-test server, from the test mod's initializer, before the registries
