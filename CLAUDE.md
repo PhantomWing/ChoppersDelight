@@ -23,6 +23,8 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 - Game tests in `src/test`, laid out as The Lead Age's (`GameTests`, `GameTestRegistration`, `TestCompat`,
   `verification.md`), run with `runGameTestServer`. The test source set joins the mod in `neoForge.mods`, and
   the `gameTestServer` run uses it. The test bodies are the same to the byte as `fabric/1.21`'s; only `TestCompat`
-  and the registration differ. ModDevGradle has no portal agent, so the scenarios are played on `fabric/1.21` alone.
+  and the registration differ.
+- Scenarios in `scenarios/`, the same files as `fabric/1.21`'s, played by the portal's Play scenarios: cutting on a
+  board, decorating in the crafting grid, Farmer's Delight's board's name, stacking, and a carved tool's look.
 - Publishes with `publishMods` to Modrinth and CurseForge, tagged NeoForge and 1.21.1 alone, since NeoForge 21.1 exists for 1.21.1 only (`publishing.md`).
 - Hand-authored access transformer: `src/main/resources/META-INF/accesstransformer.cfg`. A first suspect when a port fails to load.
