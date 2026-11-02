@@ -1,3 +1,9 @@
+# 1.2.2
+
+### Fixes
+- Fix tools carved into a decorated cutting board lying flat on it
+
+
 # 1.2.1
 
 ### Fixes
