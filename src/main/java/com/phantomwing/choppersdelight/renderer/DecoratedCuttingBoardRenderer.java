@@ -84,7 +84,11 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
             if (board.is(ModItems.CUTTING_BOARD.get())) {
                 // If it is Farmer's Delight Cutting Board, render that type.
                 CuttingBoardBlockEntity cuttingBoard = new CuttingBoardBlockEntity(blockEntity.getBlockPos(), blockState);
-                cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+                if (blockEntity.isItemCarvingBoard()) {
+                    cuttingBoard.carveToolOnBoard(blockEntity.getStoredItem().copy());
+                } else {
+                    cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+                }
 
                 // Render the new CuttingBoardBlockEntity.
                 BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
@@ -98,7 +102,11 @@ public class DecoratedCuttingBoardRenderer implements BlockEntityRenderer<Decora
             } else {
                 // Otherwise, render our mod's Cutting Board.
                 ModCuttingBoardBlockEntity cuttingBoard = new ModCuttingBoardBlockEntity(blockEntity.getBlockPos(), blockState);
-                cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+                if (blockEntity.isItemCarvingBoard()) {
+                    cuttingBoard.carveToolOnBoard(blockEntity.getStoredItem().copy());
+                } else {
+                    cuttingBoard.addItem(blockEntity.getStoredItem().copy());
+                }
 
                 // Render the new CuttingBoardBlockEntity.
                 BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
