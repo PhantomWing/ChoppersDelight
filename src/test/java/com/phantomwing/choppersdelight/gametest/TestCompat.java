@@ -30,6 +30,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import vectorwing.farmersdelight.common.block.entity.CuttingBoardBlockEntity;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -146,6 +148,51 @@ public final class TestCompat {
     public static boolean entitiesLoadedAroundSpawn(ServerLevel level, int radius) {
         return ChunkPos.rangeClosed(new ChunkPos(level.getSharedSpawnPos()), radius)
                 .allMatch(chunk -> level.areEntitiesLoaded(chunk.toLong()));
+    }
+
+    /** A plain cutting board's block entity, as the tests use it. Farmer's Delight's own on these lines. */
+    public interface Board {
+        void add(ItemStack stack);
+
+        /** Cuts what the board holds with a tool, as a player's click does, answering whether a recipe matched. */
+        boolean cut(ItemStack tool);
+
+        boolean isEmpty();
+
+        boolean isCarved();
+
+        ItemStack stored();
+    }
+
+    /** The plain cutting board's block entity at a spot, or empty where there is none. */
+    public static Optional<Board> boardAt(ServerLevel level, BlockPos pos) {
+        if (!(level.getBlockEntity(pos) instanceof CuttingBoardBlockEntity board)) return Optional.empty();
+        return Optional.of(new Board() {
+            @Override
+            public void add(ItemStack stack) {
+                board.addItem(stack);
+            }
+
+            @Override
+            public boolean cut(ItemStack tool) {
+                return board.processStoredItemUsingTool(tool, null);
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return board.isEmpty();
+            }
+
+            @Override
+            public boolean isCarved() {
+                return board.isItemCarvingBoard();
+            }
+
+            @Override
+            public ItemStack stored() {
+                return board.getStoredItem();
+            }
+        });
     }
 
     /** Right-clicks the top of a block with what the player holds, as the game does when a player clicks. */
