@@ -30,6 +30,20 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
   `DecoratedCuttingBoardItemRenderer`, registered into `SpecialModelRenderers.ID_MAPPER`.
 - Farmer's Delight's own cutting board recipe is replaced in `RecipeManager#prepare` (`CuttingBoardRecipeMixin`).
 - Datagen: `runDatagen`. No generated resources are committed on this line. Pinned to this mod with `modId = mod_id`.
-- No game tests yet. Writing the first one for whatever is ported next is the highest-value test available (`verification.md`).
+- Game tests in `src/test`, laid out as The Lead Age's (`GameTests`, `GameTestRegistration`, `TestCompat`,
+  `verification.md`), run with `runGameTest`. The test bodies and `GameTests` are the same to the byte as every other
+  line's; only `TestCompat` and the registration differ. The test source set is a mod of its own,
+  `choppersdelight_gametest`, and from 1.21.5 its `fabric.mod.json` names `GameTestRegistration` as a `main`
+  entrypoint, which registers the bodies into vanilla's `test_function` registry and the tests into `test_instance`
+  from `DynamicRegistrySetupCallback`, as The Lead Age's Fabric registration does (`kb/mc-deltas/1.21.4-to-1.21.5.md`).
+  The run counts vanilla's own `always_pass` too: 20 tests, 19 of them the mod's.
+- The registration also loads the mod's creative tab, which the mod registers from its client entrypoint alone: on a
+  dedicated server nothing else loads it on this line (Every Compat does on 1.21.1), and the tab test would first touch
+  it after the registries froze. It keeps the server for `TestCompat.burnTime`, since the fuel values are the server's
+  from 1.21.2 and the game-test server isn't Fabric's game instance.
+- Scenarios in `scenarios/`, `fabric/1.21`'s, played by the portal's Play scenarios: cutting on a board, decorating in
+  the crafting grid, Farmer's Delight's board's name, stacking, and a carved tool's look. The renamed board's `give`
+  names it with an SNBT string, `custom_name="Grandma's Board"`, since text components in a command are SNBT from
+  1.21.5; 1.21.1's JSON string inside quotes names it `"Grandma's Board"`, quotes and all.
 - Publishes the `remapJar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 1.21.5 (`publishing.md`).
 - GitHub Actions: `build.yml`.

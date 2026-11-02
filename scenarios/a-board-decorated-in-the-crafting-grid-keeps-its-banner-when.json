@@ -1,0 +1,140 @@
+{
+  "name": "A board decorated in the crafting grid keeps its banner when placed and broken",
+  "gamemode": "survival",
+  "steps": [
+    {
+      "reset": true
+    },
+    {
+      "give": "choppersdelight:cherry_cutting_board"
+    },
+    {
+      "give": "minecraft:white_banner[banner_patterns=[{pattern:\"minecraft:flower\",color:\"pink\"}]]"
+    },
+    {
+      "inventory": true
+    },
+    {
+      "click": 36
+    },
+    {
+      "click": 1
+    },
+    {
+      "click": 37
+    },
+    {
+      "click": 2
+    },
+    {
+      "expect": "slot",
+      "slot": 0,
+      "is": "choppersdelight:decorated_cutting_board"
+    },
+    {
+      "hover": 0
+    },
+    {
+      "expect": "tooltip",
+      "line": "Cherry Cutting Board"
+    },
+    {
+      "expect": "tooltip",
+      "has": "Pink Flower Charge"
+    },
+    {
+      "screenshot": "decorated-in-the-grid"
+    },
+    {
+      "click": 0,
+      "shift": true
+    },
+    {
+      "expect": "inventory",
+      "has": "choppersdelight:decorated_cutting_board"
+    },
+    {
+      "close": true
+    },
+    {
+      "key": "9"
+    },
+    {
+      "expect": "holding",
+      "is": "choppersdelight:decorated_cutting_board"
+    },
+    {
+      "use": [
+        0,
+        -1,
+        -2
+      ],
+      "face": "up"
+    },
+    {
+      "expect": "block",
+      "at": [
+        0,
+        0,
+        -2
+      ],
+      "is": "choppersdelight:decorated_cutting_board"
+    },
+    {
+      "screenshot": "decorated-board-placed"
+    },
+    {
+      "break": [
+        0,
+        0,
+        -2
+      ]
+    },
+    {
+      "expect": "block",
+      "at": [
+        0,
+        0,
+        -2
+      ],
+      "is": "minecraft:air"
+    },
+    {
+      "walk": [
+        0,
+        0,
+        -3
+      ]
+    },
+    {
+      "walk": [
+        0,
+        0,
+        -2
+      ]
+    },
+    {
+      "expect": "inventory",
+      "has": "choppersdelight:decorated_cutting_board",
+      "count": 1,
+      "within": 80
+    },
+    {
+      "inventory": true
+    },
+    {
+      "hover": "choppersdelight:decorated_cutting_board"
+    },
+    {
+      "expect": "tooltip",
+      "line": "Cherry Cutting Board"
+    },
+    {
+      "expect": "tooltip",
+      "has": "Pink Flower Charge"
+    },
+    {
+      "close": true
+    }
+  ]
+}
