@@ -100,18 +100,7 @@
       "is": "minecraft:air"
     },
     {
-      "walk": [
-        0,
-        0,
-        -3
-      ]
-    },
-    {
-      "walk": [
-        0,
-        0,
-        -2
-      ]
+      "command": "execute as @p at @s run tp @s @e[type=item,sort=nearest,limit=1]"
     },
     {
       "expect": "inventory",
