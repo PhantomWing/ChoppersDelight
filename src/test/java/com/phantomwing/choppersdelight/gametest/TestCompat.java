@@ -21,6 +21,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ChunkPos;
@@ -41,6 +42,9 @@ import java.util.UUID;
  * the test bodies copy across lines unchanged.
  */
 public final class TestCompat {
+    /** The white banner. From 26.2 the coloured items are one collection, {@code Items.BANNER.pick(DyeColor.WHITE)}. */
+    public static final Item WHITE_BANNER = Items.WHITE_BANNER;
+
     private TestCompat() {
     }
 
