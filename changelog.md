@@ -7,6 +7,7 @@
 - Fix a renamed Farmer's Delight Cutting Board showing as Spruce Cutting Board
 - Fix hoppers and pipes not reaching the item on a decorated cutting board
 - Fix decorated cutting boards of the same design not stacking
+- Fix the Creative Inventory tab missing on dedicated servers, where mods such as Polymer build it
 
 ### Additions
 - Ported to Minecraft 1.21.11

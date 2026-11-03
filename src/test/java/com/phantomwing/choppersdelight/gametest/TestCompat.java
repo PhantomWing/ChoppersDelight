@@ -49,14 +49,6 @@ public final class TestCompat {
     /** The white banner. From 26.2 the coloured items are one collection, {@code Items.BANNER.pick(DyeColor.WHITE)}. */
     public static final Item WHITE_BANNER = Items.WHITE_BANNER;
 
-    /**
-     * Registers the mod's creative tab on the game-test server, from the test mod's initializer, before the registries
-     * freeze. The mod registers it from its client entrypoint, which a server doesn't run; on 1.21.1 Every Compat's
-     * module, which this line's dev runs don't have, registered it there too.
-     */
-    static void registerModTab() {
-        ModItemGroups.registerModItemGroups();
-    }
 
     /** The mod's creative tab. */
     public static CreativeModeTab modTab() {

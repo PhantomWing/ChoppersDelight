@@ -43,8 +43,7 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
   Lead Age's Fabric registration does. Here `TestCompat` reads fuel from the server's `FuelValues` (the registration
   hands it the server), names a stack by its hover name's translation key, picks a block through
   `BlockState#getCloneItemStack`, gives `getAnalogOutputSignal` a side, and makes no mock player wait for the spawn
-  area (1.21.9); `ResourceLocation` is `Identifier`. The mod registers its creative tab from its client entrypoint
-  only, so the registration has `TestCompat` register it on the game-test server before the registries freeze.
+  area (1.21.9); `ResourceLocation` is `Identifier`.
 - Scenarios in `scenarios/`, the same files as `fabric/1.21`'s, played by the portal's Play scenarios: cutting on a
   board, decorating in the crafting grid, Farmer's Delight's board's name, stacking, and a carved tool's look.
 - Publishes the `remapJar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 1.21.11 (`publishing.md`).
