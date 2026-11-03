@@ -47,8 +47,7 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
   names a stack by its item name's translation key, gives the comparator a side, and doesn't wait for the spawn's
   entities before a mock player. The test source set is a mod of its own, `choppersdelight_gametest`, whose
   `fabric.mod.json` names the registration as its `main` entrypoint: from 1.21.5 it registers the tests into vanilla's
-  test registries itself. It also registers the mod's creative tab, which the mod registers from its client
-  entrypoint alone (on 1.21.1 Every Compat's module registered it on a server too; 26.x has no Every Compat). The
+  test registries itself. The
   JUnit `test` task is told not to fail on finding no tests (Gradle 9).
 - Scenarios in `scenarios/`, played by the portal's Play scenarios: cutting on a board, decorating in the crafting
   grid, Farmer's Delight's board's name, stacking, and a carved tool's look. A `give` names an item in SNBT
