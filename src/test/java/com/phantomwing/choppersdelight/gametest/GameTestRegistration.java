@@ -26,13 +26,11 @@ import java.util.Optional;
  * <p>Fabric API's own registration from 1.21.5 takes one annotated method per test, so this registers as vanilla does,
  * from the test source set's own mod's {@code main} entrypoint: the functions at once, the instances as the server sets
  * up its datapack registries, before they load and freeze. Fabric makes the entrypoint, so it keeps a public
- * constructor. It also registers the mod's creative tab, which the mod registers on the client alone, as a server-side
- * mod that uses the tab would, and hands {@link TestCompat} the server as it starts, for the calls given no level.</p>
+ * constructor. It also hands {@link TestCompat} the server as it starts, for the calls given no level.</p>
  */
 public final class GameTestRegistration implements ModInitializer {
     @Override
     public void onInitialize() {
-        TestCompat.registerModTab();
         ServerLifecycleEvents.SERVER_STARTING.register(TestCompat::serverStarting);
         GameTests.ALL.forEach(test -> Registry.register(BuiltInRegistries.TEST_FUNCTION, id(test.name()), test.body()));
 

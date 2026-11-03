@@ -54,14 +54,6 @@ public final class TestCompat {
         server = starting;
     }
 
-    /**
-     * Registers the mod's creative tab on the game-test server, from the test mod's initializer, before the registries
-     * freeze. The mod registers it from its client entrypoint, which a server doesn't run; on 1.21.1 Every Compat's
-     * module, which 26.x has no build of, registered it there too.
-     */
-    public static void registerModTab() {
-        ModItemGroups.registerModItemGroups();
-    }
 
     /** The mod's creative tab. */
     public static CreativeModeTab modTab() {
