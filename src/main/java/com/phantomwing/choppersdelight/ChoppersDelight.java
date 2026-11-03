@@ -6,6 +6,7 @@ import com.phantomwing.choppersdelight.block.custom.DecoratedCuttingBoardBlock;
 import com.phantomwing.choppersdelight.block.entity.DecoratedCuttingBoardBlockEntity;
 import com.phantomwing.choppersdelight.component.ModDataComponents;
 import com.phantomwing.choppersdelight.item.ModItems;
+import com.phantomwing.choppersdelight.itemGroup.ModItemGroups;
 
 import com.phantomwing.choppersdelight.recipe.ModRecipes;
 import net.fabricmc.api.ModInitializer;
@@ -31,6 +32,8 @@ public class ChoppersDelight implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		DecoratedCuttingBoardBlockEntity.init();
 		ModRecipes.registerModRecipes();
+		// Here rather than in the client entrypoint: a server-side mod such as Polymer builds the tab on a dedicated server.
+		ModItemGroups.registerModItemGroups();
 
 		// Sneak + tool carving on our decorated cutting boards
 		// (FD's own callback only matches CuttingBoardBlockEntity, so we need our own for DecoratedCuttingBoardBlockEntity).
