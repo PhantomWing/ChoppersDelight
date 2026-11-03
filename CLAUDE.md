@@ -40,7 +40,8 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 - Datagen: `runDatagen`. No generated resources are committed on this line. Pinned to this mod with `modId = mod_id`.
 - Game tests in `src/test`, laid out as The Lead Age's (`GameTests`, `GameTestRegistration`, `TestCompat`,
   `verification.md`), run with `runGameTest`. The test bodies are the same to the byte as every other line's; only
-  `TestCompat` and the registration differ. Here `TestCompat` takes Components in `fail` and `assertTrue`, looks
+  `TestCompat` and the registration differ. Here `TestCompat` gives the white banner as `Items.WHITE_BANNER` (a
+  collection from 26.2), takes Components in `fail` and `assertTrue`, looks
   items up by `Identifier` with `getValue`, crafts through `level.recipeAccess()` with no registries to `assemble`,
   reads fuel from the server's `fuelValues()` (Fabric's `FuelRegistry` is gone; the registration keeps the server as
   it starts), names a stack by its item name's translation key, gives the comparator a side, and doesn't wait for the
@@ -50,6 +51,7 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
   entrypoint alone (on 1.21.1 Every Compat's module registered it on a server too; 26.x has no Every Compat). The
   JUnit `test` task is told not to fail on finding no tests (Gradle 9).
 - Scenarios in `scenarios/`, played by the portal's Play scenarios: cutting on a board, decorating in the crafting
-  grid, Farmer's Delight's board's name, stacking, and a carved tool's look.
+  grid, Farmer's Delight's board's name, stacking, and a carved tool's look. A `give` names an item in SNBT
+  (`custom_name="Grandma's Board"`), as from 1.21.5.
 - Publishes the `jar` with `publishMods` to Modrinth and CurseForge, tagged Fabric and 26.1, 26.1.1, 26.1.2 (`publishing.md`).
 - GitHub Actions: `build.yml`.
