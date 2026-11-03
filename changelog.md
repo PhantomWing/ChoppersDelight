@@ -1,3 +1,9 @@
+# 1.2.3
+
+### Fixes
+- Fix the Creative Inventory tab missing on dedicated servers, where mods such as Polymer build it
+
+
 # 1.2.2
 
 ### Fixes
