@@ -1,7 +1,6 @@
 package com.phantomwing.choppersdelight.gametest;
 
 import com.phantomwing.choppersdelight.ChoppersDelight;
-import com.phantomwing.choppersdelight.itemGroup.ModItemGroups;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
 import net.minecraft.core.Holder;
@@ -31,10 +30,6 @@ import java.util.Optional;
 public final class GameTestRegistration implements ModInitializer {
     @Override
     public void onInitialize() {
-        // The mod registers its creative tab from its client entrypoint alone, so on a dedicated server with no mod
-        // referencing it (Every Compat does on 1.21.1) the tab's class first loads in a test, after the registries
-        // froze. Registered here as a server-side mod that uses the tab would.
-        ModItemGroups.registerModItemGroups();
         TestCompat.watchServer();
 
         GameTests.ALL.forEach(test -> Registry.register(BuiltInRegistries.TEST_FUNCTION, id(test.name()), test.body()));
