@@ -14,6 +14,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.state.BlockState;
@@ -91,6 +92,23 @@ public final class DecoratedCuttingBoardGameTest {
         helper.succeedWhen(() -> {
             int carrots = countAround(helper, BOARD, Items.CARROT);
             TestCompat.assertTrue(helper, carrots == 1, "Breaking the decorated cutting board should drop the carrot on it, dropped " + carrots);
+        });
+    }
+
+    /** Forge 1.20.1's decorated board dropped itself however it was broken, a creative player's break too. */
+    public static void aDecoratedBoardBrokenInCreativeDropsOnlyWhatItHolds(GameTestHelper helper) {
+        ItemStack decorated = place(helper);
+        board(helper).addItem(new ItemStack(Items.CARROT));
+        whenSpawnLoaded(helper, 80, () -> {
+            ServerPlayer player = TestCompat.mockPlayer(helper);
+            player.setGameMode(GameType.CREATIVE);
+            player.gameMode.destroyBlock(helper.absolutePos(BOARD));
+            helper.succeedWhen(() -> {
+                int carrots = countAround(helper, BOARD, Items.CARROT);
+                TestCompat.assertTrue(helper, carrots == 1, "Breaking the decorated cutting board in creative should still drop the carrot on it, dropped " + carrots);
+                int boards = countAround(helper, BOARD, decorated.getItem());
+                TestCompat.assertTrue(helper, boards == 0, "Breaking the decorated cutting board in creative shouldn't drop the board, dropped " + boards);
+            });
         });
     }
 
