@@ -40,6 +40,7 @@ public class ModBlocks {
     public static final Supplier<Block> WARPED_CUTTING_BOARD = registerVanillaCuttingBoard("warped_cutting_board");
 
     public static final Supplier<Block> PALE_OAK_CUTTING_BOARD = registerVanillaCuttingBoard("pale_oak_cutting_board");
+    public static final Supplier<Block> POPLAR_CUTTING_BOARD = registerVanillaCuttingBoard("poplar_cutting_board");
 
     // Biomes O' Plenty
     public static final Supplier<Block> BOP_DEAD_CUTTING_BOARD = registerBiomesOPlentyCuttingBoard("dead_cutting_board");

@@ -35,6 +35,7 @@ public class ModItems {
     public static final Supplier<Item> WARPED_CUTTING_BOARD = registerVanillaCuttingBoardItem(ModBlocks.WARPED_CUTTING_BOARD);
 
     public static final Supplier<Item> PALE_OAK_CUTTING_BOARD = registerVanillaCuttingBoardItem(ModBlocks.PALE_OAK_CUTTING_BOARD);
+    public static final Supplier<Item> POPLAR_CUTTING_BOARD = registerVanillaCuttingBoardItem(ModBlocks.POPLAR_CUTTING_BOARD);
 
     // Biomes o Plenty cutting boards
     public static final Supplier<Item> BOP_DEAD_CUTTING_BOARD = registerBiomesOPlentyCuttingBoardItem(ModBlocks.BOP_DEAD_CUTTING_BOARD);

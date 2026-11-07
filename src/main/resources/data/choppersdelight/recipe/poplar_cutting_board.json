@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:poplar_planks",
+    "/": "minecraft:stick"
+  },
+  "pattern": [
+    "/##",
+    "/##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "choppersdelight:poplar_cutting_board"
+  }
+}

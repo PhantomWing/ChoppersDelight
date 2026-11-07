@@ -12,6 +12,7 @@
 ### Additions
 - Ported to Minecraft 26.3
 - Added a crafting recipe for the Pale Oak Cutting Board
+- Added the Poplar Cutting Board
 
 
 # 1.1.0
