@@ -26,6 +26,7 @@ public final class GameTests {
             test("a_decorated_board_is_named_after_its_wood", DecoratedCuttingBoardGameTest::aDecoratedBoardIsNamedAfterItsWood),
             test("a_broken_decorated_board_keeps_its_design", DecoratedCuttingBoardGameTest::aBrokenDecoratedBoardKeepsItsDesign),
             test("a_broken_decorated_board_drops_what_it_holds", DecoratedCuttingBoardGameTest::aBrokenDecoratedBoardDropsWhatItHolds),
+            test("a_decorated_board_broken_in_creative_drops_only_what_it_holds", DecoratedCuttingBoardGameTest::aDecoratedBoardBrokenInCreativeDropsOnlyWhatItHolds),
             test("picking_a_decorated_board_gives_its_design", DecoratedCuttingBoardGameTest::pickingADecoratedBoardGivesItsDesign),
             test("a_decorated_board_cuts_cake_with_a_knife", DecoratedCuttingBoardGameTest::aDecoratedBoardCutsCakeWithAKnife),
             test("a_hopper_takes_the_item_off_a_decorated_board", DecoratedCuttingBoardGameTest::aHopperTakesTheItemOffADecoratedBoard),

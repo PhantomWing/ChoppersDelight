@@ -93,17 +93,28 @@ public class DecoratedCuttingBoardBlock extends CuttingBoardBlock
     }
 
     @Override
+    public void playerWillDestroy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull Player player) {
+        // Mark creative-mode destruction so onRemove can skip dropping the decorated board item itself.
+        if (player.isCreative() && level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity decoratedBoard) {
+            decoratedBoard.setDestroyedByCreativePlayer(true);
+        }
+        super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
     public void onRemove(BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.is(newState.getBlock())) {
             return;
         }
 
         if (level.getBlockEntity(pos) instanceof DecoratedCuttingBoardBlockEntity decoratedBoard) {
-            // Drop the stored item (matches FD's onRemove behavior — items in containers always drop).
+            // Drop the stored item (matches FD's onRemove behavior — items in containers always drop, even in creative).
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), decoratedBoard.getStoredItem());
             level.updateNeighbourForOutputSignal(pos, this);
-            // Drop the decorated cutting board item itself with NBT preserved.
-            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), decoratedBoard.getItem());
+            // Drop the decorated cutting board item itself with NBT preserved, unless a creative player broke it.
+            if (!decoratedBoard.isDestroyedByCreativePlayer()) {
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), decoratedBoard.getItem());
+            }
         }
 
         super.onRemove(state, level, pos, newState, isMoving);

@@ -68,6 +68,9 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity implemen
     private ItemStack cuttingBoard = ItemStack.EMPTY;
     private ItemStack banner = ItemStack.EMPTY;
 
+    // Transient flag set by the block when a creative-mode player breaks it, so onRemove can skip dropping the decorated item.
+    private boolean destroyedByCreativePlayer = false;
+
     public DecoratedCuttingBoardBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.DECORATED_CUTTING_BOARD.get(), pos, state);
 
@@ -296,6 +299,14 @@ public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity implemen
         decoratedData.put(ModDataComponents.DECORATED_CUTTING_BOARD_BANNER_DATA, this.banner.save(new CompoundTag()));
 
         return itemStack;
+    }
+
+    public boolean isDestroyedByCreativePlayer() {
+        return this.destroyedByCreativePlayer;
+    }
+
+    public void setDestroyedByCreativePlayer(boolean destroyedByCreativePlayer) {
+        this.destroyedByCreativePlayer = destroyedByCreativePlayer;
     }
 
     public ItemStack getCuttingBoard() {

@@ -1,3 +1,9 @@
+# 1.2.3
+
+### Fixes
+- Fix decorated cutting boards dropping themselves when broken in creative mode
+
+
 # 1.2.2
 
 ### Fixes
