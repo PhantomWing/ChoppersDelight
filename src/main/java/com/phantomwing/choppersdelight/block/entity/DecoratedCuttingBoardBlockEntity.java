@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Mirror of FD Refabricated 3.2.3's CuttingBoardBlockEntity, which holds one item at a time, plus the decoration.
+ * Mirror of FD Refabricated 3.3.3's CuttingBoardBlockEntity, which holds one item at a time, plus the decoration.
  */
 public class DecoratedCuttingBoardBlockEntity extends SyncedBlockEntity
 {

@@ -91,8 +91,10 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
 	// Farmer's Delight Refabricated
-	modImplementation("vectorwing:FarmersDelight:${minecraft_version}-${farmersdelight_version}+refabricated") {
+	modImplementation("vectorwing:FarmersDelight:${farmersdelight_minecraft_version}-${farmersdelight_version}+refabricated") {
 		exclude(group: "net.fabricmc")
+		// Its 1.21.8 build brings Fabric API for 1.21.8, which refuses to load on 1.21.6.
+		exclude(group: "net.fabricmc.fabric-api")
 	}
 
 	// No JEI: Farmer's Delight Refabricated has no JEI integration on 1.21.6, so there is nothing for it to show.

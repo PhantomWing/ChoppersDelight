@@ -19,8 +19,10 @@ publishes through `publishMods` (`publishing.md`), with the platform IDs in `gra
 ## This line
 
 - Java 21, Mojang mappings with Parchment.
-- Farmer's Delight Refabricated 1.21.6-3.2.3, from the Greenhouse maven, a port of Farmer's Delight 1.2, so its cutting
-  board holds one item at a time; its 1.21.8-3.3.3 build loads on 1.21.6 too. The decorated cutting board mirrors 3.2.3's
+- Farmer's Delight Refabricated 1.21.8-3.3.3, the newest for 1.21.6, from the Greenhouse maven, named by
+  `farmersdelight_minecraft_version` since Refabricated names a build after the newest Minecraft it covers (1.21.6 to
+  1.21.8 here); a port of Farmer's Delight 1.2, so its cutting board holds one item at a time. The manifest still takes
+  1.21.6-3.2.3, whose cutting board is the same. The decorated cutting board mirrors 3.3.3's
   `CuttingBoardBlock` and `CuttingBoardBlockEntity` (`DecoratedCuttingBoardBlock`, `DecoratedCuttingBoardBlockEntity`);
   check them against Farmer's Delight's own when it updates.
 - Farmer's Delight Refabricated has no JEI integration on 1.21.6 (it integrates REI), and JEI has no 1.21.6 build, so there is no JEI plugin here.
